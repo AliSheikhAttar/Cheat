@@ -12,7 +12,7 @@ Top
       - -a – show processes for all users.
       - -u – display the current user’s processes.
       - -x – include processes without a terminal.
-
+    
     - processes with specific name
     ```bash
     ps -aux | grep <process name>
@@ -24,8 +24,8 @@ Top
         - -c – ensures that only PIDs from the current root directory are returned.
         - -o – omits the specified PIDs from the results.
         - -s – returns only a single PID, typically the oldest, among the matching processes.
-
-
+    
+    
       - ```bash
         pgrep -[option] [pattern]
         ```
