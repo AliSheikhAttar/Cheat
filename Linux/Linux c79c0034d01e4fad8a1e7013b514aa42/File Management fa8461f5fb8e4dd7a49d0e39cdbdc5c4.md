@@ -11,7 +11,6 @@ chmod +x ./*.AppImage
  ```bash
  mkdir Micro; for i in {0..10}; do mv ../Downloads/"AVR Microcontroller$i.pdf" ./Micro; done
 ```
-<<<<<<< HEAD
 
 - unzip tar files
 ```bash
@@ -23,15 +22,12 @@ tar -xvzf <archive>
   - The -f flag is used to specify the path of the archive file.
   - archive is the path to the tar.gz file you want to unzip.
   
-- Absolute address
-=======
 - the umask acts as a filter to remove certain permissions from the default permission set. It helps enforce security policies by restricting the default access granted to newly created files and directories.
 ```bash
 umask <value ex. 777>
 ```
 
-- Current Path
->>>>>>> cb9c3db33929fa6c5628f470610877dc4496fb35
+- Current Absolute path
 ```bash
 pwd
 ```
