@@ -11,6 +11,12 @@ chmod +x ./*.AppImage
  ```bash
  mkdir Micro; for i in {0..10}; do mv ../Downloads/"AVR Microcontroller$i.pdf" ./Micro; done
 ```
+- the umask acts as a filter to remove certain permissions from the default permission set. It helps enforce security policies by restricting the default access granted to newly created files and directories.
+```bash
+umask <value ex. 777>
+```
+
+- Current Path
 ```bash
 pwd
 ```
