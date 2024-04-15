@@ -75,6 +75,11 @@ Top
     ```bash
     killall <pname> [option]
     ```
+    - -e: This option specifies that the process name should match exactly. If this option is not used, "killall" will match any process name that contains the specified string.
+
+    - -i: This option prompts the user before killing each process.
+
+    - -s signal: This option allows you to specify a common signal to send to the background process. The default signal is SIGTERM.  
     -o [time] – only kills processes older than the specified time.
     -y [time] – only kills processes newer than the specified time.
 
