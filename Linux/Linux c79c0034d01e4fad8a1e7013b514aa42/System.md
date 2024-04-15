@@ -6,32 +6,32 @@ Top
 ```
 - Procceses
   -  Search processes
-    ```bash
-      ps -[option]
-    ```
-      - -a – show processes for all users.
-      - -u – display the current user’s processes.
-      - -x – include processes without a terminal.
-    
-    - processes with specific name
-    ```bash
-    ps -aux | grep <process name>
-    ```
-    - finds the PID of a process by its name.
-      - ```bash
-        pidof -[option] <processname>
-        ```
-        - -c – ensures that only PIDs from the current root directory are returned.
-        - -o – omits the specified PIDs from the results.
-        - -s – returns only a single PID, typically the oldest, among the matching processes.
-    
-    
-      - ```bash
-        pgrep -[option] [pattern]
-        ```
-        - -n – returns only the newest instance among the matching processes. 
-        - -o – returns only the oldest instance among the matching processes.
-        - -u – matches processes that the specified user owns.
+      ```bash
+        ps -[option]
+      ```
+        - -a – show processes for all users.
+        - -u – display the current user’s processes.
+        - -x – include processes without a terminal.
+      
+      - processes with specific name
+      ```bash
+      ps -aux | grep <process name>
+      ```
+      - finds the PID of a process by its name.
+        - ```bash
+          pidof -[option] <processname>
+          ```
+          - -c – ensures that only PIDs from the current root directory are returned.
+          - -o – omits the specified PIDs from the results.
+          - -s – returns only a single PID, typically the oldest, among the matching processes.
+      
+      
+        - ```bash
+          pgrep -[option] [pattern]
+          ```
+          - -n – returns only the newest instance among the matching processes. 
+          - -o – returns only the oldest instance among the matching processes.
+          - -u – matches processes that the specified user owns.
 
 
   - Kill
