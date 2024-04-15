@@ -7,7 +7,7 @@ Top
 - Procceses
   -  Search processes
   ```bash
-  - ps -[option]
+    ps -[option]
   ```
     - -a – show processes for all users.
     - -u – display the current user’s processes.
