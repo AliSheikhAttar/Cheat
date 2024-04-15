@@ -5,6 +5,11 @@
 ```bash
 docker-compose build
 ```
+
+- Config
+```bash
+docker-compose config
+```
 - Run All Containers
 
 ```bash
@@ -18,11 +23,15 @@ docker image prune -f
 docker volume prune -f
 ```
 
-- Delete All Containers
+- Delete all Containers
 ```bash
 docker-compose down
 ```
 
+- Delete all containers and volumes
+```bash
+docker-compose down -v
+```
 - List of containers
 ```bash
 docker-compose ps
@@ -45,7 +54,14 @@ docker  volume ls
 docker  network ls
 docker  info
 ```
-
+- Available volumes
+```bash
+docker volume ls
+```
+- Create volume
+```bash
+docker create volume <volume name>
+```
 - Delete docker image
 ```bash
 docker rmi  <image id>

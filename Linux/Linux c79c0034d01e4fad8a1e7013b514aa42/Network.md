@@ -12,3 +12,10 @@ axel -a -n [Num_of_Thread] link1 link2 link3 ...
 ```bash
 axel -a -n [Num_of_Thread] link1 link2 link3 ...
 ```
+
+- firewall
+```bash
+sudo ufw disable/enable/status
+```
+
+- sudo systemctl stop/status firewalld

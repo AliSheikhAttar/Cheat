@@ -11,13 +11,37 @@ chmod +x ./*.AppImage
  ```bash
  mkdir Micro; for i in {0..10}; do mv ../Downloads/"AVR Microcontroller$i.pdf" ./Micro; done
 ```
+
+- unzip tar files
+```bash
+tar -xvzf <archive>
+```
+  - The -x flag is used to extract the content of the archive.
+  - The -v flag is used to output the list of files being extracted.
+  - The -z flag is used to decompress the file using gzip.
+  - The -f flag is used to specify the path of the archive file.
+  - archive is the path to the tar.gz file you want to unzip.
+  
+- Absolute address
 ```bash
 pwd
 ```
 
+- Move to root
 ```bash
 cd ~
 ```
+
+- Run command inside a file
+    - ```bash
+        . / <file.txt>
+      ```
+    - ```bash
+        bash <file.txt>
+      ```
+    - ```bash
+        sh <file.txt>
+      ```
 
 ```bash
 ls -t
@@ -87,8 +111,9 @@ cat -n "a.txt"
 cat -b "a.txt"
 ```
 
+- type into the file
 ```bash
-cat > "a.txt"
+cat > <file>
 ```
 
 ```bash
