@@ -29,9 +29,11 @@ Top
         - ```bash
           pgrep -[option] [pattern]
           ```
+          - -l – List the process names and the PIDs.
           - -n – returns only the newest instance among the matching processes. 
           - -o – returns only the oldest instance among the matching processes.
           - -u – matches processes that the specified user owns.
+          - -x – Only find processes that exactly match the given pattern.
 
 
   - Kill
@@ -69,19 +71,30 @@ Top
       - -u [username] – kills processes owned by a specific user.
       - -t [terminal] – kills processes attached to a specific terminal.
       - -l – provides a detailed process list along with the PID.
+      - -n. Only kill the newest of the processes that are discovered.
+      - -o. Only kill the oldest of the processes that are discovered.
+      - -u. Only kill the processes owned by the specified user.
+      - -x. Only kill the processes that match the pattern exactly.
+      - -signal. Send a specific signal to the process, rather than SIGTERM.
 
+    - closes a given server's connection to clients. The syntax of the xkill command is;
+    If a server has opened some unwanted processes, xkill aborts these processes.
+    ```bash
+    xkill <resource>
+    ```
 
     - kill/terminate all processes named <pname>
     ```bash
     killall <pname> [option]
     ```
     - -e: This option specifies that the process name should match exactly. If this option is not used, "killall" will match any process name that contains the specified string.
-
     - -i: This option prompts the user before killing each process.
-
-    - -s signal: This option allows you to specify a common signal to send to the background process. The default signal is SIGTERM.  
-    -o [time] – only kills processes older than the specified time.
-    -y [time] – only kills processes newer than the specified time.
+    - -s signal: This option allows you to specify a common signal to send to the background process. The default signal is SIGTERM.
+    - -I. Ignore the case when trying to find the process name.
+    - -u. Only kill processes owned by a specific user.
+    - -v. Report back on whether the process has been successfully killed.
+    - -o [time] – only kills processes older than the specified time.
+    - -y [time] – only kills processes newer than the specified time.
 
     - Ex: terminates all currently running processes named chrome that have been running for longer than 30 minutes:
     ```bash
