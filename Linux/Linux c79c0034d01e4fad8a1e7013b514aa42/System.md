@@ -62,23 +62,18 @@ Top
     kill $(pgrep pattern)
     ```
 
-    - change ownership of directories
-    ```bash
-      sudo chown newuser filename
-    ```
-
     - kill all the processes containing the process name <pname>
     ```bash
-    pkill apache <pname> [option]
+    pkill <pname> [option]
     ```
       - -u [username] – kills processes owned by a specific user.
       - -t [terminal] – kills processes attached to a specific terminal.
       - -l – provides a detailed process list along with the PID.
 
 
-    - kill/terminate all processes named <pname> [option]
+    - kill/terminate all processes named <pname>
     ```bash
-    killall apache <pname>
+    killall <pname> [option]
     ```
     -o [time] – only kills processes older than the specified time.
     -y [time] – only kills processes newer than the specified time.
@@ -87,6 +82,10 @@ Top
     ```bash
     killall -o 30m chrome
     ```
+- change ownership of directories
+```bash
+  sudo chown newuser filename
+```
 
 - Service
   - Systemctl
