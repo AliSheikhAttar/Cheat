@@ -1,15 +1,62 @@
 # Docker Commands
 
-- Building
+- Building & running
+    - The following only builds the images, does not start the containers:
+    ```bash
+    docker-compose build
+    ```
+    - The following builds the images if the images do not exist and starts the containers:
+    ```bash
+    docker-compose up
+    ```
 
+    - If you add the --build option, it is forced to build the images even when not needed:
+    ```bash
+    docker-compose up --build
+    ```
+
+    - The following skips the image build process;If the images aren't built beforehand, it fails:
+    ```bash
+    docker-compose up --no-build
+    ```
+
+    - The --no-cache option disables the Docker build cache in the image creation process. This is used to cache each layer in the Dockerfile and to speed up the image creation reusing layers (~ Dockerfile lines) previously built for other images that are identical.
+    ```bash
+    docker-compose up --no-cache
+    ```
+
+The command run overrides the command defined in the service configuration.
+For example, if the web service configuration is started with bash, then docker-compose run web python app.py overrides it with python app.py.
 ```bash
-docker-compose build
+docker compose run <image> [command]
+```
+The second difference is the docker-compose run command does not create any of the ports specified in the service configuration.
+This prevents the port collisions with already open ports. If you do want the service's ports created and mapped to the host, specify the --service-ports flag:
+```bash
+$ docker-compose run --service-ports web python manage.py <command Ex:shell>
+```
+
+- login
+```bash
+docker login -u <username> -p <password>
+```
+
+
+- Restart docker-machine
+```bash
+docker-machine restart default
+```
+
+- Reset to default env
+```bash
+eval $(docker-machine env default)
 ```
 
 - Config
 ```bash
 docker-compose config
 ```
+
 - Run All Containers
 
 ```bash

@@ -12,6 +12,10 @@ Top
         - -a – show processes for all users.
         - -u – display the current user’s processes.
         - -x – include processes without a terminal.
+        - -e – list all processes in the system, regardless of the owner or controlling terminal. 
+        - -H – formats the CMD column’s data to display the parent-child relationship between processes.
+        - -axjf – prettier output with a few more columns.
+        - man ps – more human
       
       - processes with specific name
       ```bash
@@ -102,8 +106,21 @@ Top
     ```
 - change ownership of directories
 ```bash
-  sudo chown newuser filename
+  sudo chown -c -R $USER:$USER <directory>
 ```
+Explanation:
+chown: change the ownership of files/directories
+-c: report all changes
+-R: do this recursively (for all files/directories beneath the given one)
+$USER:$USER: change the owner and the group that owns the the entry to the user that issues the command (sudo preserves the values)
+$HOME: do this with your home directory
+You can test those environment variables with the following commands
+
+echo $USER
+sudo echo $USER
+echo $HOME
+sudo echo $HOME
+
 
 - Service
   - Systemctl

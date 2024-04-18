@@ -16,3 +16,13 @@ python manage.py makemigrations <App name>
 ```bash
 python manage.py migrate <App name>
 ```
+
+- create admin user
+```bash
+python3 manage.py createsuperuser
+```
+
+- Register object model in admin
+```bash
+    admin.site.register(ObjectModel)
+```
