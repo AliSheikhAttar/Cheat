@@ -25,6 +25,11 @@
     docker-compose up --no-cache
     ```
 
+    - Build an image from a specified docker file
+    ```bash
+    docker build <path to docker file>
+    ```
+
 The command run overrides the command defined in the service configuration.
 For example, if the web service configuration is started with bash, then docker-compose run web python app.py overrides it with python app.py.
 ```bash
@@ -39,6 +44,11 @@ $ docker-compose run --service-ports web python manage.py <command Ex:shell>
 - login
 ```bash
 docker login -u <username> -p <password>
+```
+
+- Log out or remove the credentials used to authenticate with a Docker registry. 
+```bash
+Docker Logout  [REGISTRY_URL]
 ```
 
 
@@ -83,14 +93,28 @@ docker-compose down -v
 ```bash
 docker-compose ps
 ```
-- List of containers
+- list all the running Docker containers
 ```bash
 docker ps
 ```
 
-- List of containers with sizes
+- List all the running containers in the background
+```bash
+docker ps --all/-a
+```
+
+- list all the Docker images that are currently available on your system
 ```bash
 docker images
+```
+- List of images with sizes
+```bash
+docker compose images
+```
+
+- This command is used to execute a command in a running container
+```bash
+docker exec <container> <command>
 ```
 
 - Available resources
@@ -101,14 +125,58 @@ docker  volume ls
 docker  network ls
 docker  info
 ```
-- Available volumes
+
+- Examine the evolution of a Docker image or its constituent parts.
+
 ```bash
-docker volume ls
+docker history <image_name>
+```
+
+
+- stop a running container.
+```bash
+docker stop
+```
+
+- Restart one or more Docker containers that are currently operating. Restarting a container entails gently pausing it and then restarting it with the same configuration and parameters.  It is recommended to use this after rebooting the system.
+```bash
+docker restart <container container2 ...>
+```
+
+- Stop the container immediately by killing its execution. While the ‘docker stop’ command helps shut down the container in its own time, the ‘docker kill’ command stops it at once.
+```bash
+docker kill <container>
+```
+
+- search for image
+
+```bash
+docker search <image name>
+```
+- pull image
+```bash
+docker pull <image>
+```
+- Creates a new image of an edited container on the local system
+```bash
+docker commit <conatainer id> <username/imagename>
+```
+
+- Push an image to the docker hub repository
+```bash
+docker push <username/image name>
 ```
 - Create volume
 ```bash
 docker create volume <volume name>
 ```
+
+- Copies files or directories from the host machine’s file system to the container’s file system during Docker image construction.
+
+```bash
+COPY <source_file> <destination_directory>
+```
+
 - Delete docker image
 ```bash
 docker rmi  <image id>
@@ -123,6 +191,7 @@ docker rmi $(docker images -q)
 ```bash
 docker rmi $(docker images -q) 
 ```
+
 
 - Delete docker dangling image Layers with no relation to labeled images are called dangling images. They’re outdated and take up unnecessary disk space. 
 ```bash
@@ -161,15 +230,21 @@ docker container rm $(docker container ls -aq)
 docker volume ls  
 ```
 
+- List of dangling volumes; A dangling volume is a volume that exists but is no longer attached to any container.
+```bash
+docker volume ls -f dangling=true 
+```
+
+- Create volume in the Docker container
+```bash
+docker volume create <volume>
+```
+
 - Delete 1/more volumes
 ```bash
 docker volume <rm vol_name vol_name2>  
 ```
 
-- List of dangling volumes; A dangling volume is a volume that exists but is no longer attached to any container.
-```bash
-docker volume ls -f dangling=true 
-```
 
 - Delete dangling volumes;
 ```bash
@@ -185,6 +260,10 @@ docker exec -it <image> bash
 ```bash
 docker network ls
 ```
+- Create network
+```bash
+docker network create <network_name>
+```
 
 - Delete docker network;If you get errors, remove the containers using the network.
 ```bash
@@ -195,3 +274,32 @@ docker network rm <networkID>
 ```bash
 docker inspect 
 ```
+
+- docker compose alpha    	Experimental commands
+- docker compose build    	Build or rebuild services
+- docker compose config	    Parse, resolve and render compose file in canonical format
+- docker compose cp	        Copy files/folders between a service container and the local filesystem
+- docker compose create	    Creates containers for a service
+- docker compose down	        Stop and remove containers, networks
+- docker compose events	    Receive real time events from containers
+- docker compose exec	        Execute a command in a running container
+- docker compose images	    List images used by the created containers
+- docker compose kill	        Force stop service containers
+- docker compose logs	        View output from containers
+- docker compose ls	        List running compose projects
+- docker compose pause	    Pause services
+- docker compose port	        Print the public port for a port binding
+- docker compose ps	        List containers
+- docker compose pull	        Pull service images
+- docker compose push	        Push service images
+- docker compose restart	    Restart service containers
+- docker compose rm	        Removes stopped service containers
+- docker compose run	        Run a one-off command on a service
+- docker compose start	    Start services
+- docker compose stop	        Stop services
+- docker compose top	        Display the running processes
+- docker compose unpause	    Unpause services
+- docker compose up	        Create and start containers
+- docker compose version	    Show the Docker Compose version information
+- docker compose wait	        Block until the first service container stops
+- docker compose watch	    Watch build context for service and rebuild/refresh containers when files are updated
