@@ -30,3 +30,6 @@ sudo ufw disable/enable/status
 ```bash
 unset http_proxy https_proxy
 ```
+- `arp - a`  --- ARP cache table
+
+- arp -s <ip address> <mac address> --- add entry to ARP cache table statically
