@@ -6,4 +6,4 @@
 
 - [Linux](/Linux/README.MD)
 
-- [Postgresql](/Postgresql/README.MD)
+- [Postgresql](/Postgresql/README.md)
