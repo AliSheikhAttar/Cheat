@@ -77,7 +77,6 @@ Top
       - -l – provides a detailed process list along with the PID.
       - -n. Only kill the newest of the processes that are discovered.
       - -o. Only kill the oldest of the processes that are discovered.
-      - -u. Only kill the processes owned by the specified user.
       - -x. Only kill the processes that match the pattern exactly.
       - -signal. Send a specific signal to the process, rather than SIGTERM.
 
