@@ -32,7 +32,7 @@ umask <value ex. 777>
 pwd
 ```
 
-- Move to root
+- Move to home : /home/<USERNAME>
 ```bash
 cd ~
 ```
@@ -93,33 +93,25 @@ The -exec or -execdir options run without further prompts. If you prefer to be p
 find . -name <"*.bak"> -delete
 ```
 
+- direcories & files
 ```bash
-ls -t
+  ls [option] <option>
 ```
-
-```bash
-ls -l
-```
-
-```bash
-ls -r
-```
-
-```bash
-ls -h
-```
-
-```bash
-ls -R
-```
-
-```bash
-ls -l -t
-```
-
-```bash
-ls -lh "path"
-```
+  - -a : list all files including hidden file starting with '.'
+  - --color	: colored list [=always/never/auto]
+  - -d : list directories - with ' */'
+  - -F : add one char of */=>@| to enteries
+  - -i : list file's inode index number
+  - -l : list with long format - show permissions
+  - -la: list long format including hidden files
+  - -lh: list long format with readable file size
+  - -ls: list with long format with file size
+  - -r : list in reverse order
+  - -R : list recursively directory tree
+  - -s : list file size
+  - -S : sort by file size
+  - -t : sort by time & date
+  - -X : sort by extension name 
 
 ```bash
 mkdir -p "a"/"inside_a"
@@ -223,13 +215,65 @@ rm -r "test/"
 ```
 
 ```bash
-ls --help
-```
-
-```bash
 info ls
 ```
 
 ```bash
 man ls
 ```
+- disk storage usage by directories and files
+```bash
+du [option] <directory>
+```
+  - -h : human
+  - -s : summery
+  - -a : all directories & files
+  - -c : total
+  - --time : last access time
+
+
+- File type and info
+```bash
+file [option] <file>
+```
+  - b
+  only type
+
+## vim
+- insert - i
+- normal - ESC 
+- command - :
+  ### normal
+  - u : undo
+  - cntrl + r : redo
+  - y+y : copy the line
+  - y + G : copy till end of the file
+  - y + gg : copy till start of the file
+  - p : paste the line down
+  - shift + p : paste in the above
+  - d + d : cut the line
+  - r + <char> : replace
+  - x : delete char
+  - d + 0 : delete till start of line
+  - d + $ : delete till end of line
+  - b : go to start of word / prev
+  - w : go to start of word / after
+  - e : go to end of word / prev
+  - <n ex:20> e : <n> prev word
+  - o : new line 
+  - shift + o : new line above
+  - 0 : start of line down
+  - $ : end of line
+  - g + g: start of file 
+  - shift + g : end of file
+  - <n> + shift + g : go to line <n>
+  - '*'*<n> : go to <n>next occurence/s
+  - '#'*<n> : go to prev <n>occurence/s
+  - /<string> + shift+n/n : find the prev/next occurence 
+  ### command 
+  - set number : lines numbered
+  - w : save
+  - q : quit
+  - wq : w & q
+  - q! : quit without save
+

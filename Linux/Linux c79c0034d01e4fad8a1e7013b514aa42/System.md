@@ -1,4 +1,6 @@
 # Linux System
+
+## [Directories]()
 - service and processes most using cpu
 
 ```bash
@@ -103,6 +105,11 @@ Top
     ```bash
     killall -o 30m chrome
     ```
+
+- find the executable file for a command
+```bash
+which <executable file>
+```
 - change ownership of directories
 ```bash
   sudo chown -c -R $USER:$USER <directory>
