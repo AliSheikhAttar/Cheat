@@ -1,7 +1,7 @@
 - Start project
 ```bash 
 django-admin startproject <Project name>
-```
+``` 
 
 - Start app
 ```bash

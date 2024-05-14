@@ -13,3 +13,11 @@
 ## Delete previous commits and revert to commit 
 
 `git reset --hard HEAD~` 
+
+## .gitignore
+
+- ignore specific formats
+*.<fileformat>
+
+- ignore specific directories
+<dir_name>                  
