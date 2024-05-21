@@ -1,3 +1,21 @@
+## Virtual env
+- Create virtual env
+```bash
+python -m venv <env_name> 
+virtualenv <env_name>
+```
+- activate
+
+` source <env>/bin/activate`
+` deactivate `
+
+- ready the pip
+
+` python3 -m pip install --upgrade pip `
+` python3 -m pip --version `
+- installed packages
+` python3 -m pip freeze `
+` pip list `
 - Start project
 ```bash 
 django-admin startproject <Project name>
@@ -26,3 +44,4 @@ python3 manage.py createsuperuser
 ```bash
     admin.site.register(ObjectModel)
 ```
+

@@ -16,6 +16,15 @@ axel -a -n [Num_of_Thread] link1 link2 link3 ...
 axel -a -n [Num_of_Thread] link1 link2 link3 ...
 ```
 
+- which ports are used
+```bash
+lsof -i:<port> 
+```
+- kill ssh
+```bash
+killall ssh
+```
+
 - firewall
 ```bash
 sudo ufw disable/enable/status

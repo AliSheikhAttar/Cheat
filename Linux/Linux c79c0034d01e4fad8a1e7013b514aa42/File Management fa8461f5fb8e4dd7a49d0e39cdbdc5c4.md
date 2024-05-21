@@ -3,7 +3,13 @@
 ```bash
 chmod +x ./*.AppImage
 ```
-
+- give permissions to file
+```bash
+chmod 777 <file>
+chmod u+x filename # Grant execute permission to the owner
+chmod g+r filename # Grant read permission to the group
+chmod o+w filename # Grant write permission to others
+```
 - run AppImage file
 ```bash
 ./<x>.AppImage
@@ -94,7 +100,8 @@ find options starting/path expression
   - -O1	(Default) -> filter based on file name first.
   - -O2	-> File name first, then file type.
   - -O3	-> Allow find to automatically re-order the search based on efficient use of resources and likelihood of success.
-  - -maxdepth X ->	Search current directory as well as all sub-directories X levels deep.
+  - -maxdepth X ->	Search current directory as well as all sub-directories at most X levels deep.
+  - -mindepth X ->	Search current directory as well as all sub-directories at least X levels deep.
   - -iname ->	Search without regard for text case(not case sensitive).
   - -name -> with name ...
   - -not ->	Return only results that do not match the test case.
@@ -173,7 +180,8 @@ find . -maxdepth <2> -name <"name">
 
   G ⇒GB
 
-- execute post process : -exec <command> <placeholder for outputs> <endof command args: (; or +)>
+- execute post process : -exec <command> <placeholder for outputs> <endof command args: (; or +)> 
+';' execute process on each result and feth the next result but '+' fetch all result and execute on all of them 
 - ask and delete each founded files
 ```bash
 find . -name "*.txt" -exec rm -i {} \;
@@ -516,9 +524,7 @@ arshia  7
 reza    8
 soltan  10
 
-## Grep
-
-Grep
+## grep
 
 Example:
 
@@ -550,9 +556,14 @@ grep -i we "filename"
 grep <in> "filename"
 ```
 
-- match whole word
+- match whole word - first of string or preceded by non-word
 ```bash
 grep -w <in> "filename"
+```
+
+- match whole word
+```bash
+grep -x <in> "filename"
 ```
 - print lines that doesn’t contain string 
 ```bash
@@ -562,9 +573,9 @@ grep -v string "filename"
 ```bash
 grep -cw string "filename" 
 ```
-- show lines that contain string and the number of that line. 
+- show lines that contain string and the number of that line and write in out.txt. 
 ```bash
-grep -ni string "filename"
+grep -in string "filename" > out.txt
 ```
 
 - Regex(*Regular Expression):*
@@ -579,6 +590,14 @@ grep -e pattern1 -e pattern2 -e pattern3 <filename>
 ```bash
 grep -E 'pattern1|pattern2' <filename>
 ```
+- <n> lines above and n lines under
+```bash
+-C <n> 
+```
+- with lines numbers
+```bash
+-n
+``` 
 ## Wildcards
 
 - “ * ”  ⇒ It means zero or more of each character.
@@ -586,6 +605,9 @@ grep -E 'pattern1|pattern2' <filename>
 - “ ? ” ⇒ It means there is only one number of each character.
 
 - “ [ ] ” ⇒ It means there is only one number of the characters provided inside the brackets.
+
+- [! ] or [^ ] (Negation) -> Matches any one character NOT specified within the brackets.
+Example: [^0-9]* matches any filename that doesn't start with a digit.
 
 - start (any of a, b, d, c, i, o) after l and before s
 ```bash

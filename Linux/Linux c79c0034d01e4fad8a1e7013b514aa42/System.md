@@ -58,107 +58,6 @@ pgrep [options] pattern
 >process instead of listing them on stdout.
 >pidwait will wait for each process instead of listing them on stdout.
 
-- -c, --count
-  print a count of matching processes. 
-
-- -d, --delimiter delimiter
-      Sets  the  string  used to delimit each process ID in the output
-      (by default a newline).  (pgrep only.)
-
-
-
-- -f, --full
-      The pattern is normally only matched against the  process  name.
-      When -f is set, the full command line is used.
-
-- -g, --pgroup pgrp,...
-      Only  match  processes in the process group IDs listed.  Process
-      group 0 is translated into pgrep's, pkill's,  or  pidwait's  own
-      process group.
-
-- -G, --group gid,...
-      Only  match processes whose real group ID is listed.  Either the
-      numerical or symbolical value may be used.
-
-- -i, --ignore-case
-      Match processes case-insensitively.
-
-- -l, --list-name
-      List the process name as well as the process ID.  (pgrep only.)
-
-- -a, --list-full
-      List the full command line as well as the  process  ID.   (pgrep
-      only.)
-
-- -n, --newest
-      Select  only  the newest (most recently started) of the matching
-      processes.
-
-- -o, --oldest
-      Select only the oldest (least recently started) of the  matching
-      processes.
-
-- -O, --older secs
-      Select processes older than secs.
-
-- -P, --parent ppid,...
-      Only match processes whose parent process ID is listed.
-
-- -s, --session sid,...
-      Only  match  processes whose process session ID is listed.  Ses‐
-      sion ID 0 is translated into pgrep's, pkill's, or pidwait's  own
-      session ID.
-- -t, --terminal term,...
-      Only  match processes whose controlling terminal is listed.  The
-      terminal name should be specified without the "/dev/" prefix.
-
-- -u, --euid euid,...
-      Only match processes whose effective user ID is listed.   Either
-      the numerical or symbolical value may be used.
-
-- -U, --uid uid,...
-      Only  match  processes whose real user ID is listed.  Either the
-      numerical or symbolical value may be used.
-
-- -v, --inverse
-      Negates the matching.  This option is usually used in pgrep's or
-      pidwait's  context.  In pkill's context the short option is dis‐
-      abled to avoid accidental usage of the option.
-
-- -w, --lightweight
-      Shows all thread ids instead of pids  in  pgrep's  or  pidwait's
-      context.  In pkill's context this option is disabled.
-
-- -x, --exact
-      Only  match  processes  whose  names  (or command lines if -f is
-      specified) exactly match the pattern.
-
-- -F, --pidfile file
-      Read PIDs from file.  This option is more useful for pkillorpidwait than pgrep.
-
-- -L, --logpidfile
-      Fail if pidfile (see -F) not locked.
-
-- -r, --runstates D,R,S,Z,...
-      Match only processes which match the process state.
-
-- --ns pid
-      Match  processes that belong to the same namespaces. Required to
-      run as root to match processes from other  users.  See  --nslist
-      for how to limit which namespaces to match.
-
-- --nslist name,...
-      Match  only  the provided namespaces. Available namespaces: ipc,
-      mnt, net, pid, user,uts.
-
-- -q, --queue value
-      Use sigqueue(3) rather than kill(2) and the  value  argument  is
-      used  to  specify  an integer to be sent with the signal. If the
-      receiving process has installed a handler for this signal  using
-      the  SA_SIGINFO  flag  to sigaction(2) , then it can obtain this
-      data via the si_value field of the siginfo_t structure.
-
-
 
 
 - Kill
@@ -298,3 +197,27 @@ sudo echo $HOME
   ```
   - 
 
+## Updating
+- upgrades the apps, tools, and utilities
+```bash
+apt-get upgrade
+```
+-  upgrades the apps, tools, and utilities and installs new Linux kernel of the OS
+```bash
+apt upgrade
+```
+- upgrades the apps, tools, and utilities and installs new Linux kernel of the OS. It also removes old packages if needed for the upgrade
+```bash
+apt full-upgrade
+```
+- Remove unused packages
+```bash
+apt full-upgrade
+```
+
+## Fix update
+- ` sudo apt upgrade -y `
+- ` sudo apt update `
+- ` sudo apt-get clean ; sudo apt-get check ; sudo apt -f install `
+- ` sudo apt-get dist-upgrade -y ; sudo apt-get autoremove -y `
+ 
