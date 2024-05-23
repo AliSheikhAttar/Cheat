@@ -117,25 +117,6 @@ find <directory> -name <name or expression> -mtime -<days>
 find </> -name <"*conf"> -mtime -<7>
 find </home/exampleuser/> -name <"*conf"> -mtime -<3>
 ```
-- Find a File in Linux Based on Content
-The find command can only filter the directory hierarchy based on a file’s name and metadata. If you need to search based on the file’s content, use a tool like grep. Consider the following example:
-```bash 
-find . -type <f> -exec grep <"example"> '{}' \; -print
-```
-find . -type f -exec grep "example" '{}' \; -print
-This searches every object in the current directory hierarchy (.) that is a file (-type f) and then runs the command grep "example" for every file that satisfies the conditions. The files that match are printed on the screen (-print). The curly braces ({}) are a placeholder for the find match results. The {} are enclosed in single quotes (') to avoid handing grep a malformed file name. The -exec command is terminated with a semicolon (;), which should be escaped (\;) to avoid interpretation by the shel
-
-
-- Find and Process a File in Linux; -exec option runs commands against every object that matches the find expression. Consider the following example:
-```bash
-find . -name "rc.conf" -exec chmod o+r '{}' \;
-```
-This filters every object in the current hierarchy (.) for files named rc.conf and runs the chmod o+r command to modify the find results’ file permissions.
-
-The commands run with the -exec are executed in the find process’s root directory. Use -execdir to perform the specified command in the directory where the match resides. This may alleviate security concerns and produce a more desirable performance for some operations.
-
-The -exec or -execdir options run without further prompts. If you prefer to be prompted before action is taken, replace -exec with -ok or -execdir with -okdir
-
 
 - Delete the results
 ```bash
@@ -182,27 +163,45 @@ find . -maxdepth <2> -name <"name">
 
 - execute post process : -exec <command> <placeholder for outputs> <endof command args: (; or +)> 
 ';' execute process on each result and feth the next result but '+' fetch all result and execute on all of them 
-- ask and delete each founded files
-```bash
-find . -name "*.txt" -exec rm -i {} \;
-```
-- find string in lines of founded files => find and execute at each step
-```bash
-find . -name "*.txt" -exec grep string {} \;
-```
-- find string in lines of founded files => find at once and execute all
-```bash
-find . -name "*.txt" -exec grep string {} +
-```
--  ';' takes more resource than '+' because of number of process steps
-- print the founded files
-```bash
-find . -type f -name "name" -print
-```
-- delete the founded files
-```bash
-find . -type f -name "name" -delete
-```
+  - ask and delete each founded files
+  ```bash
+  find . -name "*.txt" -exec rm -i {} \;
+  ```
+  - find string in lines of founded files => find and execute at each step
+  ```bash
+  find . -name "*.txt" -exec grep string {} \;
+  ```
+  - find string in lines of founded files => find at once and execute all
+  ```bash
+  find . -name "*.txt" -exec grep string {} +
+  ```
+  -  ';' takes more resource than '+' because of number of process steps
+  - print the founded files
+  ```bash
+  find . -type f -name "name" -print
+  ```
+  - delete the founded files
+  ```bash
+  find . -type f -name "name" -delete
+  ```
+  - Find a File in Linux Based on Content
+  The find command can only filter the directory hierarchy based on a file’s name and metadata. If you need to search based on the file’s content, use a tool like grep. Consider the following example:
+  ```bash 
+  find . -type <f> -exec grep <"example"> '{}' \; -print
+  ```
+  find . -type f -exec grep "example" '{}' \; -print
+  This searches every object in the current directory hierarchy (.) that is a file (-type f) and then runs the command grep "example" for every file that satisfies the conditions. The files that match are printed on the screen (-print). The curly braces ({}) are a placeholder for the find match results. The {} are enclosed in single quotes (') to avoid handing grep a malformed file name. The -exec command is terminated with a semicolon (;), which should be escaped (\;) to avoid interpretation by the shel
+
+
+  - Find and Process a File in Linux; -exec option runs commands against every object that matches the find expression. Consider the following example:
+  ```bash
+  find . -name "rc.conf" -exec chmod o+r '{}' \;
+  ```
+  This filters every object in the current hierarchy (.) for files named rc.conf and runs the chmod o+r command to modify the find results’ file permissions.
+
+  The commands run with the -exec are executed in the find process’s root directory. Use -execdir to perform the specified command in the directory where the match resides. This may alleviate security concerns and produce a more desirable performance for some operations.
+
+  The -exec or -execdir options run without further prompts. If you prefer to be prompted before action is taken, replace -exec with -ok or -execdir with -okdir
 
 
 ## Directories & files
@@ -649,9 +648,12 @@ bunzip2 "filename.bz2"
 ```bash
 tar -cvf archive.tar file{3..10} folder{1..2}
 ```
-- -c => determines we want to archive
-- -v => output the process result
-- -f => archive name
+  - -c => determines we want to archive
+  - -x => determines we want to unarchive
+  - -v => output the process result
+  - -f => archive name
+  - -r => add files and directories to existing archive file without unarchiving it
+
 - see inside archive without open it
 ```bash
 tar -tf archive.tar
@@ -666,11 +668,8 @@ gzip archive.tar
 ```bash
 gunzip archive.tar.gz
 tar -xvf archive.tar
-
--x => it tells we want to remove from archive mode
--v => print some information in output
--f => it takes same path as archive's path
 ```
+
 - archive and compress
 ```bash
 tar -zcvf archive.tar.gz file{3..10} folder{1..2}
@@ -716,8 +715,8 @@ awk '/of/{print $1, $3}' awk_file.txt
 output = Alirof Earth
 Arshatof Jupiter
 Aliof Pluto
+
 - seperate the columns based on character <c>
-- print the last column
 ```bash
 awk -F\<c> '{print $1" "$2" "$3}' data.txt
 ```

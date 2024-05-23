@@ -27,3 +27,13 @@ grep -e windows -e linux -e kill data.txt -C 2 -n -i > clues
 ```bash
 find . -type d -name 'Image' -mindepth 1 -maxdepth 2
 ```
+
+* write filetext "info" with text "info" inside directories named "make"
+```bash
+find . -type d -name "make" -exec sh -c 'echo "info" > {}/info.txt' \;
+```
+
+* print col - col2 - col3 at begining and print the first three columns seperated by | and then print the sum of the third column
+```bash
+awk -F '|' 'BEGIN {print "col1 - col2 - col3"} {print $1 " - " $2 " - " $3; sum += $3} END {print sum}' data.txt
+```
