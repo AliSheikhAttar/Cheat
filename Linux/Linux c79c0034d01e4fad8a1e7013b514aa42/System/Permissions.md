@@ -164,7 +164,7 @@ ls -l
   owner group
 
 ![image](Linux/Linux%20c79c0034d01e4fad8a1e7013b514aa42/System/permissions.png)
-
+![Alt text](Linux/Linux%20c79c0034d01e4fad8a1e7013b514aa42/System/permissions.png "Title")
 - 
 ```bash
 
