@@ -20,9 +20,12 @@
 
 
 - your user
-` whoami `
+```bash
+ whoami 
+```
 - more details the about user : UID , GID & all of the group IDs the user belongs to
-` id `
+```bash 
+id `
 
 
 - add user <user> to system with its home and bash
@@ -34,15 +37,14 @@ sudo useradd -m -c "<user> Temporary User" -s /bin/bash <user>
 ```
 
 - create <user> and append <group> to its groups
-` useradd -G <group> <user> `
+```bash useradd -G <group> <user> `
 - set no password for <user>
-` passwd -d <user> `
+```bash passwd -d <user> `
 - set password for user
 ```bash
 sudo passwd <user>
 ```
-- login as user
-` su - <user> `
+
 - another way to create user
 ` sudo adduser <user> `
 
@@ -82,3 +84,5 @@ Explanation:
 ` sudo echo $HOME `
 
 ## root
+- login as user
+```bash su - <user> `
