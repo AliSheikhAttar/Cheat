@@ -25,7 +25,8 @@
 ```
 - more details the about user : UID , GID & all of the group IDs the user belongs to
 ```bash 
-id `
+id 
+```
 
 
 - add user <user> to system with its home and bash
@@ -44,25 +45,41 @@ sudo useradd -m -c "<user> Temporary User" -s /bin/bash <user>
 ```bash
 sudo passwd <user>
 ```
-
+- list of encrypted passwords
+```bash
+sudo cat /etc/shadow
+```
 - another way to create user
-` sudo adduser <user> `
+```bash 
+sudo adduser <user> 
+```
 
 - Create group
-` sudo groupadd <group> `
-` sudo addgroup shared `
-
+```bash 
+sudo groupadd <group> `
+```
+```bash
+sudo addgroup shared 
+```
 - Append <group> to <user> groups
-` sudo usermod -a -G <group> <user> `
+```bash
+sudo usermod -a -G <group> <user> 
+```
 
 - delete <user>
-` sudo deluser --remove-home <user> `
+```bash
+sudo deluser --remove-home <user> 
+```
 
 - delete <user> and its home directory
-` userdel -r <user> `
-- delete <group>
-` sudo delgroup <group> `
+```bash
+ userdel -r <user> 
+```
 
+- delete <group>
+```bash
+sudo delgroup <group> 
+```
 
 
 ## Change ownership
@@ -84,5 +101,106 @@ Explanation:
 ` sudo echo $HOME `
 
 ## root
+### su
 - login as user
-```bash su - <user> `
+```bash
+su -
+```
+- login and redirect password
+```bash
+su - <user> << <password>
+```
+ 
+- login as user & password
+```bash
+sudo su -
+```
+
+- exit to owned user
+```bash
+exit
+```
+
+- login as other users
+```bash
+su - <user>
+```
+-c, --command=command
+لاگین شدن به عنوان کاربر داده شده	-, -l, --login
+استفاده از شل دلخواه به جای شل پیشفرض	-s, --shell=shell
+- options
+- -, -l, --login : login as inputed user
+- -c, -command=command : run command without logging in as user
+- -s , --shell=shell, use arbitrary shell instead of default shell
+
+### Sudo
+run commands as root
+- login as root
+```bash
+sudo -i
+```
+## Files & Directories
+- r : read
+- w : write
+- x : execute
+
+rwx (111) => all permission
+r-x (101) => not writable
+-wx (11)  => not readable
+
+```bash
+ls -l
+```
+- First column : 
+  - first char : 
+    - - => file 
+    - d => directory
+  - rest :
+    permissions of three:
+      - owner user, owner group, others
+- third :
+  owner user
+- fourth :
+  owner group
+
+![image](Linux/Linux%20c79c0034d01e4fad8a1e7013b514aa42/System/permissions.png)
+
+- 
+```bash
+
+```
+
+- 
+```bash
+
+```
+
+- 
+```bash
+
+```
+
+- 
+```bash
+
+```
+
+- 
+```bash
+
+```
+
+- 
+```bash
+
+```
+
+- 
+```bash
+
+```
+
+- 
+```bash
+
+```
