@@ -37,3 +37,6 @@ find . -type d -name "make" -exec sh -c 'echo "info" > {}/info.txt' \;
 ```bash
 awk -F '|' 'BEGIN {print "col1 - col2 - col3"} {print $1 " - " $2 " - " $3; sum += $3} END {print sum}' data.txt
 ```
+
+* the current user bash
+` grep $(whoami) /etc/passwd | cut -d: -f7 `

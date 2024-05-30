@@ -35,9 +35,31 @@ sudo ufw disable/enable/status
 - sudo systemctl stop/status firewalld
 ```
 
+## proxy
 - Reset proxy
 ```bash
-unset http_proxy https_proxy
+unset http_proxy
+unset https_proxy
+unset HTTP_PROXY
+unset https_proxy
+unset HTTPS_PROXY
+unset all_proxy
+unset ALL_PROXYz
+```
+- clear proxy
+```bash
+export http_proxy=""
+export https_proxy=""
+export HTTP_PROXY=""
+export HTTPS_PROXY=""
+export all_proxy=""
+export ALL_PROXY=""
+
+```
+- view proxy
+```bash
+echo $http_proxy
+echo $https_proxy
 ```
 
 - ARP cache table

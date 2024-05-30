@@ -58,15 +58,15 @@ def collection_detail(request, pk):
     collection = get_object_or_404(
         Collection.objects.annotate(
             products_count=Count('products')), pk=pk)
-    if request.method == 'GET':
+    if request.method == 'GET': #get object
         serializer = CollectionSerializer(collection)
         return Response(serializer.data)
-    elif request.method == 'PUT':
+    elif request.method == 'PUT': #update object
         serializer = CollectionSerializer(collection, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
-    elif request.method == 'DELETE':
+    elif request.method == 'DELETE': #delete object
         if collection.products.count() > 0:
             return Response({'error': 'Collection cannot be deleted because it includes one or more products.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
         collection.delete()
