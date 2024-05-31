@@ -121,5 +121,5 @@ echo ${!hm[@]}          # keys
 echo ${hm[@]}           # values
 # notice that "umadam" key appears once even though we defined it twice
 # notice that the index orders are different from how we inserted them
-echo ${#hm[@]}
+echo ${#hm[@]} 
 ```

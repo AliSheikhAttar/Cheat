@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Change to the specific directory
+cd /path/to/your/repository
+
+# Configure Git to use a credential helper that caches your credentials for a short period
+git config credential.helper 'cache --timeout=3600'
+
+# Use the first argument as the commit message, or default to "new cheatz" if no argument is provided
+commit_message=${1:-"new cheatz"}
+
+# Run Git commands
+git add .
+git commit -m "$commit_message"
+git push
