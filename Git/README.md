@@ -29,7 +29,10 @@
 ## status
 - more compact way
 ` git status --short ` 
-
+- output 1 if any changes detected else 0
+```bash
+git diff --cached --exit-code
+```
 ## delete from git repo
 - delete <file> from git index(staging area) and not from local
 ```bash
