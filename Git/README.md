@@ -30,7 +30,8 @@
 - more compact way
 ` git status --short ` 
 
-## delete from git repo not local
+## delete from git repo
+- delete <file> from git index(staging area) and not from local
 ```bash
 git rm --cached <file>
 ```
