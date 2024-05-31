@@ -30,6 +30,11 @@
 - more compact way
 ` git status --short ` 
 
+## delete from git repo not local
+```bash
+git rm --cached <file>
+```
+
 ## log
 - history of commits for a repo
 ` git log `
