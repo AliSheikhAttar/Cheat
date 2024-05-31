@@ -33,6 +33,11 @@
 ```bash
 git diff --cached --exit-code
 ```
+- provides a simplified output of the status of the working directory and staging area. If there are any changes (modified, added, deleted files), it will produce output
+```bash
+git status --porcelain: 
+```
+
 ## delete from git repo
 - delete <file> from git index(staging area) and not from local
 ```bash
