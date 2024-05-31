@@ -3,13 +3,7 @@
 ```bash
 chmod +x ./*.AppImage
 ```
-- give permissions to file
-```bash
-chmod 777 <file>
-chmod u+x filename # Grant execute permission to the owner
-chmod g+r filename # Grant read permission to the group
-chmod o+w filename # Grant write permission to others
-```
+
 - run AppImage file
 ```bash
 ./<x>.AppImage
@@ -19,11 +13,6 @@ chmod o+w filename # Grant write permission to others
  mkdir Micro; for i in {0..10}; do mv ../Downloads/"AVR Microcontroller$i.pdf" ./Micro; done
 ```
 
-- Remove permission
-- the umask acts as a filter to remove certain permissions from the default permission set. It helps enforce security policies by restricting the default access granted to newly created files and directories.
-```bash
-umask <value ex. 777>
-```
 
 - Run command inside a file
     - ```bash
@@ -75,7 +64,7 @@ umask <value ex. 777>
   - wq : w & q
   - q! : quit without save
   - qa : quit all open buffers and exit Vim. It closes all open files and terminates the Vim session. If there are unsaved changes in any of the buffers, Vim will prompt you to save or discard those changes before quitting.
-
+  - install clipboard: `sudo apt-get install vim-gtk3`
 ## Unzip
 - unzip tar files
 ```bash

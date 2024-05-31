@@ -81,25 +81,6 @@ sudo deluser --remove-home <user>
 sudo delgroup <group> 
 ```
 
-
-## Change ownership
-
-- change ownership of directories
-```bash
-  sudo chown -c -R $USER:$USER <directory>
-```
-Explanation:
->chown: change the ownership of files/directories
->-c: report all changes
->-R: do this recursively (for all files/directories beneath the given one)
->$USER:$USER: change the owner and the group that owns the the entry to the user that issues the command (sudo preserves the > > values)
-> $HOME: do this with your home directory
-> You can test those environment variables with the following commands
-` echo $USER `
-` sudo echo $USER `
-` echo $HOME `
-` sudo echo $HOME `
-
 ## root
 ### su
 - login as user
@@ -163,44 +144,54 @@ ls -l
 - fourth :
   owner group
 
-![image](Linux/Linux%20c79c0034d01e4fad8a1e7013b514aa42/System/permissions.png)
-![Alt text](Linux/Linux%20c79c0034d01e4fad8a1e7013b514aa42/System/permissions.png "Title")
-- 
-```bash
+![Permission image](permissions.png)
 
+### Set/Change ownership
+
+- chown: change the ownership of files/directories to <user> and <Group>
+```bash
+  sudo chown -c -R $USER:$USER <directory>/<file>
+```
+```bash
+  sudo chown -c -R $USER:$USER <directory>
+```
+Explanation:
+>-c: report all changes
+>-R: do this recursively (for all files/directories beneath the given one)
+>$USER:$USER: change the owner and the group that owns the the entry to the user that issues the command (sudo preserves the > > values)
+> $HOME: do this with your home directory
+> You can test those environment variables with the following commands
+` echo $USER `
+` sudo echo $USER `
+` echo $HOME `
+` sudo echo $HOME `
+
+### Change permissions
+
+- chmod : root or owner of files/directory
+```bash
+chmod [OPTION] [ugoa][-+=][rwx] FILE/DIR...
+```
+- u = user
+- g = group
+- o = others
+- a = all (default)
+
+- - = revoke the permissions
+- + = grant new permissions
+- = = revoke all previous permissions and grant new permissions
+
+- append write permissions for file for other users
+```bash
+chmod o+w <file>
 ```
 
-- 
+- set read and write permissions (110 = 6) for user, group and others for file (666)
 ```bash
-
+chmod 666 transferred-file
 ```
-
-- 
+- Remove permission
+- the umask acts as a filter to remove certain permissions from the default permission set. It helps enforce security policies by restricting the default access granted to newly created files and directories.
 ```bash
-
-```
-
-- 
-```bash
-
-```
-
-- 
-```bash
-
-```
-
-- 
-```bash
-
-```
-
-- 
-```bash
-
-```
-
-- 
-```bash
-
+umask <value ex. 777>
 ```
