@@ -1,5 +1,5 @@
 # General
-[Partitioning](General%20c9034f9873b64428aa74526160cef97c/Partitioning%205d4321b542e1442eb68ffeac96f15352.md)
+[Partitioning](./Partitioning.md)
 
 ## ScreenShot
     - X window and save <image.jpg> in Home dir
