@@ -24,7 +24,6 @@ chmod +x script.script
 
 - " " instead of variable wihtout use 
 
-
 ```bash
 target=quera
 echo hello $target #prints hello quera in the terminal
