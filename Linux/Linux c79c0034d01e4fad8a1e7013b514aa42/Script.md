@@ -1,4 +1,4 @@
-# Scripting
+# Script
 
 ## Creating
 ```bash
@@ -122,4 +122,11 @@ echo ${hm[@]}           # values
 # notice that "umadam" key appears once even though we defined it twice
 # notice that the index orders are different from how we inserted them
 echo ${#hm[@]} 
+```
+
+## Condition
+- if argument is passed set the variable to argument value else set it to default value
+
+```bash
+commit_message=${1:-"new cheatz"}
 ```
