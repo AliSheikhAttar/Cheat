@@ -129,3 +129,108 @@ echo ${#hm[@]}
 ```bash
 commit_message=${1:-"new cheatz"}
 ```
+### if else : condition == command => if exit code == 0 => execute
+```bash
+if command-1; then
+    commands-1
+elif command-2; then
+    commands-2
+...
+elif command-n; then
+    commands-n
+else (optional)
+    commands-else
+fi            
+```
+#### case
+```bash
+case variable in
+pattern-1) commands-1;;
+pattern-2) commands-2;;
+...
+pattern-n) commands-n;;
+*) default-commands;;
+esac
+```
+
+### test
+```bash
+if test \$num1 -eq \$num2 # if equal => exit code == 0
+then
+    echo "Equal Numbers: \$num1 == \$num2"
+else
+    echo "Not Equal Numbers: \$num1 != \$num2"
+fi 
+```
+```bash
+if [ \$num1 -eq \$num2 ] # if equal => exit code == 0
+then
+    echo "Equal Numbers: \$num1 == \$num2"
+else
+    echo "Not Equal Numbers: \$num1 != \$num2"
+fi 
+```
+
+```bash
+if [ -z "\$word1" ] && [ -n "\$word2" ] # -z => is zero or not , -n => is bigger than zero 
+then
+   echo "here"
+   echo "just word2=\$word2 is given"
+elif [ -n "\$word1" ] && [ -z "\$word2" ]
+then
+    echo "just word1=\$word1 is given"
+elif [ -n "\$word1" ] && [ -n "\$word2" ]
+then
+    echo "both word1=\$word1 and word2=\$word2 is given"
+else
+    echo "nothing given!"
+fi
+```
+
+```bash
+var=$2
+
+case $var in
+  +) echo addition of your two numbers are $(($1 + $3));;
+  -) echo subtraction of your two numbers are $(($1 - $3));;
+  \x) echo multiplication of your two numbers are $(($1 * $3));;
+  /) if [ $3 -ne 0 ]; then # if not equal zero
+     echo division of your two numbers are $(($1 / $3));;
+     fi
+  *) echo "Invalid operator";;
+esac
+```
+
+### For
+```bash
+for var in list
+do
+    commands
+done
+```
+- Manual
+```bash
+for word in "linux" "is" "perfect" "and" "windows?" "mmm," "not" "bad."
+do
+    echo -n "\$word "
+done
+echo
+```
+
+- From list
+```bash
+cat <<EOF > list
+Linux
+Changed
+My
+World!
+EOF
+
+cat <<EOF > for2.sh
+#! /bin/bash
+for word in \$(cat list)
+do
+    echo \$word
+done
+EOF
+```

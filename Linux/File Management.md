@@ -612,6 +612,10 @@ touch a{1..200}.txt
 echo {01..20}
 ```
 
+- -n: not to append a newline character at the end of the output.
+```bash
+echo -n "\$word "
+```
 
 ## Compression & archive
 
