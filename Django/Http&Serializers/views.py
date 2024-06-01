@@ -57,7 +57,7 @@ def collection_list(request):
 def collection_detail(request, pk):
     collection = get_object_or_404(
         Collection.objects.annotate(
-            products_count=Count('products')), pk=pk)
+            products_count=Count('products')), pk=pk) # annotate add fields to the model existing fields, the new field for each collection object is product_count which is count of products referenced to the collection object
     if request.method == 'GET': #get object
         serializer = CollectionSerializer(collection)
         return Response(serializer.data)
