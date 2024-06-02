@@ -61,6 +61,54 @@ echo "division of your two numbers are $(($1/$2))"
 ```bash
 ./hello.sh $(whoami) ali
 ```
+### shift
+```bash
+
+OPTION1=false # Boolean Option with default value
+OPTION2=hello # Parameter Option with default value
+
+while [ -n \$1 ]
+do
+    case $\1 in
+        -o1) echo "OPTION1 entered"
+             OPTION1=true
+             shift ;;
+
+        -o2 | --option2) echo "OPTION2 entered"
+             if [ -z \$2 ]; then
+                 echo "Option2 needs a parameter"
+                 exit 1 # exit with exit code 1
+             fi
+             OPTION2=\$2
+             shift
+             shift ;;
+
+         --) shift
+             break ;;
+
+          *) echo "\$1 is not an Option"
+             exit 1 ;;
+    esac
+done
+echo "Option1: \$OPTION1, Option2: \$OPTION2"
+count=1
+while [ -n \$1 ]
+do
+    echo "Parameter #\$count = \$1"
+    count=\$[ \$count + 1 ]
+    shift
+done
+# inputs 
+bash options.sh -o1 -o2 bye -- Alireza ArshiA SAliB
+bash options.sh -o1 --option2 bye -- Alireza ArshiA SAliB
+# outputs 
+OPTION1 entered
+OPTION2 entered
+Option1: true, Option2: bye
+Parameter #1 = Alireza
+Parameter #2 = ArshiA
+Parameter #3 = SAliB 
+```
 
 ## Array
 
@@ -154,6 +202,15 @@ esac
 ```
 
 ### test
+
+* options :
+- -z INTEGER : is zero
+- -n INTEGER : is bigger than zero
+- -d FILE    : FILE exists and is a directory
+- -e FILE    : FILE exists
+- -f FILE    : FILE exists and is a regular file
+
+- equality of numbers
 ```bash
 if test \$num1 -eq \$num2 # if equal => exit code == 0
 then
@@ -170,23 +227,23 @@ else
     echo "Not Equal Numbers: \$num1 != \$num2"
 fi 
 ```
-
+- logical expressions
 ```bash
-if [ -z "\$word1" ] && [ -n "\$word2" ] # -z => is zero or not , -n => is bigger than zero 
+if [ -z \$word1 ] && [ -n \$word2 ] 
 then
    echo "here"
    echo "just word2=\$word2 is given"
-elif [ -n "\$word1" ] && [ -z "\$word2" ]
+elif [ -n \$word1 ] && [ -z \$word2 ]
 then
     echo "just word1=\$word1 is given"
-elif [ -n "\$word1" ] && [ -n "\$word2" ]
+elif [ -n \$word1 ] && [ -n \$word2 ]
 then
     echo "both word1=\$word1 and word2=\$word2 is given"
 else
     echo "nothing given!"
 fi
 ```
-
+- calculator
 ```bash
 var=$2
 
@@ -200,24 +257,44 @@ case $var in
   *) echo "Invalid operator";;
 esac
 ```
+- backup
+```bash
+SRC=\$1
+DST=\$2
 
-### For
+if [ -z \$SRC ] || [ -z \$DST ]
+then
+    echo "Two Arguments needed"
+    exit 1
+fi
+
+if [ -e \$SRC ]
+then
+    cp -rv \$SRC \$DST
+    echo "Backup Seccussful"
+else
+    echo "Source Path not exists: \$SRC"
+fi
+```
+
+## Loop
+### for
 ```bash
 for var in list
 do
     commands
 done
 ```
-- Manual
+#### Manual
 ```bash
 for word in "linux" "is" "perfect" "and" "windows?" "mmm," "not" "bad."
 do
-    echo -n "\$word "
+    echo -n \$word
 done
 echo
 ```
 
-- From list
+#### List
 ```bash
 cat <<EOF > list
 Linux
@@ -226,11 +303,51 @@ My
 World!
 EOF
 
-cat <<EOF > for2.sh
 #! /bin/bash
 for word in \$(cat list)
 do
     echo \$word
 done
-EOF
+
+```
+
+#### Folder
+```bash
+mkdir for3
+cd for3
+mkdir folder
+touch folder/file{1..3}.{txt,png}
+mkdir folder/sub-folder{1..2}
+
+
+for word in $(pwd)/folder/*
+do
+    if [ -d \$word ]; then # its directory
+        echo "\$word is a folder"
+    elif [ -f \$word ]; then # its file
+        echo "\$word is a file"
+    fi
+done
+
+```
+#### iterator
+```bash
+for (( i = 1; i <= 10; i++ ))
+do
+    echo "Round \$i"
+done
+```
+
+### While
+```bash
+var=10
+while [ \$var -gt 0 ]
+do
+    echo "Round \$var"
+    var=\$[ \$var - 1 ]
+done
+```
+```bash
+break
+continue
 ```
