@@ -1,6 +1,12 @@
 # General
 [Partitioning](./Partitioning.md)
 
+## Gui
+```bash
+echo $XDG_CURRENT_DESKTOP
+env | grep XDG_CURRENT_DESKTOP
+```
+
 ## ScreenShot
     - X window and save <image.jpg> in Home dir
     ```bash
@@ -35,3 +41,9 @@
 ```bash
     ffmpeg -i inputfile.video outputfile.video
 ```
+
+## Live watch
+```bash
+watch -n1 date +%r
+```
+
