@@ -6,22 +6,24 @@
 
 ![Screenshot 2024-02-13 153251.png](Standard%20Stream%203e15e4dd7ff74cbd8a94ba5b39710fd1/Screenshot_2024-02-13_153251.png)
 
-# Redirecting streams
-
+## Redirecting streams
+### Output
 ```bash
-command > output
+command -options arguments 1> destination
+command -options arguments > destination
 ```
-
+### Input
 ```bash
-echo "hello from quera" > file.txt
+command -options arguments 0< input_source
+command -options arguments < input_source
 ```
-
+### Error
 ```bash
-**echo "hello from quera" > file.txt**
+command -options arguments 2> destination
 ```
-
+### Output & Error
 ```bash
-command < input
+command -options arguments 1> output_destination 2> error_destination
 ```
 
 ```bash

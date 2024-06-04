@@ -233,6 +233,8 @@ cd /
   - -t : sort by time & date
   - -X : sort by extension name 
   - -h : more human
+  - -ltha : with full details
+
 
 - Create all path
 ```bash
@@ -315,14 +317,6 @@ file [option] <file>
   - b
   only type
 
-- Information about ls. use “q” to exit
-```bash
-info ls
-```
-- Complete information about ls
-```bash
-man ls
-```
 - disk storage usage by directories and files
 ```bash
 du [option] <directory>
@@ -723,3 +717,19 @@ awk -F\- '{print $1" "$2" "$3}' data.txt
 ```bash
 awk 'NF' <sample.txt> 
 ```
+
+```bash 
+awk -F ',' -v kw="$keyword" 'BEGIN{OFS=","} $3 ~ kw {print FNR" | "$1" | "$2" | "$3}' tasks.csv
+awk -v task_id="$task_id" -F ',' 'BEGIN {OFS = FS} 
+                NR == task_id {$1 = 1} {print}' tasks.csv > tasks.tmp && mv tasks.tmp tasks.csv
+```
+
+- -v : declare variable
+- begin : runs before processing
+- OFS : output delimiter
+- FS : input delimiter
+- FNR processed line in current file
+- NR processed line in all files
+- int1 == int2 {expression1} ... {expression n} : numerical equality
+- str1 ~ str2 {expression1} ... {expression n} : is used to match a variable against a regular expression.
+- > tasks.tmp && mv tasks.tmp tasks.csv : if awk command was ok then replace the result

@@ -10,4 +10,9 @@
 
 ## [Processes](./Processes.md)
 
+### Kernel
+![Permission image](kernel.png)
+![Permission image](kernel1.png)
+
 ## [Services](./Services.md)
+

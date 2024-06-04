@@ -95,7 +95,7 @@ count=1
 while [ -n \$1 ]
 do
     echo "Parameter #\$count = \$1"
-    count=\$[ \$count + 1 ]
+    count=\$[ \$count + 1 ] # $((count+1))
     shift
 done
 # inputs 
@@ -163,12 +163,16 @@ hm[0]="kaqaz gheichi"
 hm[1]="gheichi sang"
 hm[2]="sang kaqaz"
 
-
+echo ${hm[che]}
 echo ${!hm[@]}          # keys
 echo ${hm[@]}           # values
 # notice that "umadam" key appears once even though we defined it twice
 # notice that the index orders are different from how we inserted them
-echo ${#hm[@]} 
+echo ${#hm[@]}
+
+for val in "${hm[@]}"; do #loop
+    echo $val
+done
 ```
 
 ## Condition
@@ -177,7 +181,8 @@ echo ${#hm[@]}
 ```bash
 commit_message=${1:-"new cheatz"}
 ```
-### if else : condition == command => if exit code == 0 => execute
+### if 
+condition == command => if exit code == 0 => execute
 ```bash
 if command-1; then
     commands-1
@@ -210,7 +215,15 @@ esac
 - -e FILE    : FILE exists
 - -f FILE    : FILE exists and is a regular file
 
-- equality of numbers
+- equality and unequlity of numbers
+```bash
+[[ NUM == NUM ]] [[ NUM -eq NUM ]]
+[[ NUM != NUM ]] [[ NUM -ne NUM ]]
+[[ NUM < NUM ]] [[ NUM -lt NUM ]]
+[[ NUM <= NUM ]] [[ NUM -le NUM ]]
+[[ NUM > NUM ]] [[ NUM -gt NUM ]]
+[[ NUM >= NUM ]] [[ NUM -ge NUM ]]
+```
 ```bash
 if test \$num1 -eq \$num2 # if equal => exit code == 0
 then
@@ -276,6 +289,21 @@ else
     echo "Source Path not exists: \$SRC"
 fi
 ```
+- Area
+```bash
+#! /bin/bash
+
+if [[ $1 == "triangle" ]]; then
+    Area=$(($2*$3/2))
+    echo "Triangle Area is : $Area"
+elif [[ $1 == "rectangle" ]]; then
+        Area=$(($2 * $3))
+        echo "Rectangle Area is : $Area"
+else
+        Area=$(($2 * $2))
+        echo "Square Area is : $Area"
+fi
+```
 
 ## Loop
 ### for
@@ -292,6 +320,18 @@ do
     echo -n \$word
 done
 echo
+```
+
+#### range
+```bash
+# gouss law
+for i in {0..10}
+do
+  sum=$((sum+i))
+done
+
+echo sum of first 10 integers are: $sum
+echo sum of first 10 integers are: $(((10+0)*11/2))
 ```
 
 #### List
@@ -350,4 +390,46 @@ done
 ```bash
 break
 continue
+```
+
+## function
+
+```bash
+function hello_world {
+  echo hello world!
+}
+
+function greet {
+  echo "hello $1"
+}
+
+greet mirza
+greet hovakhshatara
+hello_world
+
+target=garshasb
+
+function greet {
+  local target=world
+  echo "hello $target"
+}
+
+greet mirza # extra input => no effects
+greet hovakhshatara 
+echo hello $target
+```
+
+## command substitution
+> use command/function as variable
+```bash
+# gouss law
+function gauss {
+  for i in {0..10}
+    do
+      sum=$((sum+i))
+  done
+  echo $sum
+}
+
+echo here is the proof that guass law was currect: `gauss` == $(((10+0)*11/2))
 ```
