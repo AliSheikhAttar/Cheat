@@ -121,7 +121,7 @@ Features of Systemd
 * User Session Control: Manages user logins with systemd-login.
 * System Event Logging: Can be used for system event logging similar to syslog.
 * Commands for Managing Services with Systemd
- 
+  
 - List units: ` sudo systemctl list-units `
 - View status of unit: ` sudo systemctl status networking.service `
 - Start a service: ` sudo systemctl start networking.service `
