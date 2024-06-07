@@ -30,41 +30,44 @@ chmod +x ./*.AppImage
 - insert - i
 - normal - ESC 
 - command - :
-  ### normal
-  - u : undo
-  - cntrl + r : redo
-  - y+y : copy the line
-  - y + G : copy till end of the file
-  - y + gg : copy till start of the file
-  - p : paste the line down
-  - shift + p : paste in the above
-  - d + d : cut the line
-  - r + <char> : replace
-  - x : delete char
-  - d + 0 : delete till start of line
-  - d + $ : delete till end of line
-  - b : go to start of word / prev
-  - w : go to start of word / after
-  - e : go to end of word / prev
-  - <n ex:20> e : <n> prev word
-  - o : new line 
-  - shift + o : new line above
-  - 0 : start of line down
-  - $ : end of line
-  - g + g: start of file 
-  - shift + g : end of file
-  - <n> + shift + g : go to line <n>
-  - '*'*<n> : go to <n>next occurence/s
-  - '#'*<n> : go to prev <n>occurence/s
-  - /<string> + shift+n/n : find the prev/next occurence 
-  ### command 
-  - set number : lines numbered
-  - w : save
-  - q : quit
-  - wq : w & q
-  - q! : quit without save
-  - qa : quit all open buffers and exit Vim. It closes all open files and terminates the Vim session. If there are unsaved changes in any of the buffers, Vim will prompt you to save or discard those changes before quitting.
-  - install clipboard: `sudo apt-get install vim-gtk3`
+### normal
+- u : undo
+- cntrl + r : redo
+- y+y : copy the line
+- d + d : cut the line
+- y + G : copy till end of the file
+- y + gg : copy till start of the file
+- p : paste the line down
+- shift + p : paste in the above
+- r + <char> : replace
+- x : delete char
+- d + 0 : delete till start of line
+- d + $ : delete till end of line
+- b : go to start of word / prev
+- w : go to start of word / after
+- e : go to end of word / prev
+- shift+e : end of line
+- <n ex:20> e : <n> prev word
+- o : new line 
+- shift + o : new line above
+- 0 : start of line down
+- $ : end of line
+- g + g: start of file 
+- shift + g : end of file
+- <n> + shift + g : go to line <n>
+- '*'*<n> : go to <n>next occurence/s
+- '#'*<n> : go to prev <n>occurence/s
+- /<string> + shift+n/n : find the prev/next occurence 
+### command 
+- set number : lines numbered
+- w : save
+- q : quit
+- wq : w & q
+- q! : quit without save
+- qa : quit all open buffers and exit Vim. It closes all open files and terminates the Vim session. If there are unsaved changes in any of the buffers, Vim will prompt you to save or discard those changes before quitting.
+- install clipboard: `sudo apt-get install vim-gtk3`
+
+
 ## Unzip
 - unzip tar files
 ```bash
@@ -610,6 +613,9 @@ echo {01..20}
 ```bash
 echo -n "\$word "
 ```
+- -e: characters that come after \ as special chars
+ex: \r in text means the new line to echo be echoed in the first(previous line) and replace the previous chars
+if the lenght is less than the previous one the old remaining chars remain
 
 ## Compression & archive
 

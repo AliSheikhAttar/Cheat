@@ -25,9 +25,14 @@ lsof -i:<port>
 killall ssh
 ```
 
-- firewall
+- firewall (Uncomplicated Firewall)
 ```bash
 sudo ufw disable/enable/status
+```
+
+- allow transfer on <port> : random number greater than 1024 (less are preserved)
+```bash
+sudo ufw allow <port>/tcp
 ```
 
 

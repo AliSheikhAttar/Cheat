@@ -74,6 +74,16 @@ ps aux
 
 
 
+## Example Commands
+
+### Display Specific Columns
+
+To display the process ID, user, CPU usage, and command:
+
+```bash
+ps -e -o pid,user,%cpu,cmd
+
+
 ### options
 - -s <column> : sort by column
 - -u <user>   : belong to <user>
@@ -101,7 +111,11 @@ jobs
 ```
 - transfer process to background
 ```bash
-bg JOB
+bg JOB <syntax suger>
+```
+- run process in background
+```bash
+<command> &
 ```
 - transfer process to foreground
 ```bash
@@ -122,6 +136,8 @@ fg JOB
 - -axjf – prettier output with a few more columns.
 - -p <pid>
 - -r : only running processes
+- -f : output in long format(more info)
+- -e : running processes
 
 - Sorting
 ```bash
@@ -139,6 +155,30 @@ ps --sort [+|-]<column>
 - **TIME Column**: The amount of time the process has been running.
 - **COMMAND Column**: The command of the process.
 
+# Commonly Used Columns in `ps`
+
+| Column   | Description                                                |
+|----------|------------------------------------------------------------|
+| **PID**  | Process ID.                                                |
+| **PPID** | Parent Process ID.                                         |
+| **UID**  | User ID of the process owner.                              |
+| **USER** | Username of the process owner.                             |
+| **RUSER**| Real user name.                                            |
+| **GROUP**| Group name of the process owner.                           |
+| **TTY**  | Terminal associated with the process.                      |
+| **TIME** | Cumulative CPU time used by the process.                   |
+| **CMD**  | Command that started the process.                          |
+| **COMM** | Command name (only the executable name).                   |
+| **ARGS** | Command with all its arguments.                            |
+| **STAT** | Process state (e.g., R, S, D, Z, T) with additional characters for more details. |
+| **VSZ**  | Virtual memory size of the process.                        |
+| **RSS**  | Resident Set Size (the non-swapped physical memory a task has used). |
+| **%CPU** | CPU usage percentage.                                      |
+| **%MEM** | Memory usage percentage.                                   |
+| **NI**   | Nice value of the process (used for priority).             |
+| **PRI**  | Priority of the process.                                   |
+| **STIME**| Start time of the process.                                 |
+| **WCHAN**| If a process is sleeping, this is the name of the kernel function in which it is sleeping. |
 
 ### status
 
@@ -286,10 +326,16 @@ renice -n <nice_value> -u <user>
 - SIGCONT (18) – continue the process
 * SIGKILL & SIGSTOP effects immediately
 
+
+### Kill
+
 - All signals
 ```bash
 kill -l
+# KILL , STOP, CONT
 ```
+
+
 - send signal to process
 ```bash
 kill -NAME <PID>
@@ -298,9 +344,6 @@ kill -NUMBER <PID>
 
 kill -SIGSTOP <PID>
 ```
-
-
-### Kill
 
 
 - kill multiple
@@ -320,11 +363,12 @@ pkill <pname> [option]
 - -u [username] – kills processes owned by a specific user.
 - -t [terminal] – kills processes attached to a specific terminal.
 - -l – provides a detailed process list along with the PID.
-- -n. Only kill the newest of the processes that are discovered.
-- -o. Only kill the oldest of the processes that are discovered.
-- -x. Only kill the processes that match the pattern exactly.
-- -signal. Send a specific signal to the process, rather than SIGTERM.
-- -e, --echo. Display name and PID of the process being killed.  (pkill only.)
+- -n – Only kill the newest of the processes that are discovered.
+- -o – Only kill the oldest of the processes that are discovered.
+- -x – Only kill the processes that match the pattern exactly.
+- --signal – Send a specific signal to the process, rather than SIGTERM.
+- -e, --echo – Display name and PID of the process being killed.  (pkill only.)
+- -x – match exactly
 
 - closes a given server's connection to clients. The syntax of the xkill command is;
 If a server has opened some unwanted processes, xkill aborts these processes.
@@ -336,16 +380,55 @@ xkill <resource>
 ```bash
 killall <pname> [option]
 ```
-- -e: This option specifies that the process name should match exactly. If this option is not used, "killall" will match any process name that contains the specified string.
-- -i: This option prompts the user before killing each process.
-- -s signal: This option allows you to specify a common signal to send to the background process. The default signal is SIGTERM.
-- -I. Ignore the case when trying to find the process name.
-- -u. Only kill processes owned by a specific user.
-- -v. Report back on whether the process has been successfully killed.
+
+- kill group or session
+```bash
+kill -SIGNAL -<PGID>
+kill -SIGNAL -<SID>
+```
+
+- -e – This option specifies that the process name should match exactly. If this option is not used, "killall" will match any process name that contains the specified string.
+- -I – ignore case for matching name
+- -i – This option prompts the user before killing each process.
+- -s <signal> – This option allows you to specify a common signal to send to the background process. The default signal is SIGTERM.
+- -I – Ignore the case when trying to find the process name.
+- -u – Only kill processes owned by a specific user.
+- -v – Report back on whether the process has been successfully killed.
 - -o [time] – only kills processes older than the specified time.
 - -y [time] – only kills processes newer than the specified time.
+- -q – do not complain if no processes were killed
+- -r(--regexp)/-f – interpret process name as regex pattern
+- -v – report if a signal was successfully sent
 
 - Ex: terminates all currently running processes named chrome that have been running for longer than 30 minutes:
 ```bash
 killall -o 30m chrome
 ```
+
+
+## Groups & Sessions
+
+- **Group**: A group is a set of related processes that can be sent signals all at once. Each group is identified by a <PGID>.
+- **Group Leader**: In a group, the process whose <ID> equals the <group ID> is the group leader (<PID> == <PGID>).
+- **Session**: Each tab in your terminal is considered a session, and each session can have multiple process groups. The `jobs` command shows the processes in the session where the command is executed, which is why the output of `jobs` differs across different terminal tabs. Each session is identified by an <SID>.
+- **Session Leader**: Within a session, the process whose <ID> equals the <session ID> is considered the session leader (<PID> == <<SID>>). When you bring a process to the foreground with the `fg` command, that process (and its corresponding process group) becomes the session leader.
+
+
+## init process
+after booting:
+```bash
+ps -aux | head -n 2
+```
+
+## Daemon processes
+
+* background system processes
+* their parents is init process
+* end with d
+```bash
+ps -ef | awk '$3 == 1'
+```
+
+## Process cycle
+
+[Process cycle in shell](Process%20cycle%20in%20shell.png)

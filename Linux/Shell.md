@@ -1,5 +1,4 @@
-## Shell
-
+# Shell
 
 ### info
 - Information about ls. use “q” to exit
