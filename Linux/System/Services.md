@@ -12,7 +12,7 @@ running or waiting to run.
 - **Background Operation**: Often wait for events or signals to perform tasks.
 
 
-- Systemctl
+### Systemctl
 - ```bash 
     systemctl start <Service> 
   ```
@@ -41,22 +41,34 @@ running or waiting to run.
       systemctl list-unit-files --state=enabled --type=service
   ```
 
-- ```bash 
-    sudo service start <Service>
-  ```
-- 
 
-- ```bash 
-  sudo service status <Service>
+#### Create service
+```bash
+    sudo nano /etc/systemd/system/startup_asa.service
 ```
-- 
 
-- ```bash 
-  sudo service stop <Service>
+```bash
+[Unit]
+Description=asa startup
+After=graphical.target
+
+[Service]
+Type=simple
+ExecStart=/home/asa/startup_asa.sh #(Path to script)
+Restart=always
+Environment=DISPLAY=:0 # $(DISPLAY)
+Environment=XAUTHORITY=/home/asa/.Xauthority # $(XAUTHORITY)
+User=asa
+Group=asa
+
+[Install]
+WantedBy=graphical.target #runlevel
 ```
-- 
+```bash
+sudo systemctl daemon-reload
+```
 
-# Service Management in Linux
+
 
 ### Additional Points
 - **Service Management Tools**: Common tools include `systemctl` for `systemd` and `service` or `update-rc.d` for SysVinit.
@@ -72,22 +84,19 @@ Manages the start of other processes.
 ```bash
 service --status-all
 ```
-
-- Start a service
-```bash
-sudo service networking start
+- start
+```bash 
+    sudo service start <Service>
 ```
-
-- Stop a service
-```bash
-sudo service networking stop
+- status
+```bash 
+  sudo service status <Service>
 ```
-
-- Restart a service
-```bash
-sudo service networking restart
+- stop
+```bash 
+  sudo service stop <Service>
 ```
-
+- 
 ## Upstat
 * If the /usr/share/upstart directory exists on your system, you are using Upstart.
 
