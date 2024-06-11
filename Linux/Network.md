@@ -39,6 +39,14 @@ sudo ufw allow <port>/tcp
 ```bash
 - sudo systemctl stop/status firewalld
 ```
+## ping
+```bash
+ping google.com
+```
+- with limitation
+```bash
+ping google.com -c <n> # n packets
+```
 
 ## proxy
 - Reset proxy

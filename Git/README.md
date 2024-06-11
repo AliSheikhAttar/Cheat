@@ -5,16 +5,6 @@
 ` git config --global user.email “<Enter your email here>” `
 ` git init `
 
-## Push to github
-- clone 
-` $ git clone <copied URL> <folder name> `
-- add remote repo as local repo
-` git remote add origin <paste copied URL here> `
-- push master branch to remote repo & set it as default remote branch
-` git push --set-upstream origin master `
-- push local to github
-` git push origin ` 
-
 ## add to staging environment
 ` git add .`
 ` git add -A `
@@ -26,6 +16,26 @@
 - commit without staging
 ` git commit -a -m “<Enter your message here>” `
 
+## Push to github
+- clone 
+` $ git clone <copied URL> <folder name> `
+- add remote repo as local repo
+` git remote add origin <paste copied URL here> `
+- push master branch to remote repo & set it as default remote branch
+` git push --set-upstream origin master `
+- push local to github
+` git push origin ` 
+
+## pull 
+- pull from repo
+```bash
+git pull
+```
+- pull and merge
+```bash
+git config pull.rebase false
+git pull
+```
 ## status
 - more compact way
 ` git status --short ` 
