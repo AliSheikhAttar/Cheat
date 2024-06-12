@@ -77,6 +77,10 @@ git rm --cached <file>
 - revert to specific previous commit discardss to any changes made after that
 ` git reset <commithash> `
 
+- point the head to the previous commit (rollback one commit)
+```bash
+git reset --hard HEAD~1
+```
 
 ## amend
 - change the last commit message

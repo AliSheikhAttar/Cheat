@@ -13,6 +13,7 @@ class Collection(models.Model):
 
 class Product(models.Model):
     sku = models.CharField(max_length=10,primary_key=True) # django wont create id field and make it primary instead set this as primary key
+    slug = models.SlugField() # SEO => show contents in url for better seo
     title = models.CharField(max_length=255) # short text
     description = models.TextField() # long text
     price = models.DecimalField(max_digits=6, decimal_places=2) # max is 9999.99
@@ -38,6 +39,11 @@ class Customer(models.Model):
     birth_date = models.DateField(null=True) # nullable
     membership = models.CharField(
         max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE) # choose from possible values
+    class Meta:
+        db_table = 'customers' # database table name
+        indexes = [
+            models.Index(fields=['last_name', 'firstname']) # create indexes
+        ]
 
 
 class Order(models.Model):
