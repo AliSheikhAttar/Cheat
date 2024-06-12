@@ -28,7 +28,7 @@ class Customer(models.Model):
     MEMBERSHIP_SILVER = 'S'
     MEMBERSHIP_GOLD = 'G'
 
-    MEMBERSHIP_CHOICES = [
+    MEMBERSHIP_CHOICES = [ 
         (MEMBERSHIP_BRONZE, 'Bronze'),
         (MEMBERSHIP_SILVER, 'Silver'),
         (MEMBERSHIP_GOLD, 'Gold'),
