@@ -11,7 +11,7 @@ sudo apt search <package>
 
 - install
 ```bash
-sudo apt instal <package>
+sudo apt install <package>
 ```
 
 - Update installed packages
@@ -21,6 +21,7 @@ sudo apt update
 - delete package
 ```bash
 sudo apt remove <package>
+sudo apt-get purge <package>
 ```
 - remove dependencies
 ```bash
@@ -45,15 +46,15 @@ sudo apt full-upgrade
 ```
 
 ## Fix update
-- ` sudo apt upgrade -y `
-- ` sudo apt update `
-- ` sudo apt-get clean ; sudo apt-get check ; sudo apt -f install `
-- ` sudo apt-get dist-upgrade -y ; sudo apt-get autoremove -y `
-
+```bash
+sudo apt upgrade -y
+sudo apt update 
+sudo apt-get clean ; sudo apt-get check ; sudo apt -f install 
+sudo apt-get dist-upgrade -y ; sudo apt-get autoremove -y 
+```
 ## Fix installination
 ```bash
 sudo apt clean # clearing packages cache
-sudo apt update
 ```
 
 ## Mirrors for apt resources

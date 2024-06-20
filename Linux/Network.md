@@ -1,4 +1,4 @@
-# Linux Network
+# Network
 
 - reset network and proxy settings
 1.  

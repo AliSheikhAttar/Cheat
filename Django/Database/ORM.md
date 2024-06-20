@@ -98,3 +98,35 @@ query_set = OrderItem.objects.order_by('-unit_price')[0]
 # Equal
 query_set = OrderItem.objects.latest('unit_price')
 ```
+
+## limit
+```python
+LIMIT = 5
+query_set = OrderItem.objects.order_by('price')[:LIMIT]
+```
+
+## Selection
+- output = dictionary , key = column
+```python
+query_set = OrderItem.objects.values('id', 'title', 'colllection__title')
+```
+- output = tupple
+```python
+query_set = OrderItem.objects.values('id', 'title', 'colllection__title')
+```
+- output = instance
+```python
+query_set = OrderItem.objects.only('id', 'title', 'colllection__title')
+```
+- exclude fields
+```python
+query_set = OrderItem.objects.defer('description')
+```
+### ordered products
+```python
+query_set = orderItem.objects.values('product_id').distinct() # it doesnt have product_id => creates it and set it as foreign key to product, same as product__id
+# answer
+query_set = Product.objects.filter(
+        id__in=orderItem.objects.values('product_id').distinct()).order_by('title')# id field in ...
+
+```
