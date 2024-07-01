@@ -1,22 +1,54 @@
 # Git 
 ## Setup
-- Setup
-` git config --global user.name “<Enter your username here>” `
-` git config --global user.email “<Enter your email here>” `
-` git init `
+- system : all users
+- global : user all repositories
+- local : this repository
+### Setup Name, Email, Editor
+```bash
+git config --global user.name “<Enter your username here>” 
+git config --global user.email <Enter your email here> 
+git config --global core.editor "code --wait" #wait until the vscode instance is closed
+```
+### configure the configuration file
+```bash
+git config --global -e
+```
+### End of line
+- input : don't add /r when pulling from repo/ Mac/Linux
+- true : add /r when pulling from repo/ Windows
+```bash
+git config --global core.autocrlf input 
+```
+### config
+```bash
+git config --help
+git config -h #short summary
+```
 
-## add to staging environment
-` git add .`
-` git add -A `
-` git add --all `
+### initialize a new repository
+```bash
+git init
+```
+## Staging Area & Repo
 
-## commit 
+### add to staging environment
+```bash 
+git add .
+git add -A
+git add --all
+```
+### commit 
 - commit staged files
-`git commit -m "This commit is a mistake"`
-- commit without staging
-` git commit -a -m “<Enter your message here>” `
+```bash
+git commit -m "This commit is a mistake"
+git commit # for long messages 
+```
+### commit without staging
+```bash
+git commit -a -m “<Enter your message here>”
+```
 
-## Push to github
+### Push to github
 - clone 
 ` $ git clone <copied URL> <folder name> `
 - add remote repo as local repo
@@ -26,34 +58,68 @@
 - push local to github
 ` git push origin ` 
 
-## pull 
+### pull 
 - pull from repo
 ```bash
 git pull
 ```
-- pull and merge
+### pull and merge
 ```bash
 git config pull.rebase false
 git pull
 ```
-## status
-- more compact way
-` git status --short ` 
-- output 1 if any changes detected else 0
+### files on stagin area
+```bash
+git ls-files
+```
+### ignore changes
+```bash
+git stash
+```
+
+### status
+- more compact way: left column -> staging area, right column -> working dir
+```bash
+git status -s #--short
+```
+
+### staged changes
+- - -> last commit + -> staging area, @-x,y +z,s@ from line x/z y/s lines
+```bash
+git diff --staged
+```
+
+### not staged changes
+- - -> staging area + -> working dir, @-x,y +z,s@ from line x/z y/s lines
+```bash
+git diff
+```
+
+### output 1 if any changes detected else 0
 ```bash
 git diff --cached --exit-code
 ```
-- provides a simplified output of the status of the working directory and staging area. If there are any changes (modified, added, deleted files), it will produce output
+
+### provides a simplified output of the status of the working directory and staging area. If there are any changes (modified, added, deleted files), it will produce output
 ```bash
 git status --porcelain: 
 ```
 
-## delete from git repo
+## delete from working dir & staging area
+```bash
+git rm *.txt
+```
+
+## delete from staging area
 - delete <file> from git index(staging area) and not from local
 ```bash
 git rm --cached <file>
 ```
 
+## renaming & moving files from working dir & staging area
+```bash
+git mv <file> <new_file>
+```
 ## log
 - history of commits for a repo
 ` git log `

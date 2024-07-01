@@ -4,6 +4,30 @@
 chmod +x ./*.AppImage
 ```
 
+## create links
+### hard link
+```bash
+ln <example.txt> <example_link.txt>
+
+```
+### symbolic link
+```bash
+ln -s </path/to/target> </path/to/symlink>
+```
+| Feature                  | Symbolic Link (Symlink)                               | Hard Link                                          |
+|--------------------------|-------------------------------------------------------|----------------------------------------------------|
+| Type                     | Path-based pointer                                    | Direct reference to inode                          |
+| Filesystem               | Can link across different filesystems                 | Must be on the same filesystem                     |
+| Behavior if Target Deleted | Becomes broken (dangling)                            | Link still works; data remains accessible          |
+| Directory Linking        | Can link to directories                               | Cannot link to directories                         |
+| Permissions              | Link permissions irrelevant                           | Shares permissions with target file                |
+| Typical Use Cases        | Shortcuts, linking to directories, cross-filesystem linking | Ensuring data remains accessible under different names within the same filesystem |
+
+- see inode info
+```bash
+ls -i /path/to/file
+```
+
 - run AppImage file
 ```bash
 ./<x>.AppImage
@@ -81,7 +105,7 @@ tar -xvzf <archive>
 - unzip
 ```bash
 unzip 'zip/rar file'
-``` 
+```
 
 ## Find
 
@@ -739,3 +763,4 @@ awk -v task_id="$task_id" -F ',' 'BEGIN {OFS = FS}
 - int1 == int2 {expression1} ... {expression n} : numerical equality
 - str1 ~ str2 {expression1} ... {expression n} : is used to match a variable against a regular expression.
 - > tasks.tmp && mv tasks.tmp tasks.csv : if awk command was ok then replace the result
+
