@@ -1,37 +1,38 @@
 # Git 
+
 ## Setup
 - system : all users
 - global : user all repositories
 - local : this repository
-### Setup Name, Email, Editor
+- Setup Name, Email, Editor
 ```bash
 git config --global user.name “<Enter your username here>” 
 git config --global user.email <Enter your email here> 
-git config --global core.editor "code --wait" #wait until the vscode instance is closed
+git config --global core.editor "code --wait" -wait until the vscode instance is closed
 ```
-### configure the configuration file
+- configure the configuration file
 ```bash
 git config --global -e
 ```
-### End of line
+- End of line
 - input : don't add /r when pulling from repo/ Mac/Linux
 - true : add /r when pulling from repo/ Windows
 ```bash
 git config --global core.autocrlf input 
 ```
-### config
+- config
 ```bash
 git config --help
-git config -h #short summary
+git config -h -short summary
 ```
 
-### initialize a new repository
+- initialize a new repository
 ```bash
 git init
 ```
 ## Staging Area & Repo
 
-### add to staging environment
+- add to staging environment
 ```bash 
 git add .
 git add -A
@@ -41,14 +42,14 @@ git add --all
 - commit staged files
 ```bash
 git commit -m "This commit is a mistake"
-git commit # for long messages 
+git commit - for long messages 
 ```
-### commit without staging
+- commit without staging
 ```bash
 git commit -a -m “<Enter your message here>”
 ```
-
-### Push to github
+### Push
+- Push to github
 - clone 
 ` $ git clone <copied URL> <folder name> `
 - add remote repo as local repo
@@ -63,74 +64,112 @@ git commit -a -m “<Enter your message here>”
 ```bash
 git pull
 ```
-### pull and merge
+- pull and merge
 ```bash
 git config pull.rebase false
 git pull
 ```
-### files on stagin area
+## status & diff
+- more compact way: left column -> staging area, right column -> working dir
+```bash
+git status -s --short
+```
+
+- provides a simplified output of the status of the working directory and staging area. If there are any changes (modified, added, deleted files), it will produce output
+```bash
+git status --porcelain: 
+```
+
+- files on stagin area
 ```bash
 git ls-files
 ```
-### ignore changes
+- ignore changes
 ```bash
 git stash
 ```
 
-### status
-- more compact way: left column -> staging area, right column -> working dir
-```bash
-git status -s #--short
-```
-
-### staged changes
+- staged changes
 - - -> last commit + -> staging area, @-x,y +z,s@ from line x/z y/s lines
 ```bash
 git diff --staged
 ```
 
-### not staged changes
+- not staged changes
 - - -> staging area + -> working dir, @-x,y +z,s@ from line x/z y/s lines
 ```bash
 git diff
 ```
 
-### output 1 if any changes detected else 0
+- output 1 if any changes detected else 0
 ```bash
 git diff --cached --exit-code
 ```
-
-### provides a simplified output of the status of the working directory and staging area. If there are any changes (modified, added, deleted files), it will produce output
+### config diff tool
+- set vscode as diff tool
 ```bash
-git status --porcelain: 
+git config --global diff.tool vscode
+```
+```bash
+git config --global difftool.vscode.cmd "code --wait --diff $LOCAL $REMOTE"
 ```
 
-## delete from working dir & staging area
+-- delete from working dir & staging area
 ```bash
 git rm *.txt
 ```
 
-## delete from staging area
+-- delete from staging area
 - delete <file> from git index(staging area) and not from local
 ```bash
 git rm --cached <file>
 ```
 
-## renaming & moving files from working dir & staging area
+-- renaming & moving files from working dir & staging area
 ```bash
 git mv <file> <new_file>
 ```
-## log
+## log & history
 - history of commits for a repo
-` git log `
-` git log --oneline ` first seven chars of commit hash  & commit message
+- sorted from latest to earliest
+```bash
+git log
+```
+- reverse sorting
+```bash
+git log --reverse
+```
+- short log
+- first seven chars of commit hash  & commit message
+```bash
+git log --oneline 
+```
+- show commits diffs
+```bash
+git show <hashkey> # first char till any char as long as its unique
+git show HEAD~<n> #nth previous from the last
+```
+- show commits contents
+```bash
+git show <hashkey>:<file> # first char till any char as long as its unique
+git show HEAD~<n>:<dir/file> #nth previous from the last
+```
+- show commits files
+- blob : files, tree: dir
+```bash
+git ls-tree <hashkey>/<HEAD~<n>>
+```
+- show content of each file/dir
+```bash
+git show <hashkey of node> # as long as its not ambiguous
+```
 
-## help
+-- help
 - options
 ` git <command> -help `
 - all possible commands
 ` git help --all `
-## revert
+-- revert
 - revert to last commit and commit without message
 ` git revert HEAD --no-edit `
 
@@ -148,13 +187,13 @@ git mv <file> <new_file>
 git reset --hard HEAD~1
 ```
 
-## amend
+-- amend
 - change the last commit message
 ` git commit --amend -m “<Commit Message>” `
 
 
 
-## .gitignore
+-- .gitignore
 
 - ignore specific formats
 *.<fileformat>
@@ -162,7 +201,7 @@ git reset --hard HEAD~1
 - ignore specific directories
 <dir_name>               
 
-## Branch
+-- Branch
 - Create branch
 ` git branch <banch_name> `
 - checkout to branch
