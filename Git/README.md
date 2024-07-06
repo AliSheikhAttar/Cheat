@@ -229,7 +229,7 @@ git restore --source=HEAD~<n> <file>
 ```
            
 
-## Branch
+## Branching & Merging
 - Create branch
 ```bash
 git branch <banch_name> 
@@ -244,18 +244,136 @@ git checkout <branch_name>
 ```
 - rename branch
 ```bash
-
+git branch -m <old branch> <new branch name>‍‍‍‍‍‍‍‍
+```
 - make branch and checkout to it
-` git checkout -b <branch name> `
+```bash
+git checkout -b <branch name> 
+```
+```bash
+git switch -C <branch>
+```
+
 - list
-` git branch --list `
-` git branch `
+```bash
+git branch --list 
+```
+```bash
+git branch 
+```
+
 - delete
-` git branch --delete <branch name> ` 
-` git branch -d <branch name> ` 
-- merge branch with master
-` git merge <branch name> `
+```bash
+git branch --delete <branch name> 
+``` 
+```bash
+git branch -d <branch name> 
+``` 
+
 - local and remote branches
-` git branch -a `
+```bash
+git branch -a 
+```
 - remote branches
-` git branch -r `
+```bash
+git branch -r 
+```
+### Comparing branches
+
+- Lists the commits in the <branch> branch not in master
+```bash
+git log master..<branch>
+```
+
+- summary of changes
+```bash
+git diff master..<branch>
+```
+```bash
+git diff master..<branch>
+```
+- Changed files
+```bash
+git diff --name-status <branch>
+```
+
+### Stashing
+
+- Creates a new stash
+```bash
+git stash push -m "New tax rules"
+```
+
+- Lists all the stashes
+```bash
+git stash list
+```
+
+- Shows the given stash
+```bash
+git stash show stash@{1}
+```
+
+- Shortcut for stash@{1}
+```bash
+git stash show 1
+```
+- Applies the given stash to the working dir
+```bash
+git stash apply 1
+```
+
+- Deletes the given stash
+```bash
+git stash drop 1
+```
+
+- Deletes all the stashes
+```bash
+git stash clear
+```
+
+
+## Merge
+
+- Merges the <branch> into the current branch
+```bash
+git merge <branch>
+```
+
+- Creates a merge commit even if FF is possible
+```bash
+git merge --no-ff <branch>
+```
+
+- Performs a squash merge
+```bash
+git merge --squash <branch>
+```
+
+- Aborts the merge
+```bash
+git merge --abort
+```
+
+- Shows the merged branches
+```bash
+git branch --merged
+```
+
+- Shows the unmerged branches
+```bash
+git branch --no-merged
+```
+
+- Changes the base of the current branch
+```bash
+git rebase master
+```
+
+- Applies the given commit on the current branch
+```bash
+git cherry-pick dad47ed
+```
+
+
