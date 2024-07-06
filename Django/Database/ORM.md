@@ -75,37 +75,41 @@ from django.db.models import F
 query_set = OrderItem.objects.filter(inventory=F('price'))
 # fields on related tables
 query_set = OrderItem.objects.filter(inventory=F('collection__id'))
+
+query_set = orderItem.objects.values('product_id').distinct() # it doesnt have product_id => creates it and set it as foreign key to product, same as product__id
 ```
 
 ## sorting
 ```python
 # sort on field ascending
-query_set = OrderItem.objects.order_by('price')
+order_by('price')
 # sort on field descending
-query_set = OrderItem.objects.order_by('-price')
+order_by('-price')
 # sort on multiple fields
-query_set = OrderItem.objects.order_by('unit_price', '-price')
+order_by('unit_price', '-price')
 # reverse the ordering => first descending , second ascending
-query_set = OrderItem.objects.order_by('unit_price', '-price').reverse()
+order_by('unit_price', '-price').reverse()
 
 # earliest
-query_set = OrderItem.objects.order_by('unit_price')[0]
+order_by('unit_price')[0]
 # Equal
-query_set = OrderItem.objects.earliest('unit_price')
+earliest('unit_price')
 
 # latest
-query_set = OrderItem.objects.order_by('-unit_price')[0]
+order_by('-unit_price')[0]
+
 # Equal
-query_set = OrderItem.objects.latest('unit_price')
+latest('unit_price')
 ```
 
 ## limit
 ```python
 LIMIT = 5
-query_set = OrderItem.objects.order_by('price')[:LIMIT]
+OFFSET = 3
+query_set = OrderItem.objects.order_by('price')[OFFSET:LIMIT]
 ```
 
-## Selection
+## Selection fields
 - output = dictionary , key = column
 ```python
 query_set = OrderItem.objects.values('id', 'title', 'colllection__title')
@@ -118,15 +122,67 @@ query_set = OrderItem.objects.values('id', 'title', 'colllection__title')
 ```python
 query_set = OrderItem.objects.only('id', 'title', 'colllection__title')
 ```
+
 - exclude fields
 ```python
 query_set = OrderItem.objects.defer('description')
 ```
-### ordered products
-```python
-query_set = orderItem.objects.values('product_id').distinct() # it doesnt have product_id => creates it and set it as foreign key to product, same as product__id
-# answer
-query_set = Product.objects.filter(
-        id__in=orderItem.objects.values('product_id').distinct()).order_by('title')# id field in ...
 
+### Loading joins 
+- each have 1 foreign key instance
+```python
+.select_related('table')
+```
+- each have multiple foreign key instances
+```python
+.prefetch_related('table')
+```
+
+## Aggregation
+```python
+.aggregate(Count('id'))
+.aggregate(Count('id'), min_price=Min('Unit_Price'))
+```
+
+## Anotation 
+- Add columns to table
+```python
+.annotate(<field>=(Value(True)/F('<other filed>'))
+```
+## Functions
+- call sql functions
+```python
+.annoatate(full_name=Func(F('first_name'), Value(' '), F('last_name'), function='CONCAT')))
+# or
+from django.db.models.functions import Concat
+
+.annoatate(full_name=Concat('first_name', Value(' '), 'last_name'))
+```
+
+## Grouping
+- count of field for primary , group by primary
+```python
+.annotate(orders_count=Count('order')) # dont use django defualt converstion <table>_set just use <table>
+```
+## Expression wrapper
+- set output type
+```python
+x = ExpressionWrapper(F('field')*0.3,output_field=DecimalField())
+```
+
+## Quering generic relations
+
+- tags of a product
+```python
+content_type = ContentType.objects.get_for_model(Product)
+query =  TaggedItem.objects \ 
+    .select_related('tag') \ 
+    .filter(
+        content_type=content_type,
+        object_id=1
+    )
+
+# find content_type id for product model
+#  preload tag table because its related by foreing key to TaggedItem
+# filter by object_id which is product_id
 ```
