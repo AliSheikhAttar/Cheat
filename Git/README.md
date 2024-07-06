@@ -135,15 +135,41 @@ git mv <file> <new_file>
 ```bash
 git log
 ```
+
 - reverse sorting
 ```bash
 git log --reverse
 ```
-- short log
-- first seven chars of commit hash  & commit message
+
+- first seven chars of commit hash  & commit message - short log
 ```bash
 git log --oneline 
 ```
+- log diffs & status
+```bash
+git log --oneline --stat
+```
+- log changes to files in commits
+```bash
+git log --oneline --patch
+```
+- n previous commits
+```bash
+git log --online -3
+```
+- filter by author
+```bash
+git log --online --author="Mosh"
+```
+- filter by date
+```bash
+git log --online --before/after="2020-12-2"/"one week ago"
+```
+- filter by commit message
+```bash
+git log --online --grep="GUI"
+```
+
 - show commits diffs
 ```bash
 git show <hashkey> # first char till any char as long as its unique
@@ -169,16 +195,12 @@ git show <hashkey of node> # as long as its not ambiguous
 ` git <command> -help `
 - all possible commands
 ` git help --all `
--- revert
+
+## revert
+
 - revert to last commit and commit without message
 ` git revert HEAD --no-edit `
 
-- revert to any commit 
-` git reset <commithash>`
-
-- revert to the n-th previous commit
-
-`git revert HEAD~<n>...HEAD`
 - revert to specific previous commit discardss to any changes made after that
 ` git reset <commithash> `
 
@@ -186,26 +208,43 @@ git show <hashkey of node> # as long as its not ambiguous
 ```bash
 git reset --hard HEAD~1
 ```
-
--- amend
 - change the last commit message
 ` git commit --amend -m “<Commit Message>” `
 
+- undo changes from staging area
+```bash
+git restore --staged <file>
+```
+- undo changes from working dir (restore to last commit)
+```bash
+git restore <file>
+```
+```bash
+git clean -fd <file> #f : force, d : all dirs
+```
 
+- undo changes from working dir (restore to any commit)
+```bash
+git restore --source=HEAD~<n> <file>
+```
+           
 
--- .gitignore
-
-- ignore specific formats
-*.<fileformat>
-
-- ignore specific directories
-<dir_name>               
-
--- Branch
+## Branch
 - Create branch
-` git branch <banch_name> `
+```bash
+git branch <banch_name> 
+```
+
 - checkout to branch
-` git checkout <branch_name> `
+```bash
+git switch <branch>
+```
+```bash
+git checkout <branch_name> 
+```
+- rename branch
+```bash
+
 - make branch and checkout to it
 ` git checkout -b <branch name> `
 - list
