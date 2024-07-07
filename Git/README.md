@@ -210,7 +210,6 @@ git show <hashkey of node> # as long as its not ambiguous
 > soft : last snapshot reset only
 > mixed(default) : last snapshot and staging area reset
 > hard : last snapshot, staging area & working dir reset to previous commit snapshot(commit)
-
 ```bash
 git reset --<option:hard> HEAD~1/<commithash>
 ```
