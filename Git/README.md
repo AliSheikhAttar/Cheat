@@ -85,10 +85,6 @@ git status --porcelain:
 ```bash
 git ls-files
 ```
-- ignore changes
-```bash
-git stash
-```
 
 - staged changes
 - - -> last commit + -> staging area, @-x,y +z,s@ from line x/z y/s lines
@@ -352,6 +348,11 @@ git stash clear
 ### Merge
 > Fast-forward : if branches have not diverged (master doesnt contain any changes after branching)
 > 3-way : if branches have diverged (before-code , and after-code snapshots -> the common ancestor and the lates commits in both branches)
+
+- show commits for branching
+```bash
+git log --oneline --all --graph
+```
 
 - after the conflicts -> git status -> open the unmerged path files -> change them -> add & commit
 
