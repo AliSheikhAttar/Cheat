@@ -1,5 +1,6 @@
 # Git 
 
+- Third-party apps : gitkraken, p4merge
 ## Setup
 - system : all users
 - global : user all repositories
@@ -145,6 +146,11 @@ git log --reverse
 ```bash
 git log --oneline 
 ```
+- show commits for branching
+```bash
+git log --oneline --all --graph
+```
+
 - log diffs & status
 ```bash
 git log --oneline --stat
@@ -155,19 +161,19 @@ git log --oneline --patch
 ```
 - n previous commits
 ```bash
-git log --online -3
+git log --oneline -3
 ```
 - filter by author
 ```bash
-git log --online --author="Mosh"
+git log --oneline --author="Mosh"
 ```
 - filter by date
 ```bash
-git log --online --before/after="2020-12-2"/"one week ago"
+git log --oneline --before/after="2020-12-2"/"one week ago"
 ```
 - filter by commit message
 ```bash
-git log --online --grep="GUI"
+git log --oneline --grep="GUI"
 ```
 
 - show commits diffs
@@ -205,8 +211,12 @@ git show <hashkey of node> # as long as its not ambiguous
 ` git reset <commithash> `
 
 - point the head to the previous commit (rollback one commit)
+> soft : last snapshot reset only
+> mixed(default) : last snapshot and staging area reset
+> hard : last snapshot, staging area & working dir reset to previous commit snapshot(commit)
+
 ```bash
-git reset --hard HEAD~1
+git reset --<option:hard> HEAD~1/<commithash>
 ```
 - change the last commit message
 ` git commit --amend -m “<Commit Message>” `
@@ -298,10 +308,15 @@ git diff --name-status <branch>
 ```
 
 ### Stashing
-
+- save changes to working dir before branching or merging
 - Creates a new stash
 ```bash
 git stash push -m "New tax rules"
+```
+
+- Add to stash
+```bash
+git stash push --all/-a -m "<message>"
 ```
 
 - Lists all the stashes
@@ -334,16 +349,35 @@ git stash clear
 ```
 
 
-## Merge
+### Merge
+> Fast-forward : if branches have not diverged (master doesnt contain any changes after branching)
+> 3-way : if branches have diverged (before-code , and after-code snapshots -> the common ancestor and the lates commits in both branches)
 
-- Merges the <branch> into the current branch
+- after the conflicts -> git status -> open the unmerged path files -> change them -> add & commit
+
+- Set conflict tool
+```bash
+git config --global merge.tool <tool:p4merge>
+git config --global mergetool.p4merge.path "<tool_path>"
+```
+
+- Merges the <branch> into the current branch (fast-forward by default)
 ```bash
 git merge <branch>
+```
+- use tool when conflict
+```bash
+git mergetool
 ```
 
 - Creates a merge commit even if FF is possible
 ```bash
 git merge --no-ff <branch>
+```
+
+- Disable Fast forwarding
+```bash
+git config --global ff no # apply to all repos
 ```
 
 - Performs a squash merge
@@ -364,6 +398,16 @@ git branch --merged
 - Shows the unmerged branches
 ```bash
 git branch --no-merged
+```
+
+- undo merge
+```bash
+git reset --<option:hard> HEAD~1/<commithash>
+```
+- revert merge
+> -m 1 : revert to first parent commit (on Master branch; last commit on master branch before merge)
+```bash
+git revert -m 1 HEAD
 ```
 
 - Changes the base of the current branch
