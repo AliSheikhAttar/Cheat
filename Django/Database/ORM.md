@@ -186,3 +186,104 @@ query =  TaggedItem.objects \
 #  preload tag table because its related by foreing key to TaggedItem
 # filter by object_id which is product_id
 ```
+
+## Custom Manager 
+```python
+# in models.py
+class custom_manager(models.Manager):
+    def custom_func():
+        pass
+    
+class mymodel(models.Model):
+    objects = custom_manager()
+
+# view
+def view_fun(request):
+    query_set = mymodel.objects.custom_func()
+
+```
+
+## Create Object
+```python
+# first approach -> better
+obj = myModel()
+obj.field = value
+obj.foreignkey = related_model(pk=2)
+obj.save()
+obj.id
+
+# second approach
+obj = myModel.objects.create(field=value, foreignkey_id=2)
+```
+- ex.
+```python
+cart = Cart()
+cart.save()
+
+item1 = CartItem()
+item1.cart = cart
+item1.product_id = 1
+item1.quantity = 1
+item1.save()
+```
+
+## Update Object
+```python
+# first approach
+obj = myModel.objects.get(pk=11)
+obj.field = newvalue
+obj.save()
+
+# second approach-> this updates the field for every record
+myModel.objects.update(field=newvalue)
+
+# for specified record
+myModel.objects.filter(pk=11).update(field=newvalue)
+```
+
+## Delete Object
+```python
+# single
+obj = myModel.objects.get(pk=11) # myModel(pk=2)
+obj.delete()
+
+# multiple
+myModel.objects.filter(field__gt=5).delete()
+```
+
+## Transaction
+- run codes atomic, if one fails, changes will be rolled back
+```python
+def view_func():
+    # other codes
+
+    with transaction.atomic():
+        obj1 = Model1()
+        obj.field = value
+        obj.save()
+    
+        obj2 = Model2()
+        obj2.field = value
+        obj2.foreign_key = obj1
+        obj2.save()
+
+```
+
+## Raw Query
+```python
+query_set = Model1.objects.raw('SELECT * FROM table')
+
+# Doesnt map to model object, accesess database directly, bypass model layer
+cursor = connection.cursor()
+cursor.execute('SELECT column FROM table')
+cursor.close()
+
+# its gonna close even when exceptions happen
+with connection.cursor() as cursor:
+    cursor.execute('SELECT column FROM table')
+
+# executing stored procedures
+with connection.cursor() as cursor:
+    cursor.callproc('get_customer', [param, param2, param3])
+
+```
