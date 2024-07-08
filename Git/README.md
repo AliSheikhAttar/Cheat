@@ -11,6 +11,11 @@ git config --global user.name “<Enter your username here>”
 git config --global user.email <Enter your email here> 
 git config --global core.editor "code --wait" -wait until the vscode instance is closed
 ```
+- store credentials permanantly
+```bash
+git credential-osxkeychain #check if keychain helper is installed
+git config --global credential.helper osxkeychain
+```
 - configure the configuration file
 ```bash
 git config --global -e
@@ -31,7 +36,7 @@ git config -h -short summary
 ```bash
 git init
 ```
-## Staging Area & Repo
+## Staging Area
 
 - add to staging environment
 ```bash 
@@ -49,27 +54,81 @@ git commit - for long messages
 ```bash
 git commit -a -m “<Enter your message here>”
 ```
+
+## Remote
 ### Push
 - Push to github
 - clone 
-` $ git clone <copied URL> <folder name> `
+```bash
+git clone <copied URL> <folder name> 
+```
 - add remote repo as local repo
-` git remote add origin <paste copied URL here> `
+```bash
+git remote add origin <paste copied URL here> 
+```
 - push master branch to remote repo & set it as default remote branch
-` git push --set-upstream origin master `
+```bash
+git push --set-upstream origin master 
+```
 - push local to github
-` git push origin ` 
-
+```bash
+git push origin 
+``` 
+- push local tags to github 
+```bash
+git push origin <tag:v1.0> 
+``` 
+- remove tag
+```bash
+git push origin --delete <tag>
+```
 ### pull 
+
+- show remote repos
+```bash
+git remote
+
+git remote -v
+```
+
+- Shows remote tracking branches
+```bash
+git branch -r
+```
+
+- Shows local & remote tracking branches
+```bash
+git branch -vv
+```
+
+- Fetches master from origin (download new commits from remote)
+```bash
+git fetch origin master
+``` 
+
+- Fetches all objects from origin
+```bash
+git fetch origin
+# or
+git fetch
+```
+
 - pull from repo
 ```bash
 git pull
 ```
+
+- pull and rebase
+```bash
+git pull --rebase
+```
+
 - pull and merge
 ```bash
 git config pull.rebase false
 git pull
 ```
+
 ## status & diff
 - more compact way: left column -> staging area, right column -> working dir
 ```bash
@@ -191,14 +250,45 @@ git ls-tree <hashkey>/<HEAD~<n>>
 ```bash
 git show <hashkey of node> # as long as its not ambiguous
 ```
+### tag
+- create lightweight tag & assign to <commit>(default: last commit)
+```bash
+git tag <tagname> <commithash>
+```
+- annotated tag
+```bash
+git tag -a <tag> -m "<message>"
+```
+- checkout to labeled commit
+```bash
+git checkout <tag>
+```
+- list of all tags
+```bash
+git tag
+```
+- list tags along with their messages
+```bash
+git tag -n
+```
+- show specific tag
+```bash
+git show <tag>
+```
+- delete tag
+```bash
+git tag -d <tag>
+```
 
--- help
+### help
 - options
-` git <command> -help `
+```bash
+git <command> -help 
+```
 - all possible commands
 ` git help --all `
 
-## revert
+### revert
 
 - revert to last commit and commit without message
 ` git revert HEAD --no-edit `
@@ -381,6 +471,7 @@ git config --global ff no # apply to all repos
 ```
 
 - Performs a squash merge
+> add commits of branch to master without merge commit
 ```bash
 git merge --squash <branch>
 ```
@@ -410,14 +501,26 @@ git reset --<option:hard> HEAD~1/<commithash>
 git revert -m 1 HEAD
 ```
 
-- Changes the base of the current branch
+- Changes the base of the current branch to master
 ```bash
 git rebase master
+```
+- Continue rebasing, skipping commit, abort rebasing
+```bash
+git rebase --continue/skip/abort
+```
+- disable autmatically creating backup-file from mergetool
+```bash
+git config --global mergetool.keepBackup false
 ```
 
 - Applies the given commit on the current branch
 ```bash
-git cherry-pick dad47ed
+git cherry-pick <dad47ed>
 ```
 
+- cherrypick a file from branch into master working dir
+```bash
+git restore --source=<branch_name> -- <file>
+```
 
