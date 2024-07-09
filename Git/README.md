@@ -524,3 +524,88 @@ git cherry-pick <dad47ed>
 git restore --source=<branch_name> -- <file>
 ```
 
+## Remote
+### Cloning a repository
+- Clone a repository from a URL
+```bash
+git clone url
+```
+
+### Syncing with remotes
+- Fetches master from origin
+```bash
+git fetch origin master
+```
+
+- Fetches all objects from origin
+```bash
+git fetch origin
+```
+
+- Shortcut for “git fetch origin”
+```bash
+git fetch
+```
+
+- Fetch + merge
+```bash
+git pull
+```
+
+- Pushes master to origin
+```bash
+git push origin master
+```
+
+- Shortcut for “git push origin master”
+```bash
+git push
+```
+
+### Sharing tags
+- Pushes tag v1.0 to origin
+```bash
+git push origin v1.0
+```
+
+- Deletes tag v1.0 from origin
+```bash
+git push origin --delete v1.0
+```
+
+### Sharing branches
+- Shows remote tracking branches
+```bash
+git branch -r
+```
+
+- Shows local & remote tracking branches
+```bash
+git branch -vv
+```
+
+- Pushes bugfix to origin
+```bash
+git push -u origin bugfix
+```
+
+- Removes bugfix from origin
+```bash
+git push -d origin bugfix
+```
+
+### Managing remotes
+- Shows remote repos
+```bash
+git remote
+```
+
+- Adds a new remote called upstream
+```bash
+git remote add upstream url
+```
+
+- Removes upstream
+```bash
+git remote rm upstream
+```
