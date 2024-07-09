@@ -290,22 +290,13 @@ git <command> -help
 
 ### revert
 
-- revert to last commit and commit without message
-` git revert HEAD --no-edit `
-
-- revert to specific previous commit discardss to any changes made after that
-` git reset <commithash> `
-
 - point the head to the previous commit (rollback one commit)
 > soft : last snapshot reset only
 > mixed(default) : last snapshot and staging area reset
 > hard : last snapshot, staging area & working dir reset to previous commit snapshot(commit)
 ```bash
-git reset --<option:hard> HEAD~1/<commithash>
+git reset --<option:hard> HEAD~1/<commithash> <--no-edit> # no-edit -> without message
 ```
-- change the last commit message
-` git commit --amend -m “<Commit Message>” `
-
 - undo changes from staging area
 ```bash
 git restore --staged <file>
@@ -608,4 +599,230 @@ git remote add <upstream> <url>
 - Removes <upstream>
 ```bash
 git remote rm <upstream>
+```
+
+## Browsing history
+
+### Viewing the history
+- Shows the list of modified files
+```bash
+git log --stat
+```
+
+- Shows the actual changes (patches)
+```bash
+git log --patch
+```
+
+### Filtering the history
+- Shows the last 3 entries
+```bash
+git log -3
+```
+
+- Shows commits by author “Mosh”
+```bash
+git log --author="Mosh"
+```
+
+- Shows commits before 2020-08-17
+```bash
+git log --before="2020-08-17"
+```
+
+- Shows commits after “one week ago”
+```bash
+git log --after="one week ago"
+```
+
+- Shows commits with “GUI” in their message
+```bash
+git log --grep="GUI"
+```
+
+- Shows commits with “GUI” in their patches
+```bash
+git log -S"GUI"
+```
+
+- Shows range of commits between hash1 and hash2
+```bash
+git log hash1..hash2
+```
+
+- Shows commits that touched file.txt
+```bash
+git log file.txt
+```
+
+### Formatting the log output
+- Custom log format with author and hash
+```bash
+git log --pretty=format:"%an committed %H"
+```
+
+### Creating an alias
+- Creates a log alias for a one-line format
+```bash
+git config --global alias.lg "log --oneline"
+```
+
+### Viewing a commit
+- Shows the commit HEAD2
+```bash
+git show HEAD2
+```
+
+- Shows the version of file1.txt in commit HEAD2
+```bash
+git show HEAD2
+.txt
+```
+
+### Comparing commits
+- Shows the changes between two commits
+```bash
+git diff HEAD~2 HEAD
+```
+
+- Shows changes to file.txt only between two commits
+```bash
+git diff HEAD~2 HEAD file.txt
+```
+
+### Checking out a commit
+- Checks out the given commit
+```bash
+git checkout dad47ed
+```
+
+- Checks out the master branch
+```bash
+git checkout master
+```
+
+### Finding a bad commit
+- Starts the bisect session
+```bash
+git bisect start
+```
+
+- Marks the current commit as a bad commit
+```bash
+git bisect bad
+```
+
+- Marks the given commit as a good commit
+```bash
+git bisect good ca49180
+```
+
+- Terminates the bisect session
+```bash
+git bisect reset
+```
+
+### Finding contributors
+- Shows the contributor list
+```bash
+git shortlog
+```
+
+### Viewing the history of a file
+- Shows the commits that touched file.txt
+```bash
+git log file.txt
+```
+
+- Shows statistics (the number of changes) for file.txt
+```bash
+git log --stat file.txt
+```
+
+- Shows the patches (changes) applied to file.txt
+```bash
+git log --patch file.txt
+```
+
+### Finding the author of lines
+- Shows the author of each line in file.txt
+```bash
+git blame file.txt
+```
+
+### Tagging
+- Tags the last commit as v1.0
+```bash
+git tag v1.0
+```
+
+- Tags an earlier commit
+```bash
+git tag v1.0 5e7a828
+```
+
+- Lists all the tags
+```bash
+git tag
+```
+
+- Deletes the given tag
+```bash
+git tag -d v1.0
+```
+
+## Rewriting History
+### Undoing commits
+- Removes the last commit, keeps changes staged
+```bash
+git reset --soft HEAD^
+```
+
+- Unstages the changes as well
+```bash
+git reset --mixed HEAD^
+```
+
+- Discards local changes
+```bash
+git reset --hard HEAD^
+```
+
+### Reverting commits
+- Reverts the given commit
+```bash
+git revert 72856ea
+```
+
+- Reverts the last three commits
+```bash
+git revert HEAD~3..
+```
+
+- Reverts the last three commits without committing
+```bash
+git revert --no-commit HEAD~3..
+```
+
+### Recovering lost commits
+- Shows the history of HEAD
+```bash
+git reflog
+```
+
+- Shows the history of bugfix pointer
+```bash
+git reflog show bugfix
+```
+
+### Amending the last commit
+- Amend the last commit
+```bash
+git commit --amend
+```
+
+### Interactive rebasing
+- Rebase interactively with the last five commits
+```bash
+git rebase -i HEAD~5
 ```
