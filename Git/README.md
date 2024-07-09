@@ -528,7 +528,7 @@ git restore --source=<branch_name> -- <file>
 ### Cloning a repository
 - Clone a repository from a URL
 ```bash
-git clone url
+git clone <url>
 ```
 
 ### Syncing with remotes
@@ -584,14 +584,14 @@ git branch -r
 git branch -vv
 ```
 
-- Pushes bugfix to origin
+- Pushes <branch> to origin
 ```bash
-git push -u origin bugfix
+git push -u origin <branch>
 ```
 
-- Removes bugfix from origin
+- Removes <branch> from origin
 ```bash
-git push -d origin bugfix
+git push -d origin <branch>
 ```
 
 ### Managing remotes
@@ -600,12 +600,12 @@ git push -d origin bugfix
 git remote
 ```
 
-- Adds a new remote called upstream
+- Adds a new remote called <upstream>
 ```bash
-git remote add upstream url
+git remote add <upstream> <url>
 ```
 
-- Removes upstream
+- Removes <upstream>
 ```bash
-git remote rm upstream
+git remote rm <upstream>
 ```
