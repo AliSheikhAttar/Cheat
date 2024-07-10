@@ -88,21 +88,21 @@ def get_queryset(self,request):
     return super().get_queryset(request).annotate(products_count=Count('product'))
 ```
 
-## links to other pages
+## links to other pages & Search
 ```python
 @admin.register(models.Collection)
 class CollectionAdmin(admin.ModelAdmin):
     autocomplete_fields = ['featured_product']
     list_display = ['title', 'products_count']
-    search_fields = ['title']
+    search_fields = ['title__istartswith'] # search fields, starts with given input case insensitive, used for autocompletion
 
-    @admin.display(ordering='products_count')
+    @admin.display(ordering='products_count') # orderظ
     def products_count(self, collection):
         url = (
-            reverse('admin:store_product_changelist')
-            + '?'
+            reverse('admin:store_product_changelist')# go to store app -> product model -> changelist
+            + '?' # get argument
             + urlencode({
-                'collection__id': str(collection.id)
+                'collection__id': str(collection.id) # filter by query
             }))
         return format_html('<a href="{}">{} Products</a>', url, collection.products_count)
 
@@ -111,3 +111,93 @@ class CollectionAdmin(admin.ModelAdmin):
             products_count=Count('product')
         )
 ```
+
+# Filter & Custom action
+```python
+class InventoryFilter(admin.SimpleListFilter):
+    title = 'inventory'
+    parameter_name = 'inventory'
+
+    def lookups(self, request, model_admin):# define lookup values for filtering
+        return [
+            ('<10', 'Low')
+        ]
+
+    def queryset(self, request, queryset: QuerySet):# implement filtering
+        if self.value() == '<10':
+            return queryset.filter(inventory__lt=10)
+
+@admin.register(models.Product)
+class ProductAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['collection'] # for creating new object
+    prepopulated_fields = {# for creating new object
+        'slug': ['title'] # slug will be populated by title
+    }
+    actions = ['clear_inventory'] # pass name of custom method
+    list_display = ['title', 'unit_price',
+                    'inventory_status', 'collection_title']
+    list_editable = ['unit_price']
+    list_filter = ['collection', 'last_update', InventoryFilter] # filter arguments
+    list_per_page = 10
+    list_select_related = ['collection']
+    search_fields = ['title']
+
+    def collection_title(self, product):
+        return product.collection.title
+
+    @admin.display(ordering='inventory')
+    def inventory_status(self, product):
+        if product.inventory < 10:
+            return 'Low'
+        return 'OK'
+
+    @admin.action(description='Clear inventory')# name for custom action in drop down 
+    def clear_inventory(self, request, queryset): # custom action
+        updated_count = queryset.update(inventory=0)
+        self.message_user( # message to user
+            request,
+            f'{updated_count} products were successfully updated.',
+            messages.ERROR # type of message
+        )
+```
+
+## Validator
+models -> <model> -> <field>
+```python
+
+description = models.TextField(null=True, blank=True)# blank=True -> can be null when creating object in admin
+unit_price = models.DecimalField(
+    max_digits=6,
+    decimal_places=2,
+    validators=[MinValueValidator(1, message="custom message")]) # min value
+```
+
+## Edit children using inline
+-> admin.py
+```python
+class OrderItemInline(admin.TabularInline): # StackedInline
+    autocomplete_fields = ['product']
+    min_num = 1
+    max_num = 10 # max number of children
+    model = models.OrderItem
+    extra = 0 # no placeholders
+
+
+@admin.register(models.Order)
+class OrderAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['customer'] # must implement the search fields in customeradmin model
+    inlines = [OrderItemInline] # add the inline
+    list_display = ['id', 'placed_at', 'customer']
+```
+
+## Generic relationships
+
+```python
+class TagInline(GenericTabularInline):
+    model = TaggedItem
+
+
+@admin.register(models.Product)
+class ProductAdmin(admin.ModelAdmin):
+    inlines = [TagInline]
+``` 
