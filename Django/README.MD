@@ -51,16 +51,6 @@ INSTALLED_APPS = [
 ]
 ```
 
-- create admin user
-```bash
-python3 manage.py createsuperuser
-```
-
-- Register object model in admin
-```bash
-    admin.site.register(ObjectModel)
-```
-
 - run web server
 ```bash
 python manage.py runserver <port(default:8000)> # instead of django-admin which doesnt take the settings of proj into account 
