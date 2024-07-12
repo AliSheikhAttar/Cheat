@@ -320,7 +320,6 @@ git restore --source=HEAD~<n> <file>
 ```bash
 git branch <banch_name> 
 ```
-
 - checkout to branch
 ```bash
 git switch <branch>
@@ -364,6 +363,12 @@ git branch -a
 ```bash
 git branch -r 
 ```
+
+- push local to remote
+```bash
+git push -u origin <branch>
+```
+
 ### Comparing branches
 
 - Lists the commits in the <branch> branch not in master
