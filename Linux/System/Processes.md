@@ -82,7 +82,7 @@ To display the process ID, user, CPU usage, and command:
 
 ```bash
 ps -e -o pid,user,%cpu,cmd
-
+```
 
 ### options
 - -s <column> : sort by column
@@ -154,6 +154,51 @@ ps --sort [+|-]<column>
 - **START Column**: The time the process started.
 - **TIME Column**: The amount of time the process has been running.
 - **COMMAND Column**: The command of the process.
+
+
+- Sort key
+pid: Process ID
+ppid: Parent Process ID
+uid: User ID
+euid: Effective User ID
+suid: Saved User ID
+ruid: Real User ID
+gid: Group ID
+egid: Effective Group ID
+sgid: Saved Group ID
+rgid: Real Group ID
+comm: Command name
+cmd: Command with all its arguments
+pcpu: Percentage of CPU usage
+pmem: Percentage of memory usage
+rss: Resident Set Size (physical memory used by the process)
+vsz: Virtual memory size
+tty: Controlling terminal
+stat: Process state
+start: Start time of the process
+lstart: Long format of the start time
+etime: Elapsed time since the process started
+time: Cumulative CPU time
+ni: Nice value
+pri: Priority
+wchan: Wait channel
+fname: File name
+f: Flags
+c: Processor utilization
+sz: Size in memory
+maj_flt: Major page faults
+min_flt: Minor page faults
+cmin_flt: Minor page faults by child processes
+cmaj_flt: Major page faults by child processes
+label: Security label
+nlwp: Number of threads
+psr: Processor
+sgi_p: Processor
+vsz: Virtual memory size in KiB
+rss: Resident Set Size in KiB
+pmem: Percentage of memory
+wchan: Waiting in function
+
 
 # Commonly Used Columns in `ps`
 
