@@ -663,13 +663,14 @@ bunzip2 "filename.bz2"
 - Archive
 
 ```bash
-tar -cvf archive.tar file{3..10} folder{1..2}
+tar -cvf <outputname:archive.tar> <files to archive :file{3..10} folder{1..2}>
 ```
   - -c => determines we want to archive
   - -x => determines we want to unarchive
   - -v => output the process result
   - -f => archive name
   - -r => add files and directories to existing archive file without unarchiving it
+  - -z => compress/decompress
 
 - see inside archive without open it
 ```bash
@@ -687,7 +688,8 @@ gunzip archive.tar.gz
 tar -xvf archive.tar
 ```
 
-- archive and compress
+- archive and compress 
+- bzip2 compresses more efficiently
 ```bash
 tar -zcvf archive.tar.gz file{3..10} folder{1..2}
 ```
