@@ -1,5 +1,17 @@
 # Nmap
 
+## Phases
+1. target enumeration
+2. host discovery
+3. Reserve-DNS reolution
+4. Port scanning
+5. Version detection
+6. OS detection
+7. Traceroute
+8. Script Scanning
+9. Output
+
+
 - stealth syn (default) scan for ports 23 and 80 in specified network
 ```bash
 nmap -sS -p22,80 <192.168.0.0/27>
@@ -34,11 +46,93 @@ nmap -sL -iL <file address>
 nmap -sL -iR 
 ```
 
-## Defense against ping scan
 
-> configure host or network firewall to block ICMP traffic
-> configure firewall to drop TCP packets for PORT 80 & 443 unless needed
-> limit the ability external devices to scan devices
+
+## Defense against ping scan
+* configure host or network firewall to block ICMP traffic
+* configure firewall to drop TCP packets for PORT 80 & 443 unless needed
+* limit the ability external devices to scan devices
+
+## Ports
+* by default scans 1000 ports are most common
+* -p for specific port
+* -F (fast mode) scans most common 100 ports
+* -r -> not to randomize port scan order
+* --top-ports <n> -> n most commonly open ports
+* -port-ratio <n> ports with ratio > n specified due to researchers founds on frequency of ports found open
+* -p<ex:1-1023>,[1024-] -> only includes ports that are registered in nmap services -> more vunrabality found than default scan
+
+## Defence againts port scan
+* configure firwall to block certain ports nmap use to detect devices
+* use intrusion detection to detect nmap scans
+
+## Timing control
+- --min/max-hostgroups -> number of hosts scaned concurrently by nmap
+- --min/max-parallelism -> number of probes launched in parallel
+- --min/max/ -initial-rtt-timeout -> time nmap waits to recieve each probes
+- --max-retries -> max number of nmap tries
+- --host-timeout -> timeout for each host
+- --scan-delay & --max-scan-delay -> time between each probe sent to host -> stealthier
+- --min/max-rate -> number of packets sent per second
+
+## Timing templates
+- -T0,T1 -> very slow high max time-out, send one probe at a time
+- -T2,T3 -> T3(default) uses dynamic parallelism
+- -T4,T5 -> reduce max-retries, T5 the only has host-timeout value
+- T3, T4 ->best to provide balance between scantime and probe timeout
+
+## Optimizing scans
+* First do Host detection for discover online hosts before scanning for large number of ports or more advanced features
+* limit the number of ports
+* Limit use of advanceded scan options unless nedded
+* Limit the use of DNS resolution if you already know which ip belongs to which device
+* Conduct scan in stage
+  1. quick scan of popular ports first
+  2. while quick scanning, a more in depth scan to detect more hosts and vulnerabilites
+* parallel scans
+  1. divide scan into multiple groups 
+  2. scan each group in parallel with seperate nmap instances
+* select an optimal area to scan from -> ex: connect directly to router instead of a previous hop connected to firewall to use faster time template
+and not have to incorporate options to get around firewall 
+
+## Service & Application version detection
+* service detection -> detect services that are not secure or have better alternatives
+* version detection -> detect application that runs those services which are outdated and vulnerable
+* OS detection -> detects old operating systems running on network, also detect rogue devices 
+* -sV option
+* --version-<degree> determin the degre 
+  * -all, -light, 0-9
+  * -all = 9 -> more probes sent to determin version, easier the scan to be detect, longer the scan takes
+  * -light = 2
+
+## OS detection
+* -O option
+* --osscan-limit -> only send addititonal probes to detect os of promising targets
+* --osscan-guess -> aggressively guess the os of all targets
+* at least 1 open and 1 closed ports to evaluate OS
+
+## Remediating detected vulnerabalities
+* switch to more secure services
+* update outdated applications
+* update outdated os
+
+## Firewall detection
+* how easily our firewall is detected from external source
+* determin any open ports indicate vulnerable services in use
+* firewall is first layer of defense
+1. does DNS reolution provide simple identification such as firewall/fw
+2. from external scan will likely to be detected since blocking host-discovery traffic to all host behind it
+3. port scan for vulnerable services of the firewall in use on the network
+
+1. scan the network, search for any name like firewall/fw -> usually have ports 80,443 open for external users visit webserver
+2. scan ports for the detected firewall ip for open ports and vulnerable services beign used
+
+## Remediating Firewall vulnerablities
+* Limit or eliminate the vulnerable services
+* Enact firewall rules that deny by default
+* setup additional security layer to mitigate vulnerablity, add itrusion detection and intrusion prevention devices behind firewall to detect & block any attacks that make it pass the firewall before reaching the internal network
+* place devices like web servers in a DMZ
+
 
 ## States of Ports
 - **Open**
@@ -234,12 +328,7 @@ nmap -sN <target>
 nmap -sF <target>
 nmap -sX <target>
 ```
-- **Top Ports Scan (--top-ports)**
->Description: Scans only the most commonly used ports.
-How it Works: Limits the scan to a specified number of top ports based on frequency.
-```bash
-nmap --top-ports 100 <target>
-```
+
 - **Trace Route (--traceroute)**
 >Description: Maps the path packets take to reach the target.
 How it Works: Uses the traceroute method to determine the route to the target.
