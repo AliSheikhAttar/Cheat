@@ -8,7 +8,7 @@ eBPF can run sandboxed programs in the Linux kernel without changing kernel sour
 eBPF lets programmers execute custom bytecode within the kernel without having to change the kernel or load kernel modules
 
 
-![BPF](BPF/BPF.png)
+![BPF](BPF.png)
 ## LKM - Linux Kernel Modules
 While the system call interface is sufficient in most cases, developers may need more flexibility to add support for new hardware, implement new filesystems, or even custom system calls. For this to be possible, there must be a way for programmers to extend the base kernel without adding directly to the kernel source code.
 
@@ -64,7 +64,7 @@ The kernel expects all eBPF programs to be loaded as bytecode, so we need a way 
 Just-In-Time (JIT) Compiler
 After verification, eBPF bytecode is just-in-time (JIT) compiled into native machine code. eBPF has a modern design, meaning it has been upgraded to be 64-bit encoded with 11 total registers. This closely maps eBPF to hardware for x86_64, ARM, and arm64 architecture, amongst others. Fast compilation at runtime makes it possible for eBPF to remain performant even as it must first pass through a VM.
 
-![eBPF](BPF/BPF1.png)
+![eBPF](BPF1.png)
 
 eBPF (extended Berkeley Packet Filter) bytecode passes through the eBPF virtual machine (VM) during its execution. The eBPF VM is an in-kernel virtual machine that verifies and interprets eBPF bytecode. 
 
