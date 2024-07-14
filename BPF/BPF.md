@@ -8,7 +8,7 @@ eBPF can run sandboxed programs in the Linux kernel without changing kernel sour
 eBPF lets programmers execute custom bytecode within the kernel without having to change the kernel or load kernel modules
 
 
-(BPF1)[BFP.png]
+![BPF](BPF/BPF.png)
 ## LKM - Linux Kernel Modules
 While the system call interface is sufficient in most cases, developers may need more flexibility to add support for new hardware, implement new filesystems, or even custom system calls. For this to be possible, there must be a way for programmers to extend the base kernel without adding directly to the kernel source code.
 
@@ -64,16 +64,20 @@ The kernel expects all eBPF programs to be loaded as bytecode, so we need a way 
 Just-In-Time (JIT) Compiler
 After verification, eBPF bytecode is just-in-time (JIT) compiled into native machine code. eBPF has a modern design, meaning it has been upgraded to be 64-bit encoded with 11 total registers. This closely maps eBPF to hardware for x86_64, ARM, and arm64 architecture, amongst others. Fast compilation at runtime makes it possible for eBPF to remain performant even as it must first pass through a VM.
 
+![eBPF](BPF/BPF1.png)
+
 eBPF (extended Berkeley Packet Filter) bytecode passes through the eBPF virtual machine (VM) during its execution. The eBPF VM is an in-kernel virtual machine that verifies and interprets eBPF bytecode. 
 
-The important takeaway here is understanding that eBPF unlocks access to kernel level events without the typical restrictions found when changing kernel code directly. Summarizing, eBPF works by:
+The important takeaway here is understanding that eBPF unlocks access to kernel level events without the typical restrictions found when changing kernel code directly. 
+
+**Summarizing**, eBPF works by:
  
-Compiling eBPF programs into bytecode
-Verifying programs execute safely in a VM before being being loaded at the hook point
-Attaching programs to hook points within the kernel that are triggered by specified events
-Compiling at runtime for maximum efficiency
-Calling helper functions to manipulate data when a program is triggered
-Using maps (key-value pairs) to share data between the user space and kernel space and for keeping state.
+* Compiling eBPF programs into bytecode
+* Verifying programs execute safely in a VM before being being loaded at the hook point
+* Attaching programs to hook points within the kernel that are triggered by specified events
+* Compiling at runtime for maximum efficiency
+* Calling helper functions to manipulate data when a program is triggered
+* Using maps (key-value pairs) to share data between the user space and kernel space and for keeping state.
 
 
 
