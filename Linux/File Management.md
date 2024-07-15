@@ -3,7 +3,10 @@
 ```bash
 chmod +x ./*.AppImage
 ```
-
+- meta data
+```bash
+stat <file>
+```
 ## create links
 ### hard link
 ```bash

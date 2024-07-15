@@ -6,16 +6,24 @@
 
 ![Screenshot 2024-02-13 153251.png](Standard%20Stream%203e15e4dd7ff74cbd8a94ba5b39710fd1/Screenshot_2024-02-13_153251.png)
 
+```bash
+echo "enter your age"
+read age # read value from stdin
+echo "your age is $age"
+```
+
 ## Redirecting streams
 ### Output
 ```bash
 command -options arguments 1> destination
 command -options arguments > destination
+echo "hello" > file.txt
 ```
 ### Input
 ```bash
 command -options arguments 0< input_source
 command -options arguments < input_source
+echo "$(< file.txt)"
 ```
 ### Error
 ```bash
