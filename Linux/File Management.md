@@ -110,7 +110,7 @@ tar -xvzf <archive>
 unzip 'zip/rar file'
 ```
 
-## Find
+## find
 
 ```bash
 find options starting/path expression
@@ -124,7 +124,7 @@ find options starting/path expression
   - -iname ->	Search without regard for text case(not case sensitive).
   - -name -> with name ...
   - -not ->	Return only results that do not match the test case.
-  - -type f ->	Search for files.
+  - -type f ->	Search for files.Find
   - -type d ->	Search for directories.
   - -empty -> empty directories
   - -not -empty -> not empty directories
