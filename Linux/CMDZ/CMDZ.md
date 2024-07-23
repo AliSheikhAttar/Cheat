@@ -23,3 +23,13 @@ sudo apt upgrade telegram-desktop
 ```bash
 sudo find / -name 'bpf_jit_enable' -print -quit
 ```
+
+## redirect the output as argument | kill specific process by name
+```bash
+pgrep bpftrace | xargs kill -9
+``` 
+
+### write to files need permission
+```bash
+sudo tee <file>
+```

@@ -1,5 +1,8 @@
 # BPF Security - Short
 
+* BCC:
+(BPF Compiler Collection) provides tools and libraries to simplify the writing and running of eBPF programs.
+****
 - bpftrace: A high-level tracing language that simplifies the process of writing BPF programs for dynamic tracing. It is powerful, user-friendly, and - supports a variety of tracing capabilities.
 - Tracepoints: Predefined static instrumentation points in the kernel, designed for low overhead and used primarily for monitoring and debugging specific kernel events.
 - Kprobes: Dynamic instrumentation points that can be inserted at any location in the kernel code at runtime, offering greater flexibility but potentially higher overhead compared to tracepoints.
@@ -12,7 +15,7 @@ system is a bpftrace built-in function that calls a user-space command.
 * bpf_send_signal():
 Not used directly in this example. Instead, the kill command is executed from user space to send the signal.
 
-- Perf Output Buffer:
+* Perf Output Buffer:
 The printf function uses the perf output buffer to send its output to user space.
 The system function triggers a user-space command, which is executed outside of the BPF program context, contrasting with the direct use of bpf_send_signal() in Example 1.
 
@@ -67,3 +70,66 @@ sudo bpftrace -e 'kprobe:security_inode_permission { printf("Permission check on
 * Tracepoints and USDT Probes: Start by looking for tracepoints or USDT probes, which provide built-in instrumentation points with minimal performance overhead.
 * LSM Kernel Hooks: If tracepoints or USDT probes are not available, check for LSM hooks that begin with "security_" to trace security-relevant events.
 * Kprobes/Uprobes: As a last resort, use kprobes for kernel functions and uprobes for user-space functions to instrument raw code directly.
+
+* execve:
+execve is a system call used in Unix-like operating systems to execute a new program. When a process calls execve, it replaces its current memory space with a new program, effectively transforming into the new process.
+The typical flow of creating a new process involves:
+fork or clone: These syscalls create a new process by duplicating the calling process.
+execve: The newly created process then calls execve to execute a different program.
+
+* Binary Files: Executable and Linking Format (ELF)
+What is ELF?
+The Executable and Linking Format (ELF) is a standard file format for executables, object code, shared libraries, and core dumps in Unix-like operating systems, such as Linux. The ELF format is flexible and extensible, making it suitable for a variety of applications.
+
+Components of an ELF File
+- Header: Contains metadata about the file, including the type (e.g., executable, shared library), architecture, entry point address, and the program header table offset.
+- Program Header Table: Describes the segments of the file that are necessary for program execution.
+- Section Header Table: Contains information about the sections of the file, which are used for linking and relocation.
+- Sections:
+  - .text: Contains the executable code.
+  - .data: Contains initialized data.
+  - .bss: Contains uninitialized data.
+  - .rodata: Contains read-only data.
+  - .symtab: Symbol table, used for linking.
+  - .strtab: String table, used for storing symbol names.
+  - .debug: Contains debugging information.
+
+* Uses of ELF Files
+  * Executables: Programs that can be directly executed by the operating system.
+  * Shared Libraries: Libraries that can be dynamically loaded at runtime.
+  * Object Files: Intermediate files used in the process of compiling a program.
+  * Core Dumps: Files that contain the memory image of a process at a specific point in time, often used for debugging.
+- Where are ELF Files Found?
+  - System Binaries: /bin, /sbin, /usr/bin, /usr/sbin
+  - Libraries: /lib, /usr/lib, /lib64, /usr/lib64
+  - Compiled Applications: Anywhere in the filesystem where user applications are installed, often in /usr/local/bin or user-specific directories.
+
+* readline() kernel function
+Example Usage in Bash:
+When you open a Bash shell and type a command, the following happens:
+
+Invocation: The shell waits for user input, invoking readline() to capture the input.
+Editing: As you type, you can use keyboard shortcuts to move the cursor, edit the text, and recall history, all handled by the readline() function.
+Completion: Pressing Tab triggers auto-completion, another feature provided by readline().
+Execution: Once you press Enter, readline() returns the completed line of text to the shell, which then parses and executes the command.
+
+
+* uretprobe
+It allows you to trace and collect information when a specific user-space function returns. uretprobe is particularly useful for understanding the behavior of user-space applications and for capturing the return values of functions.
+
+Return Probes:
+
+A return probe is triggered when a specified function exits.
+It allows you to capture the state of the program at the point when the function returns, including its return value and other context-specific information.
+
+- Example
+‍‍```bash
+bpftrace -e 'uretprobe:/path/to/executable:function_name {
+    printf("Function returned with value: %d\n", retval);
+}'
+````
+
+uretprobe:/path/to/executable:function_name:
+This specifies the target function to probe. Replace /path/to/executable with the path to the user-space binary and function_name with the name of the function you want to trace.
+printf("Function returned with value: %d\n", retval);:
+This prints the return value of the specified function. retval is a special variable in BPFtrace that holds the return value of the probed function.

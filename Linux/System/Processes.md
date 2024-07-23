@@ -56,8 +56,6 @@ top # top consuming
 htop # top consuming more human
 ps aux
 ```
-
-
 ### Output
 - **PID Column**: Unique identifier for each process.
 - **USER Column**: The user running the process (note that the process's permissions are limited to those of this user).
@@ -75,15 +73,12 @@ ps aux
 
 
 ## Example Commands
-
 ### Display Specific Columns
-
 To display the process ID, user, CPU usage, and command:
 
 ```bash
 ps -e -o pid,user,%cpu,cmd
 ```
-
 ### options
 - -s <column> : sort by column
 - -u <user>   : belong to <user>
@@ -123,6 +118,32 @@ fg JOB
 ```
 
 ##  Process status
+
+
+### status
+
+* R => Running or Runnable
+* D => Uninterruptible Sleep
+* S => Interruptable Sleep
+* T => Stopped
+* Z => Zombie
+* *+ => forground
+
+**PROCESS STATE CODES**
+>Here are the different values that the s, stat and state output
+>specifiers (header "STAT" or "S") will display to describe the state of a process:
+
+D  ***  uninterruptible sleep (usually IO)
+I  ***  Idle kernel thread
+R  ***  running or runnable (on run queue)
+S  ***  interruptible sleep (waiting for an event to complete)
+T  ***  stopped by job control signal
+t  ***  stopped by debugger during the tracing
+W  ***  paging (not valid since the 2.6.xx kernel)
+X  ***  dead (should never be seen)
+Z  ***  defunct ("zombie") process, terminated but not reaped by its parent
+
+### ps
 ```bash
   ps -[option]
 ```
@@ -156,52 +177,6 @@ ps --sort [+|-]<column>
 - **COMMAND Column**: The command of the process.
 
 
-- Sort key
-pid: Process ID
-ppid: Parent Process ID
-uid: User ID
-euid: Effective User ID
-suid: Saved User ID
-ruid: Real User ID
-gid: Group ID
-egid: Effective Group ID
-sgid: Saved Group ID
-rgid: Real Group ID
-comm: Command name
-cmd: Command with all its arguments
-pcpu: Percentage of CPU usage
-pmem: Percentage of memory usage
-rss: Resident Set Size (physical memory used by the process)
-vsz: Virtual memory size
-tty: Controlling terminal
-stat: Process state
-start: Start time of the process
-lstart: Long format of the start time
-etime: Elapsed time since the process started
-time: Cumulative CPU time
-ni: Nice value
-pri: Priority
-wchan: Wait channel
-fname: File name
-f: Flags
-c: Processor utilization
-sz: Size in memory
-maj_flt: Major page faults
-min_flt: Minor page faults
-cmin_flt: Minor page faults by child processes
-cmaj_flt: Major page faults by child processes
-label: Security label
-nlwp: Number of threads
-psr: Processor
-sgi_p: Processor
-vsz: Virtual memory size in KiB
-rss: Resident Set Size in KiB
-pmem: Percentage of memory
-wchan: Waiting in function
-
-
-# Commonly Used Columns in `ps`
-
 | Column   | Description                                                |
 |----------|------------------------------------------------------------|
 | **PID**  | Process ID.                                                |
@@ -225,14 +200,8 @@ wchan: Waiting in function
 | **STIME**| Start time of the process.                                 |
 | **WCHAN**| If a process is sleeping, this is the name of the kernel function in which it is sleeping. |
 
-### status
 
-* R => Running or Runnable
-* D => Uninterruptible Sleep
-* S => Interruptable Sleep
-* T => Stopped
-* Z => Zombie
-* *+ => forground
+
 **Interruptible Sleep (S State):**
 - In the S state, a process is waiting for an event to complete.
 - It can return to the running ® state either by receiving a signal or through an explicit wake-up call.
@@ -380,16 +349,14 @@ kill -l
 # KILL , STOP, CONT
 ```
 
-
 - send signal to process
 ```bash
 kill -NAME <PID>
 # or
 kill -NUMBER <PID>
-
+# ex
 kill -SIGSTOP <PID>
 ```
-
 
 - kill multiple
 ```bash
@@ -401,6 +368,7 @@ kill <pid1> <pid2> ...
 kill $(pgrep pattern)
 ```
 
+#### pkill
 - kill all the processes containing the process name <pname>
 ```bash
 pkill <pname> [option]
@@ -414,12 +382,15 @@ pkill <pname> [option]
 - --signal – Send a specific signal to the process, rather than SIGTERM.
 - -e, --echo – Display name and PID of the process being killed.  (pkill only.)
 - -x – match exactly
-
+  
+#### xkill
 - closes a given server's connection to clients. The syntax of the xkill command is;
 If a server has opened some unwanted processes, xkill aborts these processes.
 ```bash
 xkill <resource>
 ```
+
+#### killall
 
 - kill/terminate all processes named <pname>
 ```bash
@@ -431,7 +402,6 @@ killall <pname> [option]
 kill -SIGNAL -<PGID>
 kill -SIGNAL -<SID>
 ```
-
 - -e – This option specifies that the process name should match exactly. If this option is not used, "killall" will match any process name that contains the specified string.
 - -I – ignore case for matching name
 - -i – This option prompts the user before killing each process.

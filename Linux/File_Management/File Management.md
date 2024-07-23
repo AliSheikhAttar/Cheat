@@ -155,72 +155,80 @@ find / -name "*.log" | head -n <n>
 ```bash
 find . -maxdepth <2> -name <"name">
 ```
-- Find based on size
-  - files with 100bytes size
-  ```bash
-  find . -type f -size 100c 
-  ```
-  - all files that have less than 1M size
-  ```bash
-  find . -size -1M
-  ```
-  - files have sizes between 1 and 20 M
-  ```bash
-  find . -size +1M -size -20
-  ```
-  - all files that have more than 1M size
-  ```bash
-  find . -type f -size +1M 
-  ```
-  c ⇒ byte
 
-  k ⇒ KB
+### Find based on size
 
-  M ⇒ MB
+- files with 100bytes size
+```bash
+find . -type f -size 100c 
+```
 
-  G ⇒GB
+- all files that have less than 1M size
+```bash
+find . -size -1M
+```
 
-- execute post process : -exec <command> <placeholder for outputs> <endof command args: (; or +)> 
-';' execute process on each result and feth the next result but '+' fetch all result and execute on all of them 
-  - ask and delete each founded files
-  ```bash
-  find . -name "*.txt" -exec rm -i {} \;
-  ```
-  - find string in lines of founded files => find and execute at each step
-  ```bash
-  find . -name "*.txt" -exec grep string {} \;
-  ```
-  - find string in lines of founded files => find at once and execute all
-  ```bash
-  find . -name "*.txt" -exec grep string {} +
-  ```
-  -  ';' takes more resource than '+' because of number of process steps
-  - print the founded files
-  ```bash
-  find . -type f -name "name" -print
-  ```
-  - delete the founded files
-  ```bash
-  find . -type f -name "name" -delete
-  ```
-  - Find a File in Linux Based on Content
-  The find command can only filter the directory hierarchy based on a file’s name and metadata. If you need to search based on the file’s content, use a tool like grep. Consider the following example:
-  ```bash 
-  find . -type <f> -exec grep <"example"> '{}' \; -print
-  ```
-  find . -type f -exec grep "example" '{}' \; -print
-  This searches every object in the current directory hierarchy (.) that is a file (-type f) and then runs the command grep "example" for every file that satisfies the conditions. The files that match are printed on the screen (-print). The curly braces ({}) are a placeholder for the find match results. The {} are enclosed in single quotes (') to avoid handing grep a malformed file name. The -exec command is terminated with a semicolon (;), which should be escaped (\;) to avoid interpretation by the shel
+- files have sizes between 1 and 20 M
+```bash
+find . -size +1M -size -20
+```
+
+- all files that have more than 1M size
+```bash
+find . -type f -size +1M 
+```
+
+c ⇒ byte
+
+k ⇒ KB
+
+M ⇒ MB
+
+G ⇒ GB
+
+### execute post process 
+> -exec <command> <placeholder for outputs> <endof command args: (; or +)> 
+> ';' execute process on each result and feth the next result but '+' fetch all result and execute on all of them 
+
+- ask and delete each founded files
+```bash
+find . -name "*.txt" -exec rm -i {} \;
+```
+- find string in lines of founded files => find and execute at each step
+```bash
+find . -name "*.txt" -exec grep string {} \;
+```
+- find string in lines of founded files => find at once and execute all
+```bash
+find . -name "*.txt" -exec grep string {} +
+```
+-  ';' takes more resource than '+' because of number of process steps
+- print the founded files
+```bash
+find . -type f -name "name" -print
+```
+- delete the founded files
+```bash
+find . -type f -name "name" -delete
+```
+- Find a File in Linux Based on Content
+The find command can only filter the directory hierarchy based on a file’s name and metadata. If you need to search based on the file’s content, use a tool like grep. Consider the following example:
+```bash 
+find . -type <f> -exec grep <"example"> '{}' \; -print
+```
+find . -type f -exec grep "example" '{}' \; -print
+This searches every object in the current directory hierarchy (.) that is a file (-type f) and then runs the command grep "example" for every file that satisfies the conditions. The files that match are printed on the screen (-print). The curly braces ({}) are a placeholder for the find match results. The {} are enclosed in single quotes (') to avoid handing grep a malformed file name. The -exec command is terminated with a semicolon (;), which should be escaped (\;) to avoid interpretation by the shel
 
 
-  - Find and Process a File in Linux; -exec option runs commands against every object that matches the find expression. Consider the following example:
-  ```bash
-  find . -name "rc.conf" -exec chmod o+r '{}' \;
-  ```
-  This filters every object in the current hierarchy (.) for files named rc.conf and runs the chmod o+r command to modify the find results’ file permissions.
+- Find and Process a File in Linux; -exec option runs commands against every object that matches the find expression. Consider the following example:
+```bash
+find . -name "rc.conf" -exec chmod o+r '{}' \;
+```
+This filters every object in the current hierarchy (.) for files named rc.conf and runs the chmod o+r command to modify the find results’ file permissions.
 
-  The commands run with the -exec are executed in the find process’s root directory. Use -execdir to perform the specified command in the directory where the match resides. This may alleviate security concerns and produce a more desirable performance for some operations.
+The commands run with the -exec are executed in the find process’s root directory. Use -execdir to perform the specified command in the directory where the match resides. This may alleviate security concerns and produce a more desirable performance for some operations.
 
-  The -exec or -execdir options run without further prompts. If you prefer to be prompted before action is taken, replace -exec with -ok or -execdir with -okdir
+The -exec or -execdir options run without further prompts. If you prefer to be prompted before action is taken, replace -exec with -ok or -execdir with -okdir
 
 
 ## Directories & files
