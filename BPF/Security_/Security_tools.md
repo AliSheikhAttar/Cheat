@@ -235,3 +235,59 @@ printf("%-6d %s\n", pid, str(retval));
 This traces the readline() function in /bin/bash using a uretprobe.
 Some Linux distributions build bash differently 
 such that readline() is used from the libreadline library instead;
+
+
+## shellsnoop
+Shellsnoop is an eBPF-based tool designed for monitoring and logging shell commands executed on a system. 
+It operates by attaching eBPF programs to specific system calls, such as execve, which are used to execute programs.
+
+**Key Features of Shellsnoop**
+- Monitors Executed Commands: Captures details of shell commands at the point of execution, providing insight into the commands run on a system.
+- System-Wide Scope: Capable of monitoring commands from any shell or executable, not limited to a specific shell like bash.
+- Efficient Operation: Utilizes eBPF technology to run lightweight programs in kernel space, ensuring minimal performance overhead.
+- Detailed Logging: Logs information such as the command executed, user ID, process ID, and other relevant metadata, useful for auditing and security monitoring.
+- Security and Compliance: Helps in auditing user activities, detecting unauthorized or suspicious behavior, and ensuring compliance with security policies.
+
+**Use Cases**
+- Security Monitoring: Tracks executed commands to detect potential security breaches or unauthorized actions.
+- Auditing: Provides a log of executed commands for post-incident analysis and compliance verification.
+- Intrusion Detection: Identifies unusual or malicious command executions to help in preventing security incidents.
+
+Example Usage:
+
+```bash
+sudo shellsnoop
+```
+
+
+```bash
+#!/usr/local/bin/bpftrace   Purpose: Specifies the path to the BPFtrace interpreter, which will execute this script.
+BEGIN # This block runs at the start of the script execution.
+/$1 == 0/ # checks if no PID argument is provided (i.e., if $1 is zero or not set).
+{
+printf("USAGE: shellsnoop.bt PID\n"); # prints usage information to indicate how to use the script.
+exit(); # exits the script if no PID is provided.
+}
+tracepoint:sched:sched_process_fork # This tracepoint triggers on the fork system call, which is used to create new processes.
+/args->parent_pid == $1 || @descendent[args->parent_pid]/
+# args->parent_pid == $1: Checks if the parent PID of the new process matches the PID provided to the script.
+# @descendent[args->parent_pid]: Checks if the parent PID is already marked as a descendant.
+{
+@descendent[args->child_pid] = 1;
+#Marks the child PID as a descendant by adding it to the @descendent associative array. This array tracks the PIDs of all descendant processes.
+# Trace Writes to STDOUT and STDERR
+# bpftrace
+}
+tracepoint:syscalls:sys_enter_write # This tracepoint triggers on the write system call, which is used to write data to file descriptors.
+/(pid == $1 || @descendent[pid]) && (args->fd == 1 || args->fd == 2)/ 
+# Checks if the current process PID matches the provided PID or is a descendant.
+# Checks if the file descriptor is either 1 (STDOUT) or 2 (STDERR).
+{
+printf("%s", str(args->buf, args->count));
+# Prints the data being written to STDOUT or STDERR. str(args->buf, args->count) converts the buffer being written into a string, truncated to BPFTRACE_STRLEN (64 bytes by default).
+```
+
+**Summary of code**
+Initialization: The script begins by checking if a PID is provided. If not, it prints usage information and exits.
+Fork Monitoring: It tracks when processes fork (create child processes) and marks these child processes as descendants of the original PID.
+Output Logging: It monitors write system calls from the specified process and its descendants, capturing and printing data written to STDOUT and STDERR.
