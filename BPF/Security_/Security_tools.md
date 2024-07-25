@@ -35,7 +35,7 @@ a.out 7778  21086 0 /tmp/a.out
 - ARGS: The command-line arguments passed to the process.
 
 This shows a process executing from /tmp named a.out.
-execsnoop(8) works by tracing the execve syscall. This is a typical step in the creation of new
+execsnoop works by tracing the execve syscall. This is a typical step in the creation of new
 processes, which begins by calling fork or clone to create a new process and calls execve to
 execute a different program. Note that this is not the only way new software can execute: a buffer
 overflow attack can add new instructions to an existing process, and execute malicious software
@@ -169,7 +169,7 @@ delete(@arg0[tid]); # Deletes the entry for the current thread ID from the @arg0
 elfsnoop enhances security by providing a detailed, real-time audit trail of all executed ELF binaries. By leveraging the unique combination of mount points and inode numbers, elfsnoop makes it significantly harder for attackers to disguise their activities. This tool is invaluable for detecting unauthorized modifications, unusual execution patterns, and potential security breaches, thereby helping maintain the integrity and security of a Linux system.
 
 ## modsnoop
-modsnoop(8)5 is a bpftrace tool to show kernel module loads. For example:
+modsnoop5 is a bpftrace tool to show kernel module loads. For example:
 ```bash
 # modsnoop.bt
 Attaching 2 probes...
@@ -177,7 +177,7 @@ Tracing kernel module loads. Hit Ctrl-C to end.
 12:51:38 module init: msr, by modprobe (PID 32574, user root, UID 0)
 [...]
 ```
-This shows that at 10:50:26 the "msr" module was loaded by the modprobe(8) tool, with UID 0.
+This shows that at 10:50:26 the "msr" module was loaded by the modprobe tool, with UID 0.
 ‍‍‍- Script
 ```bash
 #!/usr/local/bin/bpftrace
@@ -291,3 +291,165 @@ printf("%s", str(args->buf, args->count));
 Initialization: The script begins by checking if a PID is provided. If not, it prints usage information and exits.
 Fork Monitoring: It tracks when processes fork (create child processes) and marks these child processes as descendants of the original PID.
 Output Logging: It monitors write system calls from the specified process and its descendants, capturing and printing data written to STDOUT and STDERR.
+
+
+## ttysnoo
+traces terminal sessions live by tracing tty_write() kernel function
+
+* tty_write : in the Linux kernel is responsible for writing data to a terminal. By tracing this function, you can capture all data being written to any terminal device.
+
+* tty: Refers to physical or virtual terminals directly connected to the system. They are lower-level and used for direct system interaction.
+  * tty devices are represented in the filesystem under /dev/tty*.
+  Examples include /dev/tty1, /dev/tty2, etc.
+  * pts: Refers to pseudo-terminal devices created by terminal emulators and remote access tools. They facilitate terminal sessions in graphical environments and remote connections.
+  * pts devices are represented in the filesystem under /dev/pts/*.
+  * Examples include /dev/pts/0, /dev/pts/1, etc.
+  * Components of PTYs:
+    * Master: The controlling side of the PTY, usually accessed by a program.
+    * Slave: The emulated terminal side of the PTY, which appears as a pts device like shell.
+  * Usage:
+    * Used by terminal emulators to provide interactive shells in graphical environments.
+    * SSH sessions and other remote terminal access methods create pts devices for each session.
+
+* `ls /dev/pts` : all terminal sessions
+* `ttl` : session number for current terminal 
+  
+```bash
+ttysnoop [options] device
+```
+Options include:
+-C: Don’t clear the screen
+> The device is either a full path to a pseudo terminal, e.g., /dev/pts/2, or just the number 2
+
+### script
+The following is the code for the bpftrace version:
+```bash
+#!/usr/local/bin/bpftrace
+#include <linux/fs.h>
+BEGIN
+{
+if ($1 == 0) {
+printf("USAGE: ttysnoop.bt pts_device
+# eg, pts14\n");
+exit();
+}
+printf("Tracing tty writes. Ctrl-C to end.\n");
+}
+kprobe:tty_write
+{
+$file = (struct file *)arg0;
+// +3 skips "pts":
+if (str($file->f_path.dentry->d_name.name) == str($1 + 3)) {
+printf("%s", str(arg1, arg2));
+}
+}
+# The kprobe:tty_write block attaches a probe to the tty_write kernel function.
+# arg0 is the first argument to the tty_write function, which is a pointer to a struct file representing the file being written to.
+# $file = (struct file *)arg0 casts arg0 to a struct file *.
+# if (str($file->f_path.dentry->d_name.name) == str($1 + 3)) compares the name of the file being written to with the provided pts device name. The +3 skips the "pts" part of the device name.
+# If the condition is true, it prints the data being written to the terminal using printf("%s", str(arg1, arg2)). Here, arg1 and arg2 are arguments to the tty_write function, representing the data being written and its length, respectively.
+```
+
+## opensnoop
+it is a BCC and bpftrace tool to trace file opens, which can be used for a number of security tasks, such as understanding
+malware behavior and monitoring file usage. Example output from the BCC version:
+```bash
+# opensnoop
+PID COMM FD ERR PATH
+12748 opensnoop -12 /usr/lib/python2.7/encodings/ascii.x86_64-linux-gnu.so
+12748 opensnoop -12 /usr/lib/python2.7/encodings/ascii.so
+12748 opensnoop -12 /usr/lib/python2.7/encodings/asciimodule.so
+12748 opensnoop 18 0 /usr/lib/python2.7/encodings/ascii.py
+12748 opensnoopv 19 0 /usr/lib/python2.7/encodings/ascii.pyc
+1222 polkitd 11 0 /etc/passwd
+1222 polkitd 11 0 /proc/11881/status
+1222 polkitd 11 0 /proc/11881/stat
+1222 polkitd 11 0 /etc/passwd
+1222 polkitd 11 0 /proc/11881/status
+1222 polkitd 11 0 /proc/11881/stat
+1222 polkitd 11 0 /proc/11881/cgroup
+1222 polkitd 11 0 /proc/1/cgroup
+1222 polkitd 11 0 /run/systemd/sessions/2
+[...]
+```
+This output shows opensnoop searching for and then loading an ascii python module: the
+first three opens were unsuccessful. Then polkitd (PolicyKit daemon) is caught opening the
+passwd file and checking process statuses. opensnoop works by tracing the open variety
+of syscalls.
+
+## eperm
+eperm is a bpftrace tool to count syscalls that failed with either EPERM “operation not
+permitted” or EACCES “permission denied” errors, both of which may be interesting for security
+analysis. For example:
+```bash
+# eperm.bt
+Attaching 3 probes...
+Tracing EACCESS and EPERM syscall errors. Ctrl-C to end.
+^C
+@EACCESS[systemd-logind, sys_setsockopt]: 1
+@EPERM[cat, sys_openat]: 1
+@EPERM[gmain, sys_inotify_add_watch]: 6
+```
+
+This shows the process name and the syscall that failed, grouped by failure. For example, this
+output shows there was one EPERM failure by cat(1) for the openat(2) syscall. These failures can
+be further investigated using other tools, such as opensnoop(8) for open failures.
+This works by tracing the raw_syscalls:sys_exit tracepoint, which fires for all syscalls. The
+overhead may begin to be noticeable on systems with high I/O rates; you should test in a lab
+environment.
+
+### script
+```bash
+#!/usr/local/bin/bpftrace
+BEGIN
+{
+printf("Tracing EACCESS and EPERM syscall errors. Ctrl-C to end.\n");
+}
+tracepoint:raw_syscalls:sys_exit
+/args->ret == -1/
+{
+@EACCESS[comm, ksym(*(kaddr("sys_call_table") + args->id * 8))] =
+count();
+}
+tracepoint:raw_syscalls:sys_exit
+/args->ret == -13/
+{
+@EPERM[comm, ksym(*(kaddr("sys_call_table") + args->id * 8))] =
+count();
+}
+```
+**explanation**
+The raw_syscalls:sys_exit tracepoint provides only an identification number for the syscall. To
+convert this to a name, a lookup table of syscalls can be used, which is how the BCC syscount(8)
+tool does it. eperm(8) uses a different technique: the kernel system call table (sys_call_table) is
+read, finding the function that handles the syscall, and then it converts that function address to
+the kernel symbol name.
+
+## tcpconnect and tcpaccept
+they are BCC and bpftrace tools to trace new TCP connections, and can be used to identify suspicious network activity. Many types
+of attacks involve connecting to a system at least once. Example output from BCC tcpconnect(8):
+# tcpconnect
+‍‍‍```bash
+PID COMM IP SADDR DADDRD PORT
+22411 a.out 4 10.43.1.178 10.0.0.1 8080
+[...]
+```
+The tcpconnect(8) output shows an a.out process making a connection to 10.0.0.1 port 8080,
+which sounds suspicious. (a.out is a default filename from some compilers and is not normally
+used by any installed software.)
+
+Example output from BCC tcpaccept(8), also using the -t option to print timestamps:
+```bash
+# tcpaccept -t
+TIME(s)PIDCOMMIP RADDRLADDRLPORT
+0.0001440sshd410.10.1.20110.43.1.17822
+0.2011440sshd410.10.1.20110.43.1.17822
+0.4081440sshd410.10.1.20110.43.1.17822
+0.6121440sshd410.10.1.20110.43.1.17822
+[...]
+```
+This output shows multiple connections from 10.10.1.201 to port 22, served by sshd(8). These are
+happening about every 200 milliseconds (from the "TIME(s)" column), which could be a brute-
+force attack.
+A key feature of these tools is that, for efficiency, they instrument only TCP session events. Other
+tools trace every network packet, which can incur high overhead on busy systems.
