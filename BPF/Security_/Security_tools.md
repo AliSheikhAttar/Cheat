@@ -138,11 +138,13 @@ printf("Tracing ELF loads. Ctrl-C to end\n");
 printf("%-8s %-6s %-18s %-18s %-10s %-10s RET\n",
 "TIME", "PID", "INTERPRETER", "FILE", "MOUNT", "INODE");
 }
+```
 kprobe:load_elf_binary #Sets a kernel probe (kprobe) on the load_elf_binary function, which is responsible for loading ELF binaries.
 {
 @arg0[tid] = arg0; #Stores the first argument (arg0) of the function call in a BPF map using the thread ID (tid) as the key.
 
 }
+```
 kretprobe:load_elf_binary # Sets a return probe (kretprobe) on the load_elf_binary function, which triggers when the function returns.
 
 /@arg0[tid]/ # The conditional (/@arg0[tid]/) ensures this block runs only if there is an entry for the current thread ID in the @arg0 map.
@@ -165,6 +167,7 @@ $bin->file->f_inode->i_ino, retval);
 delete(@arg0[tid]); # Deletes the entry for the current thread ID from the @arg0 map to clean up.
 }
 ```
+```
 **Summary**
 elfsnoop enhances security by providing a detailed, real-time audit trail of all executed ELF binaries. By leveraging the unique combination of mount points and inode numbers, elfsnoop makes it significantly harder for attackers to disguise their activities. This tool is invaluable for detecting unauthorized modifications, unusual execution patterns, and potential security breaches, thereby helping maintain the integrity and security of a Linux system.
 
@@ -186,6 +189,7 @@ BEGIN
 {
 printf("Tracing kernel module loads. Hit Ctrl-C to end.\n");
 }
+```
 kprobe:do_init_module
 {
 $mod = (struct module *)arg0;
@@ -193,6 +197,7 @@ time("%H:%M:%S ");
 printf("module init: %s, by %s (PID %d, user %s, UID %d)\n",
 $mod->name, comm, pid, username, uid);
 }
+```
 ```
 This works by tracing the do_init_module() kernel function, which can access details from the
 module struct.
@@ -225,12 +230,14 @@ BEGIN
 printf("Tracing bash commands... Hit Ctrl-C to end.\n");
 printf("%-9s %-6s %s\n", "TIME", "PID", "COMMAND");
 }
+```
 uretprobe:/bin/bash:readline
 {
 time("%H:%M:%S
 ");
 printf("%-6d %s\n", pid, str(retval));
 }
+```
 ```
 This traces the readline() function in /bin/bash using a uretprobe.
 Some Linux distributions build bash differently 
@@ -268,6 +275,7 @@ BEGIN # This block runs at the start of the script execution.
 printf("USAGE: shellsnoop.bt PID\n"); # prints usage information to indicate how to use the script.
 exit(); # exits the script if no PID is provided.
 }
+```
 tracepoint:sched:sched_process_fork # This tracepoint triggers on the fork system call, which is used to create new processes.
 /args->parent_pid == $1 || @descendent[args->parent_pid]/
 # args->parent_pid == $1: Checks if the parent PID of the new process matches the PID provided to the script.
@@ -278,6 +286,7 @@ tracepoint:sched:sched_process_fork # This tracepoint triggers on the fork syste
 # Trace Writes to STDOUT and STDERR
 # bpftrace
 }
+```
 tracepoint:syscalls:sys_enter_write # This tracepoint triggers on the write system call, which is used to write data to file descriptors.
 /(pid == $1 || @descendent[pid]) && (args->fd == 1 || args->fd == 2)/ 
 # Checks if the current process PID matches the provided PID or is a descendant.
@@ -333,8 +342,10 @@ printf("USAGE: ttysnoop.bt pts_device
 # eg, pts14\n");
 exit();
 }
+```
 printf("Tracing tty writes. Ctrl-C to end.\n");
 }
+```
 kprobe:tty_write
 {
 $file = (struct file *)arg0;
@@ -342,7 +353,9 @@ $file = (struct file *)arg0;
 if (str($file->f_path.dentry->d_name.name) == str($1 + 3)) {
 printf("%s", str(arg1, arg2));
 }
+```
 }
+```
 # The kprobe:tty_write block attaches a probe to the tty_write kernel function.
 # arg0 is the first argument to the tty_write function, which is a pointer to a struct file representing the file being written to.
 # $file = (struct file *)arg0 casts arg0 to a struct file *.
@@ -392,7 +405,7 @@ Tracing EACCESS and EPERM syscall errors. Ctrl-C to end.
 ```
 
 This shows the process name and the syscall that failed, grouped by failure. For example, this
-output shows there was one EPERM failure by cat(1) for the openat(2) syscall. These failures can
+output shows there was one EPERM failure by cat(1) for the openat syscall. These failures can
 be further investigated using other tools, such as opensnoop for open failures.
 This works by tracing the raw_syscalls:sys_exit tracepoint, which fires for all syscalls. The
 overhead may begin to be noticeable on systems with high I/O rates; you should test in a lab
@@ -405,18 +418,21 @@ BEGIN
 {
 printf("Tracing EACCESS and EPERM syscall errors. Ctrl-C to end.\n");
 }
+```
 tracepoint:raw_syscalls:sys_exit
 /args->ret == -1/
 {
 @EACCESS[comm, ksym(*(kaddr("sys_call_table") + args->id * 8))] =
 count();
 }
+```
 tracepoint:raw_syscalls:sys_exit
 /args->ret == -13/
 {
 @EPERM[comm, ksym(*(kaddr("sys_call_table") + args->id * 8))] =
 count();
 }
+```
 ```
 **explanation**
 The raw_syscalls:sys_exit tracepoint provides only an identification number for the syscall. To
@@ -513,6 +529,7 @@ printf("Tracing TCP resets. Hit Ctrl-C to end.\n");
 printf("%-8s %-14s %-6s %-14s %-6s\n", "TIME",
 "LADDR", "LPORT", "RADDR", "RPORT");
 }
+```
 kprobe:tcp_v4_send_reset
 {
 $skb = (struct sk_buff *)arg1;
@@ -526,6 +543,7 @@ time("%H:%M:%S ");
 printf("%-14s %-6d %-14s %-6d\n", ntop(AF_INET, $ip->daddr), $dport,
 ntop(AF_INET, $ip->saddr), $sport);
 }
+```
 ```
 
 This traces the tcp_v4_send_reset() kernel function, which only traces IPv4 traffic. The tool can be
@@ -607,6 +625,7 @@ BEGIN
     @cap[36] = "CAP_BLOCK_SUSPEND";
     @cap[37] = "CAP_AUDIT_READ";
 }
+```
 
 kprobe:cap_capable
 {
@@ -615,11 +634,13 @@ kprobe:cap_capable
     time("%H:%M:%S ");
     printf("%-6d %-6d %-16s %-4d %-20s %d\n", uid, pid, comm, $cap, @cap[$cap], $audit);
 }
+```
 
 END
 {
     clear(@cap);
 }
+```
 ```
 
 **Detailed Breakdown**
@@ -660,3 +681,139 @@ Clears the @cap array. This is a cleanup step to free any resources used by the 
 
 **Summary**
 The capable tool in bpftrace provides a way to trace and log all capability checks made by the kernel, including non-audit checks. It displays information such as the time of the check, the user and process IDs, the command making the check, the capability number and name, and whether the check is audited.
+
+## setuids
+setuids(8) is a bpftrace tool to trace privilege escalation syscalls: setuid, setresuid, and
+setfsuid. For example:
+```bash
+# setuids.bt# setuids.bt
+Attaching 7 probes...
+Tracing setuid family syscalls. Hit Ctrl-C to end.
+TIME        PID   COMM   UID    SYSCALL       ARGS                                (RET)
+23:39:18    23436 sudo   1000   setresuid     ruid=-1 euid=1000 suid=-1           (0)
+23:39:18    23436 sudo   1000   setresuid     ruid=-1 euid=0 suid=-1              (0)
+23:39:18    23436 sudo   1000   setresuid     ruid=-1 euid=0 suid=-1              (0)
+23:39:18    23436 sudo   1000   setresuid     ruid=0 euid=-1 suid=-1              (0)
+23:39:18    23436 sudo   0      setresuid     ruid=1000 euid=-1 suid=-1           (0)
+23:39:18    23436 sudo   1000   setresuid     ruid=-1 euid=-1 suid=-1             (0)
+23:39:18    23436 sudo   1000   setuid        uid=0                               (0)
+23:39:18    23437 sudo   0      setresuid     ruid=0 euid=0 suid=0                (0)
+[...]
+```
+This shows a sudo(8) command that was changing a UID from 1000 to 0 and the various syscalls it
+used to do this. Logins via sshd(8) can also be seen via setuids(8), as they also change the UID.
+The columns include:
+- UID: The user ID before the setuid call.
+- SYSCALL: The syscall name.
+- ARGS: Arguments to the syscall.
+- (RET): Return value. For setuid and setresuid, this shows whether the call was
+successful. For setfsuid, it shows the previous UID.
+This works by instrumenting the tracepoints for these syscalls. Since the rate of these syscalls
+should be low, the overhead of this tool should be negligible.
+
+### script
+
+The provided source code for the setuids(8) tool is a script written in bpftrace, which uses BPF (Berkeley Packet Filter) technology to trace specific syscalls related to user ID changes in a Unix-like operating system. Here is a detailed breakdown of the script:
+
+- Script Header
+```bash
+#!/usr/local/bin/bpftrace
+```
+This line specifies the interpreter for the script, which is bpftrace.
+
+- BEGIN Block
+```bash
+BEGIN
+{
+    printf("Tracing setuid(2) family syscalls. Hit Ctrl-C to end.\n");
+    printf("%-8s %-6s %-16s %-6s %-9s %s\n", "TIME", "PID", "COMM", "UID", "SYSCALL", "ARGS (RET)");
+}
+```
+The BEGIN block runs once when the script starts.
+It prints a header message indicating that tracing has started.
+It prints column headers for the output format: TIME, PID, COMM, UID, SYSCALL, and ARGS (RET).
+
+- Tracepoint: sys_enter_setuid and sys_enter_setfsuid
+```bash
+tracepoint:syscalls:sys_enter_setuid,
+tracepoint:syscalls:sys_enter_setfsuid
+{
+    @uid[tid] = uid;
+    @setuid[tid] = args->uid;
+    @seen[tid] = 1;
+}
+```
+These blocks handle entry tracepoints for setuid and setfsuid syscalls.
+When these syscalls are entered, the script stores the current UID in a map @uid indexed by thread ID (tid).
+The target UID (args->uid) is stored in a map @setuid.
+A flag @seen is set to indicate that these syscalls have been encountered for the current thread.
+
+- Tracepoint: sys_enter_setresuid
+```bash
+tracepoint:syscalls:sys_enter_setresuid
+{
+    @uid[tid] = uid;
+    @ruid[tid] = args->ruid;
+    @euid[tid] = args->euid;
+    @suid[tid] = args->suid;
+    @seen[tid] = 1;
+}
+```
+This block handles the entry tracepoint for the setresuid syscall.
+It stores the current UID, real UID (args->ruid), effective UID (args->euid), and saved set-user-ID (args->suid) in maps indexed by thread ID.
+A flag @seen is set to indicate that this syscall has been encountered for the current thread.
+
+- Tracepoint: sys_exit_setuid
+```bash
+tracepoint:syscalls:sys_exit_setuid
+/@seen[tid]/
+{
+    time("%H:%M:%S ");
+    printf("%-6d %-16s %-6d setuid uid=%d (%d)\n", pid, comm, @uid[tid], @setuid[tid], args->ret);
+    delete(@seen[tid]);
+    delete(@uid[tid]);
+    delete(@setuid[tid]);
+}
+```
+This block handles the exit tracepoint for the setuid syscall.
+If the @seen flag is set for the current thread, it means this syscall was previously encountered.
+It prints the time, process ID (pid), command name (comm), current UID, target UID, and the return value (args->ret).
+The script then deletes the entries in the maps for this thread ID to clean up.
+
+- Tracepoint: sys_exit_setfsuid
+```bash
+tracepoint:syscalls:sys_exit_setfsuid
+/@seen[tid]/
+{
+    time("%H:%M:%S ");
+    printf("%-6d %-16s %-6d setfsuid uid=%d (prevuid=%d)\n", pid, comm, @uid[tid], @setuid[tid], args->ret);
+    delete(@seen[tid]);
+    delete(@uid[tid]);
+    delete(@setuid[tid]);
+}
+```
+This block handles the exit tracepoint for the setfsuid syscall.
+If the @seen flag is set for the current thread, it prints similar details as above but includes the previous UID before the change.
+The script then deletes the entries in the maps for this thread ID.
+
+- Tracepoint: sys_exit_setresuid
+```bash
+tracepoint:syscalls:sys_exit_setresuid
+/@seen[tid]/
+{
+    time("%H:%M:%S ");
+    printf("%-6d %-16s %-6d setresuid ", pid, comm, @uid[tid]);
+    printf("ruid=%d euid=%d suid=%d (%d)\n", @ruid[tid], @euid[tid], @suid[tid], args->ret);
+    delete(@seen[tid]);
+    delete(@uid[tid]);
+    delete(@ruid[tid]);
+    delete(@euid[tid]);
+    delete(@suid[tid]);
+}
+```
+This block handles the exit tracepoint for the setresuid syscall.
+If the @seen flag is set for the current thread, it prints the details of the syscall, including the real UID, effective UID, saved set-user-ID, and the return value.
+The script then deletes the entries in the maps for this thread ID.
+
+
+
