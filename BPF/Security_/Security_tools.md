@@ -393,7 +393,7 @@ Tracing EACCESS and EPERM syscall errors. Ctrl-C to end.
 
 This shows the process name and the syscall that failed, grouped by failure. For example, this
 output shows there was one EPERM failure by cat(1) for the openat(2) syscall. These failures can
-be further investigated using other tools, such as opensnoop(8) for open failures.
+be further investigated using other tools, such as opensnoop for open failures.
 This works by tracing the raw_syscalls:sys_exit tracepoint, which fires for all syscalls. The
 overhead may begin to be noticeable on systems with high I/O rates; you should test in a lab
 environment.
@@ -420,25 +420,25 @@ count();
 ```
 **explanation**
 The raw_syscalls:sys_exit tracepoint provides only an identification number for the syscall. To
-convert this to a name, a lookup table of syscalls can be used, which is how the BCC syscount(8)
-tool does it. eperm(8) uses a different technique: the kernel system call table (sys_call_table) is
+convert this to a name, a lookup table of syscalls can be used, which is how the BCC syscount
+tool does it. eperm uses a different technique: the kernel system call table (sys_call_table) is
 read, finding the function that handles the syscall, and then it converts that function address to
 the kernel symbol name.
 
 ## tcpconnect and tcpaccept
 they are BCC and bpftrace tools to trace new TCP connections, and can be used to identify suspicious network activity. Many types
-of attacks involve connecting to a system at least once. Example output from BCC tcpconnect(8):
+of attacks involve connecting to a system at least once. Example output from BCC tcpconnect:
 # tcpconnect
 ‍‍‍```bash
 PID COMM IP SADDR DADDRD PORT
 22411 a.out 4 10.43.1.178 10.0.0.1 8080
 [...]
 ```
-The tcpconnect(8) output shows an a.out process making a connection to 10.0.0.1 port 8080,
+The tcpconnect output shows an a.out process making a connection to 10.0.0.1 port 8080,
 which sounds suspicious. (a.out is a default filename from some compilers and is not normally
 used by any installed software.)
 
-Example output from BCC tcpaccept(8), also using the -t option to print timestamps:
+Example output from BCC tcpaccept, also using the -t option to print timestamps:
 ```bash
 # tcpaccept -t
 TIME(s)PIDCOMMIP RADDRLADDRLPORT
@@ -448,8 +448,215 @@ TIME(s)PIDCOMMIP RADDRLADDRLPORT
 0.6121440sshd410.10.1.20110.43.1.17822
 [...]
 ```
-This output shows multiple connections from 10.10.1.201 to port 22, served by sshd(8). These are
+This output shows multiple connections from 10.10.1.201 to port 22, served by sshd. These are
 happening about every 200 milliseconds (from the "TIME(s)" column), which could be a brute-
 force attack.
 A key feature of these tools is that, for efficiency, they instrument only TCP session events. Other
 tools trace every network packet, which can incur high overhead on busy systems.
+
+## tcpreset
+
+tcpreset is a bpftrace tool to trace when TCP sends reset (RST) packets. This can be used for the
+detection of TCP port scanning, which sends packets to a range of ports, including closed ones,
+triggering RSTs in response. For example:
+```bash
+# tcpreset.bt
+Attaching 2 probes...
+Tracing TCP resets. Hit Ctrl-C to end.
+TIME LADDR LPORT RADDR RPORT
+20:50:24 100.66.115.238 80 100.65.2.19645195
+20:50:24 100.66.115.238 443 100.65.2.19645195
+20:50:24 100.66.115.238 995 100.65.2.19645451
+20:50:24 100.66.115.238 5900 100.65.2.19645451
+20:50:24 100.66.115.238 443 100.65.2.19645451
+20:50:24 100.66.115.238 110 100.65.2.19645451
+20:50:24 100.66.115.238 135 100.65.2.19645451
+20:50:24 100.66.115.238 256 100.65.2.19645451
+20:50:24 100.66.115.238 21 100.65.2.19645451
+20:50:24 100.66.115.238 993 100.65.2.19645451
+20:50:24 100.66.115.238 3306 100.65.2.19645451
+20:50:24 100.66.115.238 25 100.65.2.19645451
+20:50:24 100.66.115.238 113 100.65.2.19645451
+20:50:24 100.66.115.238 1025 100.65.2.19645451
+20:50:24 100.66.115.238 18581 100.65.2.19645451
+20:50:24 100.66.115.238 199 100.65.2.19645451
+20:50:24 100.66.115.238 56666 100.65.2.19645451
+20:50:24 100.66.115.238 8080 100.65.2.19645451
+20:50:24 100.66.115.238 53 100.65.2.19645451
+20:50:24 100.66.115.238 587 100.65.2.19645451
+[...]
+```
+This shows many TCP RSTs were sent for different local ports within the same second: this looks
+like a port scan. It works by tracing the kernel function that sends resets, and the overhead should
+therefore be negligible, as this occurs infrequently in normal operation.
+Note that there are different types of TCP port scans, and TCP/IP stacks can respond to them
+differently. I tested a Linux 4.15 kernel using the nmap(1) port scanner, and it responded with
+RSTs to SYN, FIN, NULL, and Xmas scans, making them all visible using tcpreset.
+The columns are:
+- TIME: Time in HH:MM:SS format
+- LADDR: Local address
+- LPORT: Local TCP port
+- RADDR: Remote IP address
+- RPORT: Remote TCP port
+
+### Script
+
+The source to tcpreset is:
+```bash
+#!/usr/local/bin/bpftrace
+#include <net/sock.h>
+#include <uapi/linux/tcp.h>
+#include <uapi/linux/ip.h>
+BEGIN
+{
+printf("Tracing TCP resets. Hit Ctrl-C to end.\n");
+printf("%-8s %-14s %-6s %-14s %-6s\n", "TIME",
+"LADDR", "LPORT", "RADDR", "RPORT");
+}
+kprobe:tcp_v4_send_reset
+{
+$skb = (struct sk_buff *)arg1;
+$tcp = (struct tcphdr *)($skb->head + $skb->transport_header);
+$ip = (struct iphdr *)($skb->head + $skb->network_header);
+507508
+Chapter 11 Security
+$dport = ($tcp->dest >> 8) | (($tcp->dest << 8) & 0xff00);
+$sport = ($tcp->source >> 8) | (($tcp->source << 8) & 0xff00);
+time("%H:%M:%S ");
+printf("%-14s %-6d %-14s %-6d\n", ntop(AF_INET, $ip->daddr), $dport,
+ntop(AF_INET, $ip->saddr), $sport);
+}
+```
+
+This traces the tcp_v4_send_reset() kernel function, which only traces IPv4 traffic. The tool can be
+enhanced to trace IPv6 as well if desired.
+This tool is also an example of reading IP and TCP headers from a socket buffer: the lines that set
+$tcp and $ip. This logic is based on the kernel’s ip_hdr() and tcp_hdr() functions, and will need
+updates if the kernel changes this logic.
+
+
+## capable
+
+
+### BCC
+
+Command line usage:
+capable [options]
+Options include:
+- -v: Include non-audit checks (verbose)
+- -p PID: Measure this process only
+- -K: Include kernel stack traces
+- -U: Include user-level stack traces
+Some checks are considered “non-audit” and don’t write a message to the audit log. These are
+excluded by default unless -v is used.
+
+### bpftrace
+The following is the code for the bpftrace version, which summarizes its core functionality. This
+version does not support options and traces all capability checks, included non-audit.
+
+The capable tool written in bpftrace traces all capability checks made by the kernel. Here is a detailed breakdown of its code and functionality:
+
+Overview
+The bpftrace version of the capable tool does not support options and traces all capability checks, including non-audit checks. It prints information about each capability check performed by the kernel.
+
+#### Code Explanation
+```bash
+#!/usr/local/bin/bpftrace
+
+BEGIN
+{
+    printf("Tracing cap_capable syscalls... Hit Ctrl-C to end.\n");
+    printf("%-9s %-6s %-6s %-16s %-4s %-20s AUDIT\n", "TIME", "UID", "PID", "COMM", "CAP", "NAME");
+
+    @cap[0] = "CAP_CHOWN";
+    @cap[1] = "CAP_DAC_OVERRIDE";
+    @cap[2] = "CAP_DAC_READ_SEARCH";
+    @cap[3] = "CAP_FOWNER";
+    @cap[4] = "CAP_FSETID";
+    @cap[5] = "CAP_KILL";
+    @cap[6] = "CAP_SETGID";
+    @cap[7] = "CAP_SETUID";
+    @cap[8] = "CAP_SETPCAP";
+    @cap[9] = "CAP_LINUX_IMMUTABLE";
+    @cap[10] = "CAP_NET_BIND_SERVICE";
+    @cap[11] = "CAP_NET_BROADCAST";
+    @cap[12] = "CAP_NET_ADMIN";
+    @cap[13] = "CAP_NET_RAW";
+    @cap[14] = "CAP_IPC_LOCK";
+    @cap[15] = "CAP_IPC_OWNER";
+    @cap[16] = "CAP_SYS_MODULE";
+    @cap[17] = "CAP_SYS_RAWIO";
+    @cap[18] = "CAP_SYS_CHROOT";
+    @cap[19] = "CAP_SYS_PTRACE";
+    @cap[20] = "CAP_SYS_PACCT";
+    @cap[21] = "CAP_SYS_ADMIN";
+    @cap[22] = "CAP_SYS_BOOT";
+    @cap[23] = "CAP_SYS_NICE";
+    @cap[24] = "CAP_SYS_RESOURCE";
+    @cap[25] = "CAP_SYS_TIME";
+    @cap[26] = "CAP_SYS_TTY_CONFIG";
+    @cap[27] = "CAP_MKNOD";
+    @cap[28] = "CAP_LEASE";
+    @cap[29] = "CAP_AUDIT_WRITE";
+    @cap[30] = "CAP_AUDIT_CONTROL";
+    @cap[31] = "CAP_SETFCAP";
+    @cap[32] = "CAP_MAC_OVERRIDE";
+    @cap[33] = "CAP_MAC_ADMIN";
+    @cap[34] = "CAP_SYSLOG";
+    @cap[35] = "CAP_WAKE_ALARM";
+    @cap[36] = "CAP_BLOCK_SUSPEND";
+    @cap[37] = "CAP_AUDIT_READ";
+}
+
+kprobe:cap_capable
+{
+    $cap = arg2;
+    $audit = arg3;
+    time("%H:%M:%S ");
+    printf("%-6d %-6d %-16s %-4d %-20s %d\n", uid, pid, comm, $cap, @cap[$cap], $audit);
+}
+
+END
+{
+    clear(@cap);
+}
+```
+
+**Detailed Breakdown**
+- BEGIN Block
+Purpose: This block is executed once when the script starts.
+Actions:
+Prints a header message indicating the start of tracing.
+Prints column headers for the output.
+Initializes an associative array @cap that maps capability numbers to their names. This is used for lookup during the capability checks.
+- Capability Mapping
+```bash
+@cap[0] = "CAP_CHOWN";
+@cap[1] = "CAP_DAC_OVERRIDE";
+# ... other capabilities ...
+@cap[37] = "CAP_AUDIT_READ";
+```
+This mapping helps translate capability numbers to human-readable names. Each capability in Linux has a unique number, and this array maps those numbers to their respective capability names.
+- kprobe
+Purpose: This block is executed each time the cap_capable kernel function is called.
+Actions:
+Captures the capability being checked (arg2), which is stored in the variable $cap.
+Captures the audit flag (arg3), stored in the variable $audit.
+Prints the current time, user ID (uid), process ID (pid), command name (comm), capability number ($cap), capability name (@cap[$cap]), and the audit flag ($audit).
+
+Example Output:
+
+objectivec
+```bash
+TIME      UID    PID    COMM             CAP  NAME                  AUDIT
+12:00:37  1000   26069  bash             2    CAP_DAC_READ_SEARCH   1
+```
+This line shows that at 12:00:37, a capability check for CAP_DAC_READ_SEARCH (capability number 2) was performed by the process bash (PID 26069) running with UID 1000. The AUDIT column indicates whether this check is recorded in the audit log (1 for yes, 0 for no).
+
+- END Block
+Purpose: This block is executed once when the script ends.
+Actions:
+Clears the @cap array. This is a cleanup step to free any resources used by the array.
+
+**Summary**
+The capable tool in bpftrace provides a way to trace and log all capability checks made by the kernel, including non-audit checks. It displays information such as the time of the check, the user and process IDs, the command making the check, the capability number and name, and whether the check is audited.
