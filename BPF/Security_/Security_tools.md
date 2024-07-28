@@ -275,7 +275,6 @@ BEGIN # This block runs at the start of the script execution.
 printf("USAGE: shellsnoop.bt PID\n"); # prints usage information to indicate how to use the script.
 exit(); # exits the script if no PID is provided.
 }
-```
 tracepoint:sched:sched_process_fork # This tracepoint triggers on the fork system call, which is used to create new processes.
 /args->parent_pid == $1 || @descendent[args->parent_pid]/
 # args->parent_pid == $1: Checks if the parent PID of the new process matches the PID provided to the script.
@@ -286,7 +285,6 @@ tracepoint:sched:sched_process_fork # This tracepoint triggers on the fork syste
 # Trace Writes to STDOUT and STDERR
 # bpftrace
 }
-```
 tracepoint:syscalls:sys_enter_write # This tracepoint triggers on the write system call, which is used to write data to file descriptors.
 /(pid == $1 || @descendent[pid]) && (args->fd == 1 || args->fd == 2)/ 
 # Checks if the current process PID matches the provided PID or is a descendant.
@@ -302,7 +300,7 @@ Fork Monitoring: It tracks when processes fork (create child processes) and mark
 Output Logging: It monitors write system calls from the specified process and its descendants, capturing and printing data written to STDOUT and STDERR.
 
 
-## ttysnoo
+## ttysnoopط
 traces terminal sessions live by tracing tty_write() kernel function
 
 * tty_write : in the Linux kernel is responsible for writing data to a terminal. By tracing this function, you can capture all data being written to any terminal device.
@@ -529,21 +527,17 @@ printf("Tracing TCP resets. Hit Ctrl-C to end.\n");
 printf("%-8s %-14s %-6s %-14s %-6s\n", "TIME",
 "LADDR", "LPORT", "RADDR", "RPORT");
 }
-```
 kprobe:tcp_v4_send_reset
 {
 $skb = (struct sk_buff *)arg1;
 $tcp = (struct tcphdr *)($skb->head + $skb->transport_header);
 $ip = (struct iphdr *)($skb->head + $skb->network_header);
-507508
-Chapter 11 Security
 $dport = ($tcp->dest >> 8) | (($tcp->dest << 8) & 0xff00);
 $sport = ($tcp->source >> 8) | (($tcp->source << 8) & 0xff00);
 time("%H:%M:%S ");
 printf("%-14s %-6d %-14s %-6d\n", ntop(AF_INET, $ip->daddr), $dport,
 ntop(AF_INET, $ip->saddr), $sport);
 }
-```
 ```
 
 This traces the tcp_v4_send_reset() kernel function, which only traces IPv4 traffic. The tool can be
