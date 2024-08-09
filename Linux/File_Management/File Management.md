@@ -7,6 +7,12 @@ chmod +x ./*.AppImage
 ```bash
 stat <file>
 ```
+
+- is file or dir
+```bash
+file <file/dir>
+```
+
 ## create links
 ### hard link
 ```bash
@@ -56,6 +62,7 @@ ls -i /path/to/file
 ## vim
 - insert - i
 - normal - ESC 
+- v - visual
 - command - :
 ### normal
 - u : undo
@@ -66,10 +73,12 @@ ls -i /path/to/file
 - y + gg : copy till start of the file
 - p : paste the line down
 - shift + p : paste in the above
+- "+p : paste the clipboard
 - r + <char> : replace
 - x : delete char
 - d + 0 : delete till start of line
 - d + $ : delete till end of line
+- d + G : delete till end of file
 - b : go to start of word / prev
 - w : go to start of word / after
 - e : go to end of word / prev
@@ -93,7 +102,9 @@ ls -i /path/to/file
 - q! : quit without save
 - qa : quit all open buffers and exit Vim. It closes all open files and terminates the Vim session. If there are unsaved changes in any of the buffers, Vim will prompt you to save or discard those changes before quitting.
 - install clipboard: `sudo apt-get install vim-gtk3`
-
+### visual
+- y : copy the selected text
+- p/P : paste after/before cursor
 
 ## Unzip
 - unzip tar files
@@ -399,6 +410,8 @@ cat >> "a.txt"
 - show the contents of the file
 ```bash
 more <"filename">
+# q to quit
+# space to page through all of file
 ```
 ```bash
 less [option] <"filename">
@@ -410,11 +423,12 @@ less [option] <"filename">
   - enter => next line
   - = => We can see the content of the current line number
   - space => next page
-  - ctrl+b => Previous page
-  - q => exit from more and back to terminal
+  - ctrl+b/b => Previous page
+  - up/down arrow : iterate line
   - g => go to first page
   - g + shift => go to last page
   - :<number> + enter => goes to the next <number> lines
+  - q => exit from more and back to terminal
 
 
 - show first 10 lines
@@ -490,6 +504,8 @@ cat chocolate.txt | head -n 20 | cut -d "," -f 1,4 --output-delimiter='*' "seper
 ```bash
 table <filename>
 ```
+
+## wc
 - file content info
 ```bash
 wc [option] <"filename"> 
@@ -501,12 +517,12 @@ number1 = count of lines , number 2 = count of words , number3 = count of charac
 - -m => only show count of characters
 - -c => only show count of bytes
 
-
-- ouput without file name
+- example
 ```bash
 cat wc-file | wc
 ```
-## Sort
+
+## sort
 
 - show first 10 lines
 ```bash
@@ -544,8 +560,14 @@ arshia  7
 reza    8
 soltan  10
 
-## grep
+- remove duplicates elements
+```bash
+cat file | sort | uniq
+```
 
+
+## grep
+- find files contain particular string inside them
 Example:
 
 ```bash
@@ -618,6 +640,10 @@ grep -E 'pattern1|pattern2' <filename>
 ```bash
 -n
 ``` 
+- search recursively through directories
+```bash
+-r
+```
 ## Wildcards
 
 - “ * ”  ⇒ It means zero or more of each character.

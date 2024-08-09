@@ -151,7 +151,7 @@ fn_name="trace_connect_entry") b.attach_kretprobe(event="tcp_v4_connect",
 fn_name="trace_connect_v4_return") 
 When the program is triggered along the code path, tcpconnect will start outputting information. The table below exemplifies some of this information.
 
-# ./tcpconnect
+## ./tcpconnect
 PID   COMM  SADDR             DADDR           DPORT
 -----------------------------------------------------
 2315  curl  172.31.43.104     93.184.216.34   80
@@ -191,6 +191,9 @@ Registers with uninitialized contents (those that have never been written to) ca
 
 Lastly, the verifier uses the eBPF program type (covered later) to restrict which kernel functions can be called from eBPF programs and which data structures can be accessed. Some program types are allowed to directly access network packet data, for example.
 
+## BPF tools in network
+
+![bpf_net](./bpf_net.png)
 
 ## Concepts
 - BPF helpers provide essential functions to extend BPF capabilities.

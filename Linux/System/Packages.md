@@ -8,6 +8,10 @@
 ```bash
 sudo apt search <package>
 ```
+- installed packages
+```bash
+sudo dpkg -l | grep openssh-server
+```
 
 - install
 ```bash

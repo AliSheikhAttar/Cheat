@@ -300,7 +300,7 @@ Fork Monitoring: It tracks when processes fork (create child processes) and mark
 Output Logging: It monitors write system calls from the specified process and its descendants, capturing and printing data written to STDOUT and STDERR.
 
 
-## ttysnoopط
+## ttysnoop
 traces terminal sessions live by tracing tty_write() kernel function
 
 * tty_write : in the Linux kernel is responsible for writing data to a terminal. By tracing this function, you can capture all data being written to any terminal device.
@@ -548,10 +548,7 @@ updates if the kernel changes this logic.
 
 
 ## capable
-
-
 ### BCC
-
 Command line usage:
 capable [options]
 Options include:
@@ -677,7 +674,7 @@ Clears the @cap array. This is a cleanup step to free any resources used by the 
 The capable tool in bpftrace provides a way to trace and log all capability checks made by the kernel, including non-audit checks. It displays information such as the time of the check, the user and process IDs, the command making the check, the capability number and name, and whether the check is audited.
 
 ## setuids
-setuids(8) is a bpftrace tool to trace privilege escalation syscalls: setuid, setresuid, and
+setuids is a bpftrace tool to trace privilege escalation syscalls: setuid, setresuid, and
 setfsuid. For example:
 ```bash
 # setuids.bt# setuids.bt
@@ -694,8 +691,8 @@ TIME        PID   COMM   UID    SYSCALL       ARGS                              
 23:39:18    23437 sudo   0      setresuid     ruid=0 euid=0 suid=0                (0)
 [...]
 ```
-This shows a sudo(8) command that was changing a UID from 1000 to 0 and the various syscalls it
-used to do this. Logins via sshd(8) can also be seen via setuids(8), as they also change the UID.
+This shows a sudo command that was changing a UID from 1000 to 0 and the various syscalls it
+used to do this. Logins via sshd can also be seen via setuids, as they also change the UID.
 The columns include:
 - UID: The user ID before the setuid call.
 - SYSCALL: The syscall name.
@@ -707,7 +704,7 @@ should be low, the overhead of this tool should be negligible.
 
 ### script
 
-The provided source code for the setuids(8) tool is a script written in bpftrace, which uses BPF (Berkeley Packet Filter) technology to trace specific syscalls related to user ID changes in a Unix-like operating system. Here is a detailed breakdown of the script:
+The provided source code for the setuids tool is a script written in bpftrace, which uses BPF (Berkeley Packet Filter) technology to trace specific syscalls related to user ID changes in a Unix-like operating system. Here is a detailed breakdown of the script:
 
 - Script Header
 ```bash

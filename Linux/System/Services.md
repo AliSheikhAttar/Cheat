@@ -96,6 +96,10 @@ service --status-all
 ```bash 
   sudo service stop <Service>
 ```
+- enable
+```bash
+sudo update-rc.d <Service> defaults
+```
 - 
 ## Upstat
 * If the /usr/share/upstart directory exists on your system, you are using Upstart.

@@ -23,6 +23,10 @@
 ```bash
  whoami 
 ```
+- hostname (name of the machine)
+```bash
+hostname
+```
 - more details the about user : UID , GID & all of the group IDs the user belongs to
 ```bash 
 id 
