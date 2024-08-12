@@ -251,3 +251,30 @@ Thus, 0x1234 in network byte order (big-endian) is converted to 0x3412 in host b
 This conversion ensures that the port numbers are displayed correctly on the host system regardless of the byte order used by the network.
 
 
+## KRSI (Kernel Runtime Security Instrumentation)
+KRSI is a framework in the Linux kernel that leverages eBPF (extended Berkeley Packet Filter) to allow dynamic runtime instrumentation of the kernel. eBPF is a powerful and flexible technology that enables custom code to be executed in the kernel context. Here are some key aspects of KRSI:
+
+- Dynamic Instrumentation: KRSI allows for dynamic monitoring and enforcement of security policies. This can be used for tasks such as tracking system calls, monitoring network traffic, or enforcing access controls.
+
+- eBPF Programs: Security policies are written as eBPF programs, which can be loaded into the kernel at runtime. These programs can inspect and modify kernel data structures, making it possible to implement complex security policies.
+
+- Flexibility and Performance: Because eBPF programs run in the kernel, they can perform security checks with minimal overhead, providing a high-performance solution for runtime security.
+
+- Use Cases: KRSI can be used for a variety of security applications, including intrusion detection, runtime integrity checking, and fine-grained access control.
+
+## KLM (Kernel Lockdown Module)
+KLM, also known simply as "Kernel Lockdown," is a feature that restricts certain aspects of kernel functionality to enhance security, particularly in environments where the integrity of the kernel is paramount. Here are the main points about KLM:
+
+- Restrictive Policies: Kernel Lockdown enforces restrictive policies that limit access to kernel features that could be used to compromise the system. This includes preventing access to kernel memory, restricting access to certain device drivers, and disabling features that could be used to modify the kernel.
+
+- Modes: Kernel Lockdown operates in different modes:
+
+- Integrity Mode: Focuses on ensuring that the kernel remains in a known good state, preventing modifications to the running kernel.
+- Confidentiality Mode: Focuses on preventing unauthorized access to sensitive data in the kernel.
+- Enforcement: When enabled, Kernel Lockdown can restrict operations such as accessing /dev/mem, /dev/kmem, and /proc/kcore, loading unsigned kernel modules, and using features like kexec (which allows loading a new kernel without rebooting).
+- 
+- Secure Boot Integration: Kernel Lockdown is often used in conjunction with Secure Boot, ensuring that only signed kernels and modules can be loaded, thus preventing unauthorized code from running in the kernel context.
+
+**Summary**
+KRSI uses eBPF to allow dynamic, programmable security instrumentation within the kernel, enabling real-time monitoring and enforcement of security policies.
+KLM enforces a set of restrictive policies to lock down the kernel and prevent unauthorized modifications and access, enhancing the overall security of the system.
