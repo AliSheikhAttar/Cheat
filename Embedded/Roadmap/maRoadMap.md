@@ -4,7 +4,7 @@
 
 - Arduino
 - Electronics
-- i2c/UART/SPI
+- i2c/UART/SPI/GPIO/SPI/ADC/DAC, etc.
 - Iot
 - Iot with Arduino
 
