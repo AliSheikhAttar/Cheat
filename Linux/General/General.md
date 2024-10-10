@@ -32,15 +32,28 @@ env | grep XDG_CURRENT_DESKTOP
 - install ffmpeg
 ```bash
     sudo apt-get install ffmpeg
-```
-- Compress
-```bash
-    ffmpeg -i big_buck_bunny.y4m -vcodec libx265 -crf 28 fps-fps=30 big_buck_bunny.mp4
-```
-- Change format
-```bash
-    ffmpeg -i inputfile.video outputfile.video
-```
+Summary
+Here are some recommended FFmpeg commands based on your needs:
+
+H.265 encoding (efficient compression):
+bash
+Copy code
+ffmpeg -i input.mp4 -c:v libx265 -crf 28 -c:a copy output.mp4
+H.264 with variable bitrate (good balance):
+bash
+Copy code
+ffmpeg -i input.mp4 -c:v libx264 -crf 23 -preset slow -c:a copy output.mp4
+Reduce bitrate:
+bash
+Copy code
+ffmpeg -i input.mp4 -b:v 1000k -c:a copy output.mp4
+Downscale resolution:
+bash
+Copy code
+ffmpeg -i input.mp4 -vf scale=1280:720 -c:a copy output.mp4
+By tweaking these parameters, you can achieve the best trade-off between video size and quality.
+
+
 
 ## Live watch
 ```bash
