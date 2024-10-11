@@ -52,11 +52,29 @@ bash
 Copy code
 ffmpeg -i input.mp4 -vf scale=1280:720 -c:a copy output.mp4
 By tweaking these parameters, you can achieve the best trade-off between video size and quality.
-
-
+```
 
 ## Live watch
 ```bash
 watch -n1 date +%r
 ```
 
+## encode
+- base64
+```bash
+base64 inputfile > encodedfile
+```
+- openssl
+```bash
+base64 inputfile > encodedfile
+```
+
+## decode
+- base64
+```bash
+base64 --decode encodedfile > decodedfile
+```
+- openssl
+```bash
+openssl enc -aes-256-cbc -d -in encryptedfile -out decryptedfile
+```
