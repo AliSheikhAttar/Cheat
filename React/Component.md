@@ -187,7 +187,7 @@ function Component2(props:Props){
 
 
 ## OR
-
+ 
 
 interface Props{
     items:string[];
