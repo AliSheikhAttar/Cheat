@@ -499,6 +499,7 @@ cut [option] <filename>
 cut -d "," -f 1,4 chocolate.txt "seperates by ',' then cut columns 1 and 4"
 cat chocolate.txt | head -n 20 | cut -d "," -f 1,4 "seperates by ',' then cut columns 1 and 4 of the first 20 lines"
 cat chocolate.txt | head -n 20 | cut -d "," -f 1,4 --output-delimiter='*' "seperates by ',' then cut columns 1 and 4 of the first 20 lines and replace ',' with '*'"
+head -n 10 /etc/passwd | cut -d ':' -f 1-7 --output-delimiter=' ' # input as range
 ```
 - show in table format
 ```bash

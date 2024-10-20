@@ -38,7 +38,7 @@ docker compose run <image> [command]
 The second difference is the docker-compose run command does not create any of the ports specified in the service configuration.
 This prevents the port collisions with already open ports. If you do want the service's ports created and mapped to the host, specify the --service-ports flag:
 ```bash
-$ docker-compose run --service-ports web python manage.py <command Ex:shell>
+docker-compose run --service-ports web python manage.py <command Ex:shell>
 ```
 
 - login
