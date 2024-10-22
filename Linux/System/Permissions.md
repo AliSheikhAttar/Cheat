@@ -31,8 +31,15 @@ hostname
 ```bash 
 id 
 ```
+- user last logged ins
+```bash
+last
+```
 
-
+- all users last logged ins
+```bash
+lastlog
+```
 - add user <user> to system with its home and bash
   - -m: Create home directory for user
   - -c: Add a comment for user

