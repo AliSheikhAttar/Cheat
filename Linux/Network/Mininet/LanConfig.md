@@ -20,7 +20,7 @@ arp -a
 ```
 ![alt text](image-4.png)
 
-## Assign an IP address to an interface
+- Assign an IP address to an interface
 ```bash
 ip addr flush dev h1-eth0
 ```
@@ -30,9 +30,9 @@ ip addr add 10.10.14.1/24 dev h1-eth0
 ```bash
 ifconfig -a
 ```
-## Set gateway
+- Set gateway
 
-Show routing table:
+- ipv4 routing table:
 ```bash
 ip route
 ```
@@ -40,8 +40,44 @@ ip route
 ```bash
 ip route add(del) default via 10.10.14.4
 ```
-## Convert into router
+- Convert into router
 Convert h4 into a router:
 ```bash
 echo 1 > /proc/sys/net/ipv4/ip_forward
 ```
+
+- interfaces status
+```bash
+ip link
+```
+
+- set interface UP
+```bash
+ip link set h4-eth0 up
+```
+
+- remove ip address
+```bash
+ip addr flush
+```
+- Assign ip address
+```bash
+ip addr add 10.10.14.1/24
+```
+
+- Add default gateway
+```bash
+ip route add default via <ip add of gateway>
+```
+
+- Enable ip forwarding on a gateway
+enable ip traffic forwarding from a lan to another lan
+```bash
+echo 1 > /proc/sys/net/ipv4/ip_forward
+```
+
+## tip
+to forward a packet between two different link:
+- add gateway in both of the links
+- enable forwarding on the gateway 
+
