@@ -1,4 +1,12 @@
 ## apt
+
+> dpkg --> apt-get, aptitude --> Synaptic, Software Center
+
+- install .deb package
+```bash
+sudo dpkg -i <DEB_PACKAGE>
+```
+
 - package source
 ```bash
 /etc/apt/sources.list
