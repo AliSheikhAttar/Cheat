@@ -160,7 +160,7 @@ return (
 }
 ```
 
-## pass data vio props
+## pass data via props
 ```ts
 function Component1(){
 
@@ -200,4 +200,90 @@ function Component2({ items, heading }:Props){
 ...
 
 }
+```
+
+## pass function via props
+
+```ts
+// add to interface
+interface Props{
+    items:string;
+    heading:string;
+    onSelectedItem: (item: string )=> void; 
+}
+// add to function parameter in component1
+function Component2(props:Props){
+// add the function in the code
+{items.map((item)=>(<li key={item} onClick={()=> {setselected(item);onSelectedItem(item);}}>{item}</li>))}
+// pass the function from the main component
+const handleSelectItem = (item:string) =>  {
+    console.log(item);
+    return (
+        <div> 
+            <component1 param1={param1} onSelectedItem={handleSelectItem}>
+        </div>
+    )
+}
+```
+
+## shortcut
+type rafce & auto-complete
+
+
+## Pass children to components
+```ts
+// change interface
+interface Props{
+    children:string;
+}
+
+function Component2({ children }:Props) => {
+    return (
+        <div>{children}</div>
+    )
+}
+// add the function in the code
+// the main component
+const handleSelectItem = (item:string) =>  {
+    console.log(item);
+    return (
+        <div> 
+            <component1>
+                hello world
+            </component1>
+        </div>
+    )
+}
+
+```
+
+## Pass html to components
+
+## Pass children to components
+```ts
+// change interface
+interface Props{
+    children:ReactNode;
+}
+
+function Component2({ children }:Props) => {
+    return (
+        <div>{children}</div>
+    )
+}
+// add the function in the code
+// the main component
+const handleSelectItem = (item:string) =>  {
+    console.log(item);
+    return (
+        <div> 
+            <component1>
+                <span>
+                    hello world
+                </span>
+            </component1>
+        </div>
+    )
+}
+
 ```

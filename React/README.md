@@ -9,6 +9,8 @@ vite # npm create vite
 ## Create app
 ```bash
 npm create vite@<version>
+# or
+npm create vite@latest
 
 cd <peoj_dir>
 npm i/install # third-party libraries/dependencies
@@ -16,7 +18,7 @@ npm i/install # third-party libraries/dependencies
 
 ## run web server
 ```bash
-nmp run dev
+npm run dev
 ```
 
 ## install bootstrap

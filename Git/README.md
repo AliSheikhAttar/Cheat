@@ -520,6 +520,11 @@ git cherry-pick <dad47ed>
 git restore --source=<branch_name> -- <file>
 ```
 
+- replace the current commit head with the remote commit
+```bash
+git reset --hard origin/main
+```
+
 ## Remote
 ### Cloning a repository
 - Clone a repository from a URL
