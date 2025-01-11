@@ -45,4 +45,4 @@ void loop() {
 Libraries: Includes SPI.h for SPI communication and SD.h for SD card functions.
 chipSelect: Pin 10 is commonly used as the CS (Chip Select) for the SD card.
 SD.begin(): Initializes the SD card. If successful, proceeds to write data.
-File Operations: Opens (or creates) example.txt on the SD card and writes a line of text.
+File Operations: Opens (or creates) example.txt on the SD card and writes a line of text. 
