@@ -35,6 +35,19 @@ go test -v
 go build
 ```
 
+The install directory is controlled by the GOPATH and GOBIN environment variables. If GOBIN is set, binaries are installed to that directory. If GOPATH is set, binaries are installed to the bin subdirectory of the first directory in the GOPATH list. Otherwise, binaries are installed to the bin subdirectory of the default GOPATH ($HOME/go or %USERPROFILE%\go).
+
+You can use the go env command to portably set the default value for an environment variable for future go commands:
+
+```bash
+go env -w GOBIN=/somewhere/else/bin
+```
+
+- To unset a variable previously set by go env -w, use go env -u:
+```bash
+go env -u GOBIN
+```
+
 - discover the install path 
 ```bash
 go list -f '{{.Target}}'
