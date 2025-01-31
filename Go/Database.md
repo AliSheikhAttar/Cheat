@@ -36,9 +36,15 @@ sudo service postgresql restart
 ```
 
 - connect to postgre
+
+```bash
+psql postgres://<user:postgres>:<pass:postgres>@<localhost>:<5430>/<database>
+```
+
 ```bash
 psql -U postgres
 ```
+
 
 - connect through system account
 ```bash
@@ -49,31 +55,6 @@ sudo -i -u postgres
 psql
 ```
 
-- cli commands
-```sql
--- List all databases
-\l
-
--- Connect to a database
-\c database_name
-
--- List all tables in current database
-\dt
-
--- List all users
-\du
-
--- Describe a table
-\d table_name
-
--- Exit PostgreSQL CLI
-\q
-```
-
-- Create table
-```sql
-CREATE DATABASE <recordings>;
-```
 
 - switches your current working database to “recordings”
 ```sql
@@ -82,9 +63,35 @@ CREATE DATABASE <recordings>;
 \connect recordings
 ```
 
+- List all users
+```sql
+\du
+```
 - list all databases
 ```sql
 \l
+```
+- List tables in current database
+```sql
+\dt
+```
+
+
+
+- Describe a table
+```sql
+\d table_name
+```
+
+- Exit PostgreSQL CLI
+```sql
+\q
+```
+
+
+- Create table
+```sql
+CREATE DATABASE <recordings>;
 ```
 
 - verify the current database
@@ -94,10 +101,6 @@ SELECT current_database();
 \conninfo
 ```
 
-- List tables in current database
-```sql
-\dt
-```
 
 - Execute sql file 
 ```sql

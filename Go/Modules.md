@@ -69,7 +69,7 @@ go env -w GOBIN=/path/to/your/bin
 go install
 ```
 
-- add dependency and download the package
+- Download the package and add dependency
 ```bash
 go get golang.org/x/example/hello/reverse
 ```
