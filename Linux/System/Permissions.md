@@ -132,9 +132,17 @@ run commands as root
 sudo -i
 ```
 ## Files & Directories
+
+- the first char:
+  - - -> file
+  - d -> directory
+  
+- order:
+  - user owner, group owner, others
+  
 - r : read
 - w : write
-- x : execute
+- x : execute, going to directory (cd)
 
 rwx (111) => all permission
 r-x (101) => not writable
@@ -195,6 +203,12 @@ chmod [OPTION] [ugoa][-+=][rwx] FILE/DIR...
 - append write permissions for file for other users
 ```bash
 chmod o+w <file>
+```
+
+- combinig
+- grand x and w permissions and revoking read permission for others and owner group
+```bash
+chmod og+x+w-r <file1> <file2> ... <pattern>
 ```
 
 - set read and write permissions (110 = 6) for user, group and others for file (666)

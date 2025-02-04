@@ -6,7 +6,7 @@
 ```bash
 sudo dpkg -i <DEB_PACKAGE>
 ```
-
+ 
 - package source
 ```bash
 /etc/apt/sources.list
@@ -16,6 +16,12 @@ sudo dpkg -i <DEB_PACKAGE>
 ```bash
 sudo apt search <package>
 ```
+
+- list of all the package database
+```bash
+apt list
+```
+
 - installed packages
 ```bash
 sudo dpkg -l | grep openssh-server
@@ -26,7 +32,7 @@ sudo dpkg -l | grep openssh-server
 sudo apt install <package>
 ```
 
-- Update installed packages
+- Update installed packages/ update package database
 ```bash
 sudo apt update
 ```

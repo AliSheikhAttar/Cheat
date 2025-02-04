@@ -1,64 +1,33 @@
 # Docker File
 
-- package 
 ```bash
-FROM python:3
+FROM <base image>:<linux distro>
+```
+```bash
+FROM <node>:<alpine>
 ```
 
+- copy all files from current dir to app dir in node image filesystem
 ```bash
-ENV PYTHONUNBUFFERED=1
+COPY . /app
 ```
 
-```bash
+- change the working directory (cd in linux)
+```
 WORKDIR /app
 ```
 
+- executing command
 ```bash
-COPY requirements.txt ./
+CMD <command>
+```
+```bash
+CMD node app.js
 ```
 
+- package our application
 ```bash
-COPY . .
+docker build -t <image name> <dockerfile location>
 ```
+> -t for tag
 
-- make a specific port accessible to other services within the same network.
-```bash
-EXPOSE 8080
-```
-
-- Port Forwarding:map port from docker container to local machine
-```bash
-docker run -p <local port>:<container port> <image id>
-```
-- make port accessible for all services connected to host machine
-```bash
-ports:
-      - "<local port>:<container port>"
-```
-
-- run command in terminal
-```bash
-RUN pip install -r requirements.txt
-```
-
-- command
-```bash
-CMD ["python", "manage.py", "runserver"]
-```
-
-- Share Database data across multiple containers
-```bash
-    volumes:
-    - db-data:
-```
-
-- mount volume in container 
-```bash
-    volumes:
-    - db-data:/<dir name>
-```
-
-- restart if stoped
-```bash
-restart: always
-```

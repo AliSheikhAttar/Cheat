@@ -127,6 +127,7 @@ unzip 'zip/rar file'
 find options starting/path expression
 ```
   - options
+  - without option -> list all files in the current directory recursively
   - -O1	(Default) -> filter based on file name first.
   - -O2	-> File name first, then file type.
   - -O3	-> Allow find to automatically re-order the search based on efficient use of resources and likelihood of success.
@@ -283,6 +284,7 @@ cd /
   - -X : sort by extension name 
   - -h : more human
   - -ltha : with full details
+  - -1 : list in one column
 
 
 - Create all path
@@ -568,7 +570,7 @@ cat file | sort | uniq
 
 
 ## grep
-- find files contain particular string inside them
+- find files contain particular string inside them/find specific string(s) inside files
 Example:
 
 ```bash
@@ -581,9 +583,13 @@ quera college
 finished!
 EOF
 ```
-- looking for <string> in <filename>
+- looking for <string> in <file(s)>
 ```bash
-grep <string> "filename"
+grep <string> "filename" "filename2" ...
+```
+- looking for <string> in <files> with particular pattern
+```bash
+grep <string> <pattern:file*>
 ```
 - print lines that contains “we”.(case sensitive)
 ```bash
@@ -804,3 +810,25 @@ awk -v task_id="$task_id" -F ',' 'BEGIN {OFS = FS}
 - str1 ~ str2 {expression1} ... {expression n} : is used to match a variable against a regular expression.
 - > tasks.tmp && mv tasks.tmp tasks.csv : if awk command was ok then replace the result
 
+## chaining commands
+- run cmd1 and cmd2
+```bash
+cmd1 ; cmd2
+```
+
+- if any cmds fail, the other wont get executed
+```bash
+cmd1 && cmd2
+```
+
+- if cmd1 executed then cmd2 won't but if cmd1 fails, cmd2 will get executed
+```bash
+cmd1 || cmd2
+```
+
+break up a long command into mulitple lines
+```bash
+mkdir hello; \
+cd hello;\
+echo done
+```

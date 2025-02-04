@@ -1,5 +1,5 @@
 # Processes
-
+> An instance of a running program
 * processes 
 ```bash
 /proc

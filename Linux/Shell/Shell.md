@@ -24,9 +24,15 @@ history <n> #last <n> commands
 - run previous commands
 ```bash
 !! # previous command
-!!<n> # nth previous command
+!<n> # nth previous command
 ```
+
 - delete history
 ```bash
 history -c; history -w;
+```
+
+- terminate session
+```bash
+exit
 ```
