@@ -208,3 +208,12 @@ docker image save -o <file>  <image:tag>
 ```bash
 docker image load -i <file>
 ```
+
+
+- Copying files between the host and containers
+```bash
+docker cp <containerID>:/app/log.txt .
+```
+```bash
+docker cp secret.txt <containerID>:/app
+```
