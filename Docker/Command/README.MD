@@ -1,5 +1,16 @@
 # Docker Commands
 
+- info on commands
+```bash
+docker <command> --help
+```
+
+- package our application
+> -t for tag
+```bash
+docker build -t <image name> <dockerfile location>
+```
+
 - list all the running Docker containers
 ```bash
 docker ps
@@ -61,10 +72,21 @@ docker run <image>
 docker run -it <image>
 ```
 
+- run image as container if locally available then run <command> in it
+```bash
+docker run <image> <command>
+```
+
 - start container
 - -i for interactively
 ```bash
 docker start -i <container id>
+```
+
+- This command is used to execute a command in a running container
+otherwise pull it then run it
+```bash
+docker exec <container> <command>
 ```
 
 - run by bash session
@@ -92,9 +114,27 @@ docker kill <container>
 docker search <image name>
 ```
 
-- Push an image to the docker registey (docker hub)
+- Delete docker image
 ```bash
-docker push <username/image name>
+docker rmi  <image id>
+```
+
+- Delete docker dangling/loose image Layers with no relation to labeled images are called dangling images.No name & tag. They’re outdated and take up unnecessary disk space. 
+```bash
+#list
+docker images -f dangling=true
+#Remove
+docker image prune
+```
+
+- delete containers running old/dangling images
+```bash
+docker container prune
+```
+
+- Delete dangling volumes;
+```bash
+docker volume prune
 ```
 
 - Free unused spaces
@@ -104,17 +144,9 @@ docker image prune -f
 docker volume prune -f
 ```
 
-- Delete docker image
+- delete an image
 ```bash
-docker rmi  <image id>
-```
-
-- Delete docker dangling image Layers with no relation to labeled images are called dangling images. They’re outdated and take up unnecessary disk space. 
-```bash
-#list
-docker images -f dangling=true
-#Remove
-docker image prune
+docker image rm <image name1/image id1> <image2> ...
 ```
 
 - terminate container
@@ -127,18 +159,52 @@ docker container stop <ID_or_Name>
 docker container rm <ID_or_Name>
 ```
 
-- Delete dangling volumes;
+## Tag & Push to registery
+> versioning
+- tagging during build
 ```bash
-docker volume prune
+docker build -t <image name>:<tag> <dockerfile location>
 ```
 
-- This command is used to execute a command in a running container
-- otherwise pull it then run it
+- tagging after build
 ```bash
-docker exec <container> <command>
+docker image tag <image name>:<default/latest tag> <image name>:<tag>
+## or
+docker image tag <image id> <image name>:<tag>
+```
+- change the image pointing to by a specific tag
+```bash
+docker image tag <new image id> <old image name>:<tag>
 ```
 
-- Port to container and open bash
+- delete a tagged image
 ```bash
-docker exec -it <imageid> bash
+docker image remove <image name>:<tag>
+```
+
+### Push to registery
+- change the repository
+```bash
+docker image tag <image id> <dockerhub username>/<image name on dockerhub>:<tag>
+```
+
+- login to docker
+```bash
+docker login
+```
+- Push an image to the docker registery (docker hub)
+```bash
+docker push <dockerhub username>/<image name on docker hub>:<tag>
+```
+
+- compress image and save to a tar archive or STDOUT
+```bash
+docker image save -o <file>  <image:tag>
+```
+
+- load an image from a tar archive or STDIN
+> the loaded image would have the same image id as the image which was saved
+> -q -> suppress the load output
+```bash
+docker image load -i <file>
 ```

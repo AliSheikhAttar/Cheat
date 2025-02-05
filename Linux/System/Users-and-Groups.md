@@ -23,6 +23,8 @@ adduser
 
 ### options for useradd
 - -m -> create home directory
+### options for adduser
+- -S -> System user
 
 ### options for usermod
 - -s -> set shell
