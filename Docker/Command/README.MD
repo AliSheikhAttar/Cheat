@@ -11,6 +11,7 @@ docker <command> --help
 docker build -t <image name> <dockerfile location>
 ```
 
+## List
 - list all the running Docker containers
 ```bash
 docker ps
@@ -21,6 +22,11 @@ docker ps
 docker ps --all/-a
 ```
 
+- containers list
+```bash
+docker container ls -a
+```
+
 - list all the Docker images 
 ```bash
 docker images
@@ -29,9 +35,9 @@ docker images
 docker image ls
 ```
 
-- containers list
+- List of images with sizes
 ```bash
-docker container ls -a
+docker compose images
 ```
 
 - list of available Docker volumes
@@ -44,11 +50,6 @@ docker volume ls
 docker volume ls -f dangling=true 
 ```
 
-- List of images with sizes
-```bash
-docker compose images
-```
-
 - Available resources
 ```bash
 docker  container ls
@@ -57,19 +58,39 @@ docker  volume ls
 docker  network ls
 docker  info
 ```
+
 - pull image
 ```bash
 docker pull <image>
 ```
 
-- run image as container if locally available
+## Container logs
+- see logs of a container
+> for example output of the websere in the terminal when we run locally
 ```bash
-docker run <image>
+docker logs <container id>
 ```
 
-- start container and interact with it (open shell)
+- see logs in real time continuesly
 ```bash
-docker run -it <image>
+docker logs -f/--follow <container id>
+```
+
+- see last <n> lines of log
+```bash
+docker logs -n 5 <container id>
+```
+
+- see timestamps of (lines of) logs
+```bash
+docker logs -t <container id>
+```
+
+## docker run
+- run image as container if locally available
+- start a new container
+```bash
+docker run <image>
 ```
 
 - run image as container if locally available then run <command> in it
@@ -77,7 +98,28 @@ docker run -it <image>
 docker run <image> <command>
 ```
 
-- start container
+- run image as container if locally available in the background (detached mode)
+```bash
+docker run -d <image>
+```
+
+- naming containers
+```bash
+docker run -d --name <container name> <image> 
+```
+
+- publish a port on the host to port on container
+```bash
+docker run -p <machine port>:<container port>
+```
+
+- start container and interact with it (open shell)
+```bash
+docker run -it <image>
+```
+
+## start, exec, interact
+- start stoped container
 - -i for interactively
 ```bash
 docker start -i <container id>
@@ -86,7 +128,12 @@ docker start -i <container id>
 - This command is used to execute a command in a running container
 otherwise pull it then run it
 ```bash
-docker exec <container> <command>
+docker exec <container name/container id> <command>
+```
+
+- Stop container
+```bash
+docker stop <container>
 ```
 
 - run by bash session
@@ -104,6 +151,59 @@ doker exec -it -u <user> <container id> bash
 docker restart <container container2 ...>
 ```
 
+- Copying files between the host and containers
+- from container to host
+```bash
+docker cp <containerID>:<full path to file or dir in container ex:/app/log.txt> <destination on host ex: .>
+```
+- from host to container
+```bash
+docker cp <host path ex:secret.txt> <containerID>:<container path ex:/app>
+```
+
+- Create a mapping/binding between a dir on the host and a dir in the container
+> we can also bind named volumes if we want with -v option
+```bash
+docker run -v <dir full path on the host ex:$(pwd)>:<dir in the container filestystem ex:/app>
+```
+
+## Volume
+- create volume
+- this would be dir that docker manages
+```bash
+docker volume create <volume name>
+```
+
+- inspect volume
+```bash
+docker volume inspect <volume name>
+```
+
+- map volume on local directory or cloud platform to a directory in container filesystem
+> if the volume doesn't exist, docker will create a new one
+> same goes for directory in container filesystem
+> if let the docker create the directory, the directory will be owned by root (limited previleges for normal user)
+```bash
+docker run -v <volume name>:<absolute path to directory in the filesystem> <image>
+```
+
+# Stop, kill, delete
+- terminate container
+```bash
+docker container stop <ID_or_Name>
+```
+
+- remove a stopped container
+```bash
+docker container rm <ID_or_Name>
+# or
+docker rm <ID_or_Name>
+```
+
+- force remove a running container
+```bash
+docker rm -f <ID_or_Name>
+```
 - Stop the container immediately by killing its execution. While the ‘docker stop’ command helps shut down the container in its own time, the ‘docker kill’ command stops it at once.
 ```bash
 docker kill <container>
@@ -127,7 +227,7 @@ docker images -f dangling=true
 docker image prune
 ```
 
-- delete containers running old/dangling images
+- delete containers running old/dangling images / stopped containers
 ```bash
 docker container prune
 ```
@@ -147,16 +247,6 @@ docker volume prune -f
 - delete an image
 ```bash
 docker image rm <image name1/image id1> <image2> ...
-```
-
-- terminate container
-```bash
-docker container stop <ID_or_Name>
-```
-
-- remove container
-```bash
-docker container rm <ID_or_Name>
 ```
 
 ## Tag & Push to registery
@@ -182,7 +272,7 @@ docker image tag <new image id> <old image name>:<tag>
 docker image remove <image name>:<tag>
 ```
 
-### Push to registery
+### Push/pull to/from registery
 - change the repository
 ```bash
 docker image tag <image id> <dockerhub username>/<image name on dockerhub>:<tag>
@@ -207,13 +297,4 @@ docker image save -o <file>  <image:tag>
 > -q -> suppress the load output
 ```bash
 docker image load -i <file>
-```
-
-
-- Copying files between the host and containers
-```bash
-docker cp <containerID>:/app/log.txt .
-```
-```bash
-docker cp secret.txt <containerID>:/app
 ```

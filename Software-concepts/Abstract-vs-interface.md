@@ -34,6 +34,7 @@ In C++ (and many OOP languages), **if a class has at least one pure virtual meth
   ```
 
 ---
+The derived class must implement all abstract methods from its abstract base class if you intend to instantiate it. In many languages, including Java, C#, and Python (using the abc module), if a class doesn’t provide an implementation for an inherited abstract method, that class must itself be declared abstract. Otherwise, you’ll face a compile-time error or a runtime error (depending on the language).
 
 ### **2. Interface**  
 - **In C++**: There’s no explicit `interface` keyword. Instead, an interface is **simulated using an abstract class with only pure virtual methods** (no data members).
@@ -88,10 +89,12 @@ In C++ (and many OOP languages), **if a class has at least one pure virtual meth
 1. **Abstract Class**:
    - When you want to share code between derived classes (e.g., common method implementations).
    - When you need member variables shared across subclasses.
+   - When you have a set of related classes that share common behavior or state.
+   - When you want to provide a common base with some default functionality.
 
 2. **Interface** (Abstract Class in C++):
    - To define a strict contract (e.g., `Drawable`, `Serializable`).
-   - To enforce polymorphism across unrelated classes (e.g., `Circle` and `Button` both implementing `Drawable`).
+   - To enforce polymorphism across unrelated classes or to specify a contract that can be applied across unrelated classes (e.g., `Circle` and `Button` both implementing `Drawable`).
 
 ---
 
