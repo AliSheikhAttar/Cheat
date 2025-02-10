@@ -22,6 +22,11 @@ docker ps
 docker ps --all/-a
 ```
 
+- container ids list
+```bash
+docker container ls -q
+```
+
 - containers list
 ```bash
 docker container ls -a
@@ -33,6 +38,10 @@ docker images
 ```
 ```bash
 docker image ls
+```
+- list only image ids
+```bash
+docker image ls -q
 ```
 
 - List of images with sizes
@@ -197,7 +206,7 @@ docker container stop <ID_or_Name>
 ```bash
 docker container rm <ID_or_Name>
 # or
-docker rm <ID_or_Name>
+docker rm <ID_or_Name> <ID_or_Name> ...
 ```
 
 - force remove a running container
@@ -249,6 +258,11 @@ docker volume prune -f
 docker image rm <image name1/image id1> <image2> ...
 ```
 
+- delete all images
+```bash
+docker image rm $(docker image ls -q)
+```
+
 ## Tag & Push to registery
 > versioning
 - tagging during build
@@ -298,3 +312,55 @@ docker image save -o <file>  <image:tag>
 ```bash
 docker image load -i <file>
 ```
+
+# docker compose
+
+- build images (using catch)
+```bash
+docker-compose build
+# or
+docker compose build
+```
+
+- force full rebuild images (without using cache)
+```bash
+docker-compose build --no-cache
+# or 
+docker compose build --no-cache
+```
+
+- start/start app
+- start container (build and start images not available) 
+```bash
+docker-compose up
+```
+- start container in the background
+```bash
+docker-compose up -d
+```
+- rebuild every time start app
+```bash
+docker-compose up --build
+```
+
+- all the relevant containers to the application
+```bash
+docker-compose ps
+```
+
+- stop and remove containers
+```bash
+docker-compose down
+```
+
+- view all logs across all containers of application in one place
+> continuosly see new messages with -f option
+```bash
+docker-compose logs -f
+```
+
+
+# network
+> when we start app using docker compose, the docker create network and add containers to the network
+> docker have embedded dns server that map ips to services name
+> each container contains a dns resolver which talks to dns server to resolve host names
