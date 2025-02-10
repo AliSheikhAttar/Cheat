@@ -8,7 +8,12 @@ docker <command> --help
 - package our application
 > -t for tag
 ```bash
-docker build -t <image name> <dockerfile location>
+docker build -t <image name> <build context: .>
+```
+
+- specify the name for dockerfile
+```bash
+docker build -t <image name> -f <dockerfile name: Dockerfile.prod> <build context: .>
 ```
 
 ## List
@@ -196,7 +201,7 @@ docker volume inspect <volume name>
 docker run -v <volume name>:<absolute path to directory in the filesystem> <image>
 ```
 
-# Stop, kill, delete
+## Stop, kill, delete
 - terminate container
 ```bash
 docker container stop <ID_or_Name>
@@ -264,7 +269,8 @@ docker image rm $(docker image ls -q)
 ```
 
 ## Tag & Push to registery
-> versioning
+
+### versioning
 - tagging during build
 ```bash
 docker build -t <image name>:<tag> <dockerfile location>
@@ -313,11 +319,17 @@ docker image save -o <file>  <image:tag>
 docker image load -i <file>
 ```
 
-# docker compose
+## docker compose
 
 - build images (using catch)
 ```bash
 docker-compose build
+# or
+docker compose build
+```
+- specify docker-compose yml file
+```bash
+docker-compose -f docker-compose.prod.yml build
 # or
 docker compose build
 ```
@@ -360,7 +372,52 @@ docker-compose logs -f
 ```
 
 
-# network
+## network
 > when we start app using docker compose, the docker create network and add containers to the network
 > docker have embedded dns server that map ips to services name
 > each container contains a dns resolver which talks to dns server to resolve host names
+
+## docker-machine / Deploy
+> in production environment:
+> we won't need volumes for sharing source code
+> we won't need test containers to continuosly run -> slows down server
+
+- vps
+- create vps using docker-machine
+> create virtual machine and install docker on it
+> we will be able to talk to that docker engine remotely on our machine
+```bash
+docker-machine create \
+--driver digitalocean (none for personal server) \
+--digitalocean-access-token <token> \
+<server name>
+```
+
+- connect to server via ssh
+> from here every command we execute will be sent to docker engine on the vps
+```bash
+docker-machine ssh <server name>
+```
+
+- list of docker machines and ip of our server: webserver
+```bash
+docker-machine ls
+```
+
+- list of environment variables we need to set to talk to the production machine
+```bash
+docker-machine env <server name / production machine>
+```
+
+- set environment variables
+> the docker machine will be active
+```bash
+eval $(docker-machine env <production machine>)
+```
+
+- deploy
+> docker-compose.prod.yml on our local machine
+```bash
+docker-compose -f <docker-compose.prod.yml> up -d
+```
+

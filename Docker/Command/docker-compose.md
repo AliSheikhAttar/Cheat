@@ -50,24 +50,51 @@ command: <command> && <command> ...
 
 ```
 
+- if a container crashes, wheter it's going to restart or not
+> if this container crashes, it's going to restart it
+> always: always restart the container
+> on-failure: restart on crashes
+> unless-stopped: only restart if we manually stop it
+ 
+```bash
+restart: yes
+```
+
+- specify the dockerfile when multiple dockerfiles exist
+```yml
+build:
+  context: ./frontend
+  dockerfile: Dockerfile.prod
+```
+
+- tagging 
+```bash
+image: <image_name>:<tag>
+```
+
+## Production
 ```yml
 version: "<version>"
 
 services:
     web:
-      build: <dockerfile location: ./frontend>
+      build:
+        context: ./frontend
+        dockerfile: Dockerfile.prod
+      image: vidly_web:1
       ports:
-        - <port on host:3000>:<port on container:3000>
+        - <port on host:80>:<port on container:80>
+      restart: unless-stopped
     api:
       build: <dockerfile location: ./backend>
+      image: vidly_api:1
       ports:
         - <port on host:3000>:<port on container:3000>
       environment:
         - DB_URL=mongodb://<host on docker network:db>/<database>
         # or
         - DB_URL: mongodb://db/database
-      volumes:
-        - <relative path to directory on host>:<path to directory on container>
+      restart: unless-stopped
     
       command: ./<sh file> && <command> && <command> ...
     db:
@@ -76,6 +103,7 @@ services:
         - <port on host:27017>:<port on container:27017>
       volumes:
         - <volume>:<directory on container>
+      restart: unless-stopped
 
 volumes:
   <volume>:

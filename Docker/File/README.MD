@@ -2,36 +2,49 @@
 
 ## FROM
 - base image
-```bash
+```dockerfile
 FROM <base image>:<linux distro>
 ```
-```bash
+```dockerfile
 FROM <node>:<alpine>
 ```
+
+- label
+> seperate the stages of operation
+> reference to the stages
+```dockerfile
+FROM <base image>:<linux distro> AS build-stage
+```
+
 ## COPY ADD
 
 - change the working directory (cd in linux)
-```bash
+```dockerfile
 WORKDIR /app
 ```
 
 - copy all files from current dir to app dir in node image filesystem
-```bash
+```dockerfile
 COPY . /app
 ```
 
 - copy all files from current dir to current working dir in image filesystem
-```bash
+```dockerfile
 COPY . .
+```
+
+- copy from specific stage from the dockerfile
+```dockerfile
+COPY --from=<label: build-stage> <directory in the stage: /app/build> <dest dir in this stage>
 ```
 
 - ADD is COPY with two more features
 - Copy Files from url
-```bash
+```dockerfile
 ADD https://.../file .
 ```
 - uncompress a file to working dir in image
-```bash
+```dockerfile
 ADD file.zip .
 ```
 
@@ -45,27 +58,28 @@ ADD file.zip .
 
 * RUN is build-time instruction (during build)
 * CMD is runtime instruction (executed when starting container)
+* we can have single CMD but multiple RUN
 - execute commands like ones executed in terminal session
-```bash
+```dockerfile
 RUN <CMD>
 ```
 
 - default command to be executed after build
-```bash
+```dockerfile
 CMD <command>
 ```
-```bash
+```dockerfile
 CMD node app.js
 ```
 
 - shell form
 > docker will execute inside a seperate shell
-```bash
+```dockerfile
 CMD <npm> <start>
 ```
 - exec form
 > execute directly, easier and faster to clean up resources when containers stop
-```bash
+```dockerfile
 CMD ["npm", "start"]
 ```
 - to overwrite CMD
@@ -74,7 +88,8 @@ docker run <image> <command>
 ```
 
 - ENTRYPOINT similar to CMD harder to get overwriten when running container
-```bash
+- execute everytime we start the image, no exception
+```dockerfile
 ENTRYPOINT ["npm", "start"]
 ```
 - to overwrite ENTRYPOINT
@@ -83,7 +98,7 @@ docker run --entrypoint <cmd>
 ```
 
 ## Env variables
-```bash
+```dockerfile
 ENV <EV>=<Value>
 # or 
 ENV <EV> <Value>
@@ -91,13 +106,41 @@ ENV <EV> <Value>
 
 ## Port 
 container will lesson on <port> (on container)
-```bash
+```dockerfile
 EXPOSE <Port>
 ```
 
 ## User
 - all of the following commands after this will be executed as <user>
-```bash
+```dockerfile
 # RUN addgroup <user> && adduser -S -G <user> <user>
 USER <user>
 ```
+
+## Build light-weight image for production
+every framework have this feature that allows us to build our project files into smaller size for production
+
+- webserver for deployment
+```dockerfile
+FROM nginx:1.12-alpine 
+```
+
+## Example dockerfile for lightweight image ready for production
+```dockerfile
+FROM node:<version>-alpine<version> AS build-stage
+WORKDIR /app
+COPY package*.json
+RUN npm install
+COPY . .
+RUN npm run build
+
+# step 2 : Production
+FROM nginx:1.12-alpine
+RUN addgroup app && adduser -S -G app app
+USER app
+COPY --from=build-stage /app/build </usr/share/nginx/html>
+EXPOSE 80
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
+```
+> standard path for serving files using nginx : `/usr/share/nginx/html`
+> 
