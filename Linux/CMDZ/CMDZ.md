@@ -54,3 +54,8 @@ command 2>/dev/null
 ```bash
 tree <dir>
 ```
+
+## find files excluding certain ones
+```bash
+find -type f -not -name "*.cpp"
+```

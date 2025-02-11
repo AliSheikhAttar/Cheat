@@ -2,7 +2,11 @@ In Go (Golang), clean code adheres to conventions that emphasize readability, si
 
 ---
 
-### **1. General Naming Principles**
+The convention in Go is to use MixedCaps or mixedCaps rather than underscores to write multiword names.
+
+---
+
+## General Naming Principles
 - **Be Descriptive but Concise**: Names should clearly convey the purpose of the variable, function, or type, but avoid being overly verbose.
   - ✅ `userID` (clear and concise)
   - ❌ `u` (too short and unclear)
@@ -20,7 +24,7 @@ In Go (Golang), clean code adheres to conventions that emphasize readability, si
 
 ---
 
-### **2. Package Naming**
+## Package Naming
 - **Use Short, Lowercase Names**: Package names should be short, descriptive, and lowercase. Avoid underscores, dashes, or mixed case.
   - ✅ `math`, `http`, `json`
   - ❌ `Math`, `Http`, `my_package`
@@ -35,7 +39,7 @@ In Go (Golang), clean code adheres to conventions that emphasize readability, si
 
 ---
 
-### **3. Variable Naming**
+## Variable Naming
 - **Use Short Names for Short Scopes**: For variables with limited scope (e.g., loop variables), single-letter names are acceptable (`i`, `j`, `v`, etc.).
   - ✅ `for i := 0; i < n; i++ { ... }`
   - ✅ `v := user.Name`
@@ -50,7 +54,7 @@ In Go (Golang), clean code adheres to conventions that emphasize readability, si
 
 ---
 
-### **4. Function Naming**
+## Function Naming
 - **Use Verbs for Actions**: Function names should describe the action they perform.
   - ✅ `GetUser()`, `SaveFile()`, `CalculateSum()`
   - ❌ `User()`, `File()`, `Sum()`
@@ -69,7 +73,7 @@ In Go (Golang), clean code adheres to conventions that emphasize readability, si
 
 ---
 
-### **5. Constant Naming**
+## Constant Naming
 - **Use UpperCamelCase for Exported Constants**: For constants that are exported, use PascalCase.
   - ✅ `const MaxRetries = 3`
   - ❌ `const maxRetries = 3`
@@ -80,7 +84,7 @@ In Go (Golang), clean code adheres to conventions that emphasize readability, si
 
 ---
 
-### **6. Struct and Interface Naming**
+## Struct and Interface Naming
 - **Use Nouns for Structs**: Struct names should be nouns that describe the entity they represent.
   - ✅ `type User struct`
   - ❌ `type DoSomething struct`
@@ -94,7 +98,7 @@ In Go (Golang), clean code adheres to conventions that emphasize readability, si
 
 ---
 
-### **7. Test Function Naming**
+## Test Function Naming
 - **Use `Test` Prefix**: Test function names must start with `Test` followed by the function or behavior being tested.
   - ✅ `func TestAddNumbers(t *testing.T)`
   - ❌ `func AddNumbersTest(t *testing.T)`
@@ -104,7 +108,7 @@ In Go (Golang), clean code adheres to conventions that emphasize readability, si
 
 ---
 
-### **8. Error Naming**
+## Error Naming
 - **Use `Err` Prefix for Error Variables**: Error variables should start with `Err` and describe the issue.
   - ✅ `var ErrNotFound = errors.New("not found")`
   - ❌ `var NotFoundError = errors.New("not found")`
@@ -115,7 +119,7 @@ In Go (Golang), clean code adheres to conventions that emphasize readability, si
 
 ---
 
-### **9. Receiver Naming**
+## Receiver Naming
 - **Use Short, Meaningful Names**: For methods on structs, use a short, meaningful name for the receiver (often one or two letters).
   - ✅ `func (u *User) Save()`
   - ✅ `func (c *Config) Load()`
@@ -125,7 +129,7 @@ In Go (Golang), clean code adheres to conventions that emphasize readability, si
 
 ---
 
-### **10. File Naming**
+## File Naming
 - **Use Lowercase with No Underscores**: File names should be all lowercase with no underscores or special characters.
   - ✅ `user.go`
   - ❌ `user_handler.go`
@@ -134,7 +138,19 @@ In Go (Golang), clean code adheres to conventions that emphasize readability, si
 
 ---
 
-### **Summary Table**
+## Setters and Getters
+
+If you have a field called owner (lower case, unexported), the getter method should be called Owner (upper case, exported), not GetOwner. The use of upper-case names for export provides the hook to discriminate the field from the method. A setter function, if needed, will likely be called SetOwner. Both names read well in practice
+```go
+owner := obj.Owner()
+if owner != user {
+    obj.SetOwner(user)
+}
+```
+
+---
+
+## Summary Table**
 
 | **Category**         | **Convention**                          | **Example**              |
 |-----------------------|------------------------------------------|--------------------------|
