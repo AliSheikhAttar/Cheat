@@ -147,20 +147,26 @@ if owner != user {
     obj.SetOwner(user)
 }
 ```
-
 ---
 
-## Summary Table**
+## interface name
+By convention, one-method interfaces are named by the **method name plus an -er suffix** or similar modification to construct an agent noun: *Reader, Writer, Formatter, CloseNotifier* etc.
 
-| **Category**         | **Convention**                          | **Example**              |
-|-----------------------|------------------------------------------|--------------------------|
-| **Packages**          | Lowercase, short, no underscores        | `auth`, `json`           |
-| **Variables**         | Descriptive, camelCase                 | `userID`, `count`        |
-| **Functions**         | Verb-based, PascalCase for exported     | `GetUser()`, `save()`    |
-| **Constants**         | PascalCase for exported, ALL_CAPS for config | `MaxRetries`, `API_KEY`  |
-| **Structs**           | Nouns                                   | `type User struct`       |
-| **Interfaces**        | Adjectives, `-er` suffix               | `type Reader interface`  |
-| **Errors**            | `Err` prefix                           | `ErrNotFound`            |
-| **Tests**             | `Test` prefix, snake_case for subtests | `TestAddNumbers`         |
+To avoid confusion, *if your type implements a method with the same meaning as a method on a well-known type, give it the same name and signature*; **call your string-converter method String not ToString**.
 
-By following these conventions, your Go code will be idiomatic, easy to read, and maintainable.
+---
+## Redeclaration and reassignment
+```go
+f, err := os.Open(name)
+```
+This statement declares two variables, f and err. A few lines later, the call to f.Stat reads,
+```go
+d, err := f.Stat()
+```
+which looks as if it declares d and err. Notice, though, that err appears in both statements. This duplication is legal: **err is declared by the first statement, but only re-assigned in the second. This means that the call to f.Stat uses the existing err variable declared above, and just gives it a new value**.
+
+In a := declaration a variable v may appear even if it has already been declared, provided:
+
+- this declaration is in the same scope as the existing declaration of v (if v is already declared in an outer scope, the declaration will create a new variable §),
+- the corresponding value in the initialization is assignable to v, and there is at least one other variable that is created by the declaration.
+> This unusual property is pure pragmatism, making it easy to use a single err value, for example, in a long if-else chain. You'll see it used often.
