@@ -1,6 +1,26 @@
 package main
 import "fmt"
 
+// > An array or struct type T may not have an element of type T, or of a type containing T as a component, directly or indirectly, if those containing types are only array or struct types.
+
+// invalid array types
+type (
+	T11 [10]T11                // element type of T1 is T1
+	T21 [10]struct{ f T21 }     // T2 contains T2 as component of a struct
+	T31 [10]T41                 // T3 contains T3 as component of a struct in T4
+	T41 struct{ f T31 }         // T4 contains T4 as component of array T3 in a struct
+)
+
+// valid array types
+type (
+	T51 [10]*T51                // T5 contains T5 as component of a pointer
+	T61 [10]func() T61          // T6 contains T6 as component of a function type
+	T71 [10]struct{ f []T71 }   // T7 contains T7 as component of a slice in a struct
+)
+
+
+//  #################################
+
 // Valid array types (with indirection)// T5: Array of pointers to T5
 type T5 [10]*T5
 
@@ -9,6 +29,22 @@ type T6 [10]func() T6
 
 // T7: Array of structs containing a slice of T7
 type T7 [10]struct{ f []T7 }
+
+
+
+
+// Valid array types (with indirection)// T5: Array of pointers to T5
+type T5 [10]*T5
+
+// T6: Array of functions that return T6
+type T6 [10]func() T6
+
+// T7: Array of structs containing a slice of T7
+type T7 [10]struct{ f []T7 }
+
+
+
+
 
 func main() {
 	// Example using T5 (Array of pointers)

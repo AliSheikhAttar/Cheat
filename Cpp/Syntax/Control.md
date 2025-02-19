@@ -1,6 +1,6 @@
 # Control and Loop statements
 
-- for
+## for
 ```cpp
 //enumerating 
 vector<int> numbers;
@@ -12,10 +12,16 @@ for(int i=0;i<numbers.size();++i){}
 for(;;){}
 ```
 
-- Assertion
+## Ternary
+```cpp 
+maxIdx2 = numbers[maxIdx2] < numbers[i] ? i : maxIdx2;
+```
+
+## Assertion
 ```cpp
 #include <cassert>
 int x = 10;
 assert(x > 0); // Assertion that x is greater than 0
 // if fails throw runtime error
 ```
+

@@ -4,7 +4,11 @@
 ```cpp
 // input
 int a
-std::cin << 
+std::cin >> a ;
+
+// input two ints
+long long n, m;
+std::cin >> n >> m;
 ```
 
 - output

@@ -304,23 +304,6 @@ var r [1000]*float64
 var r [3][5]int
 var r [2][2][2]float64  // same as [2]([2]([2]float64))
 ```
-> An array type T may not have an element of type T, or of a type containing T as a component, directly or indirectly, if those containing types are only array or struct types.
-```go
-// invalid array types
-type (
-	T1 [10]T1                 // element type of T1 is T1
-	T2 [10]struct{ f T2 }     // T2 contains T2 as component of a struct
-	T3 [10]T4                 // T3 contains T3 as component of a struct in T4
-	T4 struct{ f T3 }         // T4 contains T4 as component of array T3 in a struct
-)
-
-// valid array types
-type (
-	T5 [10]*T5                // T5 contains T5 as component of a pointer
-	T6 [10]func() T6          // T6 contains T6 as component of a function type
-	T7 [10]struct{ f []T7 }   // T7 contains T7 as component of a slice in a struct
-)
-```
 ["Example in code"](./Complementary/Valid-types.go)
 
 ### slice
@@ -338,6 +321,11 @@ make([]T, length, capacity)
 ```go
 make([]int, 50, 100)
 new([100]int)[0:50]
+
+// copy
+copy(dst, src)
+// Element-wise copy: copy copies elements one by one from src to dst.
+[more info](./Complementary/copy.md)
 ```
 
 ### struct
@@ -407,23 +395,94 @@ struct {
 }
 
 ```
-
-* A struct type T may not contain a field of type T, or of a type containing T as a component, directly or indirectly, if those containing types are only array or struct types.
+### const
 ```go
-// invalid struct types
-// array, struct
-type (
-	T1 struct{ T1 }            // T1 contains a field of T1
-	T2 struct{ f [10]T2 }      // T2 contains T2 as component of an array
-	T3 struct{ T4 }            // T3 contains T3 as component of an array in struct T4
-	T4 struct{ f [10]T3 }      // T4 contains T4 as component of struct T3 in an array
-)
+type EducationLevel int 
 
-// valid struct types
-// pointer, function, slice
-type (
-	T5 struct{ f *T5 }         // T5 contains T5 as component of a pointer
-	T6 struct{ f func() T6 }   // T6 contains T6 as component of a function type
-	T7 struct{ f [10][]T7 }    // T7 contains T7 as component of a slice in an array
+const (
+	Diploma EducationLevel = iota + 1
+	Bachelor
+	Master
+	PHD
 )
 ```
+
+## function
+```go
+func()
+func(x int) int
+func(a, _ int, z float32) bool
+func(a, b int, z float32) (bool)
+func(prefix string, values ...int)
+func(a, b int, z float64, opt ...interface{}) (success bool)
+func(int, int, float64) (float64, *[]int)
+func(n int) func(p *T)
+```
+- declare output variable
+```go
+func ReadFull(r Reader, buf []byte) (n int, err error) {
+    for len(buf) > 0 && err == nil {
+        var nr int
+        nr, err = r.Read(buf)
+        n += nr
+        buf = buf[nr:]
+    }
+    return
+}
+```
+
+## map
+* The value of an uninitialized map is nil
+* unordered group of elements
+* nil map is equivalent to an empty map except that no elements may be added
+[how it works](./Complementary/map.md)
+```go
+
+map[string]int
+map[*T]struct{ x, y float64 }
+map[string]interface{}
+
+// delete
+delete clear
+
+// size
+len(myMap)
+
+// define
+make(map[string]int, 100) // argument capacity optionaly
+
+// existence
+if v2, ok := m2[k] // return value and boolean
+// if not existed, return false along with the value zero-value
+```
+
+## channel
+* A channel provides a mechanism for concurrently executing functions 
+* to communicate by sending and receiving values of a specified element type
+* if a direction is given, the channel is directional, otherwise it is bidirectional
+* A channel may be constrained only to send or only to receive by assignment or explicit conversion
+* calls to the built-in functions cap and len by any number of goroutines without further synchronization
+* Channels act as first-in-first-out queues
+* If the capacity is zero or absent, the channel is unbuffered and communication succeeds only when both a sender and receiver are ready
+* Otherwise, the channel is buffered and communication succeeds without blocking 
+* if the buffer is not full (sends) or not empty (receives)
+* A nil channel is never ready for communication.
+
+
+```go
+chan T          // can be used to send and receive values of type T
+chan<- float64  // can only be used to send float64s
+<-chan int      // can only be used to receive ints
+
+chan<- chan int    // same as chan<- (chan int)
+chan<- <-chan int  // same as chan<- (<-chan int)
+<-chan <-chan int  // same as <-chan (<-chan int)
+chan (<-chan int)
+
+// construct
+make(chan int, 100)//optional capacity
+
+// close
+close
+```
+
