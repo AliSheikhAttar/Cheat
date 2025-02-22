@@ -140,6 +140,23 @@ a3 := 0XBC // hex
 
 [characters with accent](./Complementary/char-with-accent.md)
 
+```go
+// split
+splitted := strings.Split(line, ",")
+
+// join
+separator := ","
+line := strings.Join(strArr, separator)
+
+// float64 to string 
+str := strconv.FormatFloat(flt64, 'f', 2, 64)
+
+// string to float64
+num := strconv.ParseFloat(str, 64)
+
+// string to int
+num , err := strconv.Atoi(str)
+```
 ## interface
 
 **What is `interface{}`?**
@@ -454,6 +471,11 @@ make(map[string]int, 100) // argument capacity optionaly
 // existence
 if v2, ok := m2[k] // return value and boolean
 // if not existed, return false along with the value zero-value
+
+// iteration
+for key, value := range m2 {
+
+}
 ```
 
 ## channel

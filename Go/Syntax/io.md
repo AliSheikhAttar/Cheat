@@ -27,3 +27,27 @@ var in interface{}
 	fmt.Printf("Type: %T, Value: %v \n",in, in)
 
 ```
+
+## file
+```go
+// open file to read
+file, err := os.Open(address)
+	if err != nil {
+		return err
+	}
+defer file.Close()
+
+	for fscan := bufio.NewScanner(file); fscan.Scan(); {
+		line := fscan.Text()
+    }
+
+
+// write to file
+file, err = os.Create(address)
+	if err != nil {
+		return err
+	}
+defer file.Close()
+line := strings.Join(strArr, separator)
+_, err = fmt.Fprintln(file, line)
+```
