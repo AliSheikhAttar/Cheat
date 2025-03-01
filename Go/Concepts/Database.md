@@ -77,7 +77,6 @@ psql
 ```
 
 
-
 - Describe a table
 ```sql
 \d table_name

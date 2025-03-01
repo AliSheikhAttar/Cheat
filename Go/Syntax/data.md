@@ -305,6 +305,9 @@ string x = "asasa"
 len(x)
 x[2]
 // &x[2] illegal
+
+// join strings and elements
+x = fmt.Sprintf("%s, %d jflsd",str, num)
 ```
 
 ### array
@@ -324,28 +327,36 @@ var r [2][2][2]float64  // same as [2]([2]([2]float64))
 ["Example in code"](./Complementary/Valid-types.go)
 
 ### slice
-* The length of a slice s can be discovered by the built-in function len
 * unlike with arrays it may change during execution
 * A slice, once initialized, is always associated with an underlying array that holds its elements. A slice therefore shares storage with its array and with other slices of the same array; by contrast, distinct arrays always represent distinct storage.
 * The capacity is a measure of that extent: it is the sum of the length of the slice and the length of the array beyond the slice
 * a slice of length up to that capacity can be created by slicing a new one from the original slice.
-* The capacity of a slice a can be discovered using the built-in function cap(a).
 * A slice created with make always allocates a new, hidden array to which the returned slice value refers
+* is not comparable
 ```go
 make([]T, length, capacity)
 ```
 * produces the same slice as allocating an array and slicing it, so these two expressions are equivalent:
 ```go
-make([]int, 50, 100)
+x := make([]int, 50, 100) // length = 50 and capacity = 100
 new([100]int)[0:50]
+len(x) // length
+cap(x) // capacity
 
-// copy
+// append
+x = append(x, item)
+
+// array
+y := [n]int
+
+// copy -> better performance than for loop
 copy(dst, src)
 // Element-wise copy: copy copies elements one by one from src to dst.
 [more info](./Complementary/copy.md)
 ```
 
 ### struct
+* structs are comparable only if all of their fields would be so
 ```go
 // An empty struct.
 struct {}
@@ -424,6 +435,13 @@ const (
 )
 ```
 
+### aliasing
+```go
+type myInt = int
+var x myInt = 5
+var y int = x // No
+```
+
 ## function
 ```go
 func()
@@ -447,10 +465,39 @@ func ReadFull(r Reader, buf []byte) (n int, err error) {
     return
 }
 ```
+* functions also have state beside behaviour
+meaning that they capture variables from outside and alter them 
+```go
+package cachedfib
+
+func CachedFib() func(int) int64 {
+	var x int64 = 0
+	var y int64 = 1
+	var m int = 0
+	return func(n int) int64 {
+		if n==0 {
+			return x
+		}
+		if n==1 {
+			m+=1
+			return y
+		}
+		for i := m; i < n; i++ {
+			tmp := y
+			y += x
+			x = tmp
+			m+=1
+		}
+		return y
+	}
+}
+```
 
 ## map
 * The value of an uninitialized map is nil
+* read & write wih o(1)
 * unordered group of elements
+* keys must be comparable
 * nil map is equivalent to an empty map except that no elements may be added
 [how it works](./Complementary/map.md)
 ```go
@@ -462,7 +509,7 @@ map[string]interface{}
 // delete
 delete clear
 
-// size
+// size, # key
 len(myMap)
 
 // define
@@ -474,8 +521,14 @@ if v2, ok := m2[k] // return value and boolean
 
 // iteration
 for key, value := range m2 {
-
-}
+	
+	}
+```
+* return value zero-value if a key not present
+* how to make sure if key present?
+```go
+value, ok := myMap[key]
+// if it's not present, ok will be returned false
 ```
 
 ## channel
@@ -508,3 +561,14 @@ make(chan int, 100)//optional capacity
 close
 ```
 
+## Enumeration
+
+```go
+const (
+	NoRedirection  RedirectionType = iota // start from 0 ; iota+1 -> start from 1
+	OutputRedirect                 // >
+	OutputAppend                   // >>
+	ErrorRedirect                  // 2>
+	ErrorAppend                    // 2>>
+)
+```

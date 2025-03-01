@@ -130,11 +130,9 @@ The convention in Go is to use MixedCaps or mixedCaps rather than underscores to
 ---
 
 ## File Naming
-- **Use Lowercase with No Underscores**: File names should be all lowercase with no underscores or special characters.
-  - ✅ `user.go`
-  - ❌ `user_handler.go`
-
-- **Group Related Files**: Group files by functionality, e.g., `user.go`, `user_test.go`.
+- **snake case**: File names should be all lowercase with underscores.
+  - ❌ `user.go`
+  - ✅ `user_handler.go`
 
 ---
 

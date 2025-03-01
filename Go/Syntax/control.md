@@ -73,6 +73,17 @@ func shouldEscape(c byte) bool {
     return false
 }
 ```
+* automatically break, dont need to write it
+* if dont want to break -> `fallthrough`
+```go
+switch c {
+    case 'x':
+        fmt.Println("hi")
+        fallthrough
+    case 'y':
+        fmt.Println("bye")
+}
+```
 
 * Sometimes, though, it's necessary to break out of a surrounding loop, not the switch, and in Go that can be accomplished by putting a label on the loop and "breaking" to that label
 * continue statement also accepts an optional label but it applies only to loops.
