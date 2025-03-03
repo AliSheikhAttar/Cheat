@@ -10,6 +10,9 @@ type stringStruct struct {
     data *byte
     len  int
 }
+
+
+
 ```
 When you pass a string to a function, you’re copying this struct—i.e., the pointer to the data and the length. The actual byte array (the string’s content) isn’t copied, because the pointer just points to the same memory. This makes string passing efficient: you’re not duplicating the entire string’s content, just the small struct (typically 16 bytes on a 64-bit system: 8 for the pointer, 8 for the length).
 
@@ -52,6 +55,7 @@ func main() {
     str := "Hello"
     modifyStringPtr(&str)
     fmt.Println("Outside:", str) // Now "World"
+    
 }
 ```
 Output:

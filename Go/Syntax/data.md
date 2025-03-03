@@ -161,7 +161,22 @@ num , err := strconv.Atoi(str)
 
 **What is `interface{}`?**
 
-In Go, an interface defines a set of methods that a type must implement.  The empty interface, `interface{}`, has *no* methods.  This means *any* type in Go satisfies the empty interface.  It's a very general type.  Think of it as a "container" that can hold values of any type.
+* In Go, an interface defines a set of methods that a type must implement.  
+* The empty interface, `interface{}`, has *no* methods.  This means *any* type in Go satisfies the empty interface.  It's a very general type.  Think of it as a "container" that can hold values of any type.
+* interfaces are comparable, so map can have key of type interface
+* any is alias for interface `type any = interface{}`
+* interface is like a contract
+* zero-value of error is nil, thus error is also an interface
+
+> interface is struct with two fields
+```go
+struct {
+ type
+ value
+ }
+```
+* when interface is **not initialized** with anything, its' corresponding fields will be nil and its **compare to nil** will return **true**
+* if its **initialized with a concrete type** with nil value, its' corresponding type field will be the concrete type but its value field will still be nil, also its **compare to nil** will be **false**
 
 **Why use `interface{}`?**
 
@@ -236,7 +251,12 @@ func main() {
 }
 ```
 
-1. **Type Assertion:** The `y.(string)` attempts to convert the interface value `y` to a string. The `ok` variable will be true if the conversion is successful.  This is essential for accessing the underlying value's specific properties.  If you try a type assertion to an incorrect type, your program will panic.
+1. **Type Assertion:** The `y.(string)` attempts to convert the interface value `y` to a string. The `ok` variable will be true if the conversion is successful.  
+```go
+value, ok := v.(T)
+// value: the extracted value if the assertion succeeds
+// ok: a boolean indicating whether the assertion was successful (true) or not (false)
+```
 
 2. **Type Switch:**  A type switch is a more elegant way to handle different types held by an `interface{}`.  It allows you to execute different code blocks based on the underlying type.
 
@@ -256,6 +276,32 @@ var x interface{}  // x is nil and has static type interface{}
 var v *T           // v has value nil, static type *T
 x = 42             // x has value 42 and dynamic type int
 x = v              // x has value (*T)(nil) and dynamic type *T
+```
+
+## Error
+* error is also an alias of interface with a method called Error
+```go
+// typicall error handling
+val, err := someFunction(a, b)
+if err != nil {
+    return "",err
+}
+// raise new error
+errors.New("error Message")
+
+// appending text to error | Parsing error
+fmt.Errorf("%v this error happend", err)
+
+// error messages
+strErr := err.Error()
+
+// check type
+isErr := errors.Is(err, <errorType>)
+// another way
+switch err {
+    case <errorType>:
+        
+}
 ```
 
 ## type
@@ -401,6 +447,90 @@ struct {
 }
 ```
 
+#### object
+```go
+type Person struct {
+	ID         int64
+	NationalID string
+	FirstName  string
+	LastName   string
+	BirthDate  time.Time
+	IsEmployed bool
+}
+```
+#### method
+* a common convention in Go is to stick to one receiver type for a given type
+* these recievers (p *Person or p Person) are called method receiver
+* user methods with pointer reciever if we want to change the content or the struct is too large
+* calling a method inside itself will lead to infinitive `recursive call`
+
+```go
+// pointer to object
+func (p *Person /*2*/) FullName() string {
+	return p.FirstName + " " + p.LastName
+}
+// copy of object
+func (p Person) Age() int {
+	return time.Now().Year() - p.BirthDate.Year()
+}
+```
+* We can call methods on a nil receiver in Go without causing a panic, provided the method doesn’t dereference the nil receiver. However, directly accessing a field of a nil struct pointer will cause a panic due to dereferencing a nil pointer inside the method.
+* This is because the method call itself doesn’t dereference the receiver—the method’s implementation decides what happens.
+```go
+// Method with a pointer receiver that handles nil
+func (p *Person) SayHello() string {
+    if p == nil {
+        return "Hello from nil"
+    }
+    return "Hello, " + p.Name
+}
+// Method without handling nil
+func (p *Person) SayHelloBad() string {
+    return "Hello, " + p.Name // No nil check
+}
+```
+#### composition
+```go
+type Person struct {
+	ID         int64
+	NationalID string
+	FirstName  string
+	LastName   string
+	BirthDate  time.Time
+	IsEmployed bool
+}
+
+type Student struct {
+	Person       // 2,3
+	StudentID    string
+	EntranceDate time.Time
+}
+s := &Student{...}
+firstName := s.Firstname // student property now
+
+
+type s2 struct {
+	x func(){ fmt.Println("hello from s2")}
+}
+type s1 struct {
+	s2
+	x func(){ fmt.Println("hello from s1")}
+
+}
+s.x() // calling the inner x from s1
+s.s2.x() // calling outer x from s2
+```
+
+#### constructor
+* factory function
+* This function initializes a `Person` and returns a pointer to it, similar to how constructors work elsewhere.
+```go
+func NewPerson(name string, age int) *Person {
+    return &Person{Name: name, Age: age}
+}
+```
+
+
 #### tags
 > A field declaration may be followed by an optional string literal tag, which becomes an attribute for all the fields in the corresponding field declaration. An empty tag string is equivalent to an absent tag. The tags are made visible through a reflection interface and take part in type identity for structs but are otherwise ignored.
 [explain tags in more detail & example](./Complementary/tags.md)
@@ -492,12 +622,61 @@ func CachedFib() func(int) int64 {
 	}
 }
 ```
+* methods
+```go
+func (p *Person) FullName() string {
+	return p.FirstName + " " + p.LastName
+}
+```
+* variadic function
+> In Go, a variadic function is a function that can accept a variable number of arguments. This is achieved using the ... (ellipsis) syntax before the type of the parameter in the function definition. Variadic parameters allow you to pass zero or more arguments of a specified type to a function, making it flexible and convenient for scenarios where the number of inputs isn't fixed
+```go
+func sum(numbers ...int) int {
+    total := 0
+    for _, num := range numbers {
+        total += num
+    }
+    return total
+}
+```
+* numbers is a slice ([]int) inside the sum function.
+* You can pass any number of int arguments, including none.
+* **Only One** Variadic Parameter: A function can have only one variadic parameter, and it must be the **last** parameter in the function signature.
+```go
+func example(a int, b ...string) {}
+```
+
+* passing slice to variadic function
+```go
+func sum(numbers ...int) int {
+    return 1
+}
+
+func main() {
+    nums := []int{1, 2, 3, 4}
+    result := sum(nums...) // Unpacks the slice into individual arguments
+}
+```
+
+* can be called with no arguments, in which case the variadic parameter will be an empty slice ([]Type with length 0).
+```go
+fmt.Println(sum()) // numbers is []int{} inside sum
+```
+
+* Formatting Output -> The fmt.Printf function is a common example of a variadic function:
+```go
+fmt.Printf("Name: %s, Age: %d", "Alice", 25)
+```
+
+* Flexible APIs -> Variadic functions are useful when designing APIs that need to handle a variable number of inputs, such as logging or configuration functions.
 
 ## map
 * The value of an uninitialized map is nil
 * read & write wih o(1)
 * unordered group of elements
 * keys must be comparable
+* interfaces are comparable, so map can have key of type interface
+* map key can also have type any (any is an alias of interface)
 * nil map is equivalent to an empty map except that no elements may be added
 [how it works](./Complementary/map.md)
 ```go
@@ -572,3 +751,4 @@ const (
 	ErrorAppend                    // 2>>
 )
 ```
+

@@ -7,5 +7,9 @@ Comments that appear before top-level declarations, with no intervening newlines
 multi-line comment
 */
 
+func (p *Person /*in line comment*/) FullName() string {
+	return p.FirstName + " " + p.LastName
+}
+
 // single line comment
 ```

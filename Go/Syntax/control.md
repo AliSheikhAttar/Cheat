@@ -118,17 +118,16 @@ default:
     fmt.Printf("unexpected type %T\n", t)     // %T prints whatever type t has
 case bool:
     fmt.Printf("boolean %t\n", t)             // t has type bool
-case int:
-    fmt.Printf("integer %d\n", t)             // t has type int
-case *bool:
-    fmt.Printf("pointer to boolean %t\n", *t) // t has type *bool
+case int, float:
+    fmt.Printf("number %d\n", t)             // t has type int/float
 case *int:
     fmt.Printf("pointer to integer %d\n", *t) // t has type *int
 }
 ```
 
 ## defer
-* schedules a function call (the deferred function) to be run immediately before the function executing the defer returns
+* schedules a function call (the deferred function) to be run immediately after the function evaluating the reutrn
+* its ensured to run defer even when panic accured
 * examples are unlocking a mutex or closing a file
 * effective way to deal with situations such as resources that must be released regardless of which path a function takes to return
 ```go
