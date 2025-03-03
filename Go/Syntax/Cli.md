@@ -1,6 +1,7 @@
-# Modules
+## Modules
 
 - new module
+* takes dependencie for configing packages
 ```bash
 go mod init <path>
 ```
@@ -9,6 +10,15 @@ go mod init <path>
 ```bash
 go run .
 ```
+
+- download library/package and add to project
+* -u for latest version
+* after running this, `require` codes will be appended to go.mod which are the libraries and their dependancies
+* in go.sum, some hashes for security will be appended (like package.json in js)
+```go
+go get -u <library>
+```
+
 
 - synchronize the module's dependencies, adding those required by the code, but not yet tracked in the module
 ```bash
@@ -104,3 +114,24 @@ go work sync
 ```bash
 go get .
 ```
+
+---
+
+## go env
+- displays information about the Go environment configuration.
+```
+$ go env GOPATH
+/home/user/go
+```
+
+## GOPATH
+- an environment variable in Go that specifies the location of your Go workspace.
+* **Purpose**: It tells Go where to find your source code, dependencies, and compiled binaries. 
+* By default, it’s set to `~/go` (e.g., `/home/user/go`) if not explicitly defined.
+- **Structure**: Typically contains three subdirectories:
+  - `src/`: Where your Go source code lives (organized by package or project).
+  - `pkg/`: Where compiled package objects are stored.
+  - `bin/`: Where executable binaries are placed after running `go install`.
+
+- `go env GOPATH` specifically shows the current value of `GOPATH`.
+- Before modules, all Go projects had to live under `GOPATH`. Now, it’s more of a fallback or legacy setting unless you’re working without modules.

@@ -595,7 +595,7 @@ func ReadFull(r Reader, buf []byte) (n int, err error) {
     return
 }
 ```
-* functions also have state beside behaviour
+- functions also have state beside behaviour
 meaning that they capture variables from outside and alter them 
 ```go
 package cachedfib
@@ -622,13 +622,13 @@ func CachedFib() func(int) int64 {
 	}
 }
 ```
-* methods
+- methods
 ```go
 func (p *Person) FullName() string {
 	return p.FirstName + " " + p.LastName
 }
 ```
-* variadic function
+- variadic function
 > In Go, a variadic function is a function that can accept a variable number of arguments. This is achieved using the ... (ellipsis) syntax before the type of the parameter in the function definition. Variadic parameters allow you to pass zero or more arguments of a specified type to a function, making it flexible and convenient for scenarios where the number of inputs isn't fixed
 ```go
 func sum(numbers ...int) int {
@@ -646,7 +646,7 @@ func sum(numbers ...int) int {
 func example(a int, b ...string) {}
 ```
 
-* passing slice to variadic function
+- passing slice to variadic function
 ```go
 func sum(numbers ...int) int {
     return 1
@@ -658,17 +658,21 @@ func main() {
 }
 ```
 
-* can be called with no arguments, in which case the variadic parameter will be an empty slice ([]Type with length 0).
+- can be called with no arguments, in which case the variadic parameter will be an empty slice ([]Type with length 0).
 ```go
 fmt.Println(sum()) // numbers is []int{} inside sum
 ```
 
-* Formatting Output -> The fmt.Printf function is a common example of a variadic function:
+- Formatting Output -> The fmt.Printf function is a common example of a variadic function:
 ```go
 fmt.Printf("Name: %s, Age: %d", "Alice", 25)
 ```
 
-* Flexible APIs -> Variadic functions are useful when designing APIs that need to handle a variable number of inputs, such as logging or configuration functions.
+- Flexible APIs -> Variadic functions are useful when designing APIs that need to handle a variable number of inputs, such as logging or configuration functions.
+
+- init
+* reserved keyword
+* if exists inside a package and that package get imported, after initializing the constants, the init functions will be called once even if imported multiple times.
 
 ## map
 * The value of an uninitialized map is nil

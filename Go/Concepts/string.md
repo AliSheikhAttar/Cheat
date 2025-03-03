@@ -1,4 +1,4 @@
-Got it, let’s dive into how strings are passed to functions in Go (Golang). Go has a straightforward approach, but it’s worth unpacking because strings in Go have some unique characteristics.
+How strings are passed to functions in Go (Golang). Go has a straightforward approach, but it’s worth unpacking because strings in Go have some unique characteristics.
 
 In Go, everything is passed by value by default. That means when you pass a string to a function, the function gets a copy of the string value. However, strings in Go are immutable and implemented as a struct under the hood, consisting of two parts:
 - A pointer to the underlying byte array (the actual character data).
