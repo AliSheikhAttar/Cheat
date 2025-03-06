@@ -202,7 +202,7 @@ When you run this, you’ll see something like:
 Worker 1 started job 1
 Worker 2 started job 2
 Worker 3 started job 3
-Worker 1 finished job 1
+Worker 1 finished job **1**
 Worker 1 started job 4
 Worker 2 finished job 2
 Worker 2 started job 5
@@ -213,6 +213,9 @@ Worker 2 finished job 5
 Worker 3 finished job 6
 All workers have completed their tasks!
 ```
+[channels blocking](./Concurrency-example-channels-blocked.md)
+[jobs channel mechanism](./Concurrency-example-jobs.md)
+[what if we used unbuffered channel](./Concurrency-example-unbuffered.md)
 
 The exact order of which worker gets which job may vary due to concurrency, but the program guarantees that:
 - All 6 jobs are processed.
