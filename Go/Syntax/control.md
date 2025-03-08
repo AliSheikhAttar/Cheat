@@ -302,3 +302,28 @@ entering: a
 in a
 leaving: a
 leaving: b
+
+## delete on a generic slice
+```go
+func (l *List) Remove(elem any) {
+	l.data = slices.DeleteFunc(l.data, func(e any) bool {
+		return e == elem
+	})
+}
+```
+
+## type validating
+```go
+func validateTypes(elems ...any) error {
+	for _, e := range elems {
+		_, ok := e.(bool)
+		if ok {
+			continue
+		}
+		_, ok = e.(int)
+		if ok {
+			continue
+		}
+        }
+        }
+```

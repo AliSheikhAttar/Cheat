@@ -6,6 +6,10 @@ w1.recordDate = w2.recordDate+1
 DATEDIFF(w1.recordDate , w2.recordDate) = 1
 ```
 
+- drop if exists
+```sql
+DROP TABLE IF EXISTS album;
+```
 
 - create, primary, composite, foreign key
 ```sql

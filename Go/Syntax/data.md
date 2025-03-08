@@ -106,6 +106,20 @@ a3 := 0XBC // hex
 '\uDFFF'     // illegal: surrogate half
 '\U00110000' // illegal: invalid Unicode code point
 ```
+- byte, rune index
+```go
+func CharIndex(source string, char rune /*4*/) (bi, ri int /*5*/) {
+	for bi, r := range source {
+		if r == char {
+			return bi, ri
+		}
+
+		ri++
+	}
+
+	return -1, -1
+}
+```
 
 ## string
 - raw string
@@ -578,6 +592,21 @@ var y int = x // No
 ```
 
 ## function
+- type
+```go
+type Predicate func(int) bool
+// use
+func Filter(input IntSlice, check Predicate /*1*/) (output IntSlice) {
+	for _, e := range input {
+		if check(e) { // 2,3
+			output = append(output, e)
+		}
+	}
+
+	return output
+}
+```
+
 ```go
 func()
 func(x int) int
