@@ -125,6 +125,96 @@ case *int:
 }
 ```
 
+## select 
+- recieve
+> read from the channel which is ready, execute then exit
+> if both are ready choose randomly
+```go
+select {
+case msg1 := <-channel1:
+    fmt.Println("Received from channel1:", msg1)
+case msg2 := <-channel2:
+    fmt.Println("Received from channel2:", msg2)
+}
+```
+- send
+>  write to the channel which is ready, execute then exit
+> if both are ready choose randomly
+```go
+ch1 := make(chan int)
+ch2 := make(chan int)
+
+select {
+case ch1 <- 42:
+    fmt.Println("Sent to ch1")
+case ch2 <- 42:
+    fmt.Println("Sent to ch2")
+}
+```
+
+- non-blocking
+> if no channel is ready, it wont be blocked, instead execute default case and exit
+```go
+ch := make(chan string)
+
+select {
+case msg := <-ch:
+    fmt.Println("Received:", msg)
+default:
+    fmt.Println("No message received")
+}
+```
+
+- timeout
+> it waits until a channel is ready within the time specified (2 seconds in this example) it then execute the timeout case and exit
+```go
+ch := make(chan string)
+
+select {
+case msg := <-ch:
+    fmt.Println("Received:", msg)
+case <-time.After(2 * time.Second):
+    fmt.Println("Timeout after 2 seconds")
+}
+```
+
+- dynamic control
+> Setting a channel to nil in a select case disables that case
+```go
+var ch1, ch2 <-chan int
+ch1 = make(chan int)
+
+for {
+    select {
+    case val := <-ch1:
+        fmt.Println("Received from ch1:", val)
+    case val := <-ch2:
+        fmt.Println("Received from ch2:", val)
+    }
+    if someCondition {
+        ch1 = nil // Disable ch1
+    }
+}
+```
+
+- fanin
+```go
+func fanIn(input1, input2 <-chan string) <-chan string {
+    output := make(chan string)
+    go func() {
+        for {
+            select {
+            case s := <-input1:
+                output <- s
+            case s := <-input2:
+                output <- s
+            }
+        }
+    }()
+    return output
+}
+```
+
 ## defer
 * schedules a function call (the deferred function) to be run immediately after the function evaluating the reutrn
 * its ensured to run defer even when panic accured

@@ -358,6 +358,7 @@ x = fmt.Sprintf("%s, %d jflsd",str, num)
 
 ### array
 > The `length of array` a can be discovered using the built-in function `len`
+> allocated on stack by default
 ```go
 x := [lenght | nil]<type>
 y := []int{}
@@ -370,6 +371,7 @@ var r [1000]*float64
 var r [3][5]int
 var r [2][2][2]float64  // same as [2]([2]([2]float64))
 ```
+[Array in more detail](./Complementary/array.md)
 ["Example in code"](./Complementary/Valid-types.go)
 
 ### slice
@@ -379,6 +381,8 @@ var r [2][2][2]float64  // same as [2]([2]([2]float64))
 * a slice of length up to that capacity can be created by slicing a new one from the original slice.
 * A slice created with make always allocates a new, hidden array to which the returned slice value refers
 * is not comparable
+* underlying array allocated on heap
+* it is a structure of three elements : `pointer to array, lenght & capacity`
 ```go
 make([]T, length, capacity)
 ```
@@ -398,8 +402,9 @@ y := [n]int
 // copy -> better performance than for loop
 copy(dst, src)
 // Element-wise copy: copy copies elements one by one from src to dst.
-[more info](./Complementary/copy.md)
 ```
+[passing to function](./Complementary/passing_slice.md)
+[more info](./Complementary/copy.md)
 
 ### struct
 * structs are comparable only if all of their fields would be so
