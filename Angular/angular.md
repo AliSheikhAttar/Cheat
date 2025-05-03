@@ -8,6 +8,8 @@
 | Interpolation        | Prints out information in a template. Can access any property/method from our component class instance | `<div>Your password length is {{ length }}</div>`            |
 | Structural Directive | Changes the structure of HTML in a template.                                                          | `<div *ngIf="shouldShowSubmit()">Submit</button></div>`       |
 
+## Flow
+![alt text](flow.png)
 
 ## Event binding syntax
 ![alt text](event-binding-syntax.png)

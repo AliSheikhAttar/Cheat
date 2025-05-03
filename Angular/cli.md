@@ -14,3 +14,8 @@ ng serve
 ```
 - default port
 ` 4200 `
+
+## generate component
+```bash
+ng generate component <name>
+```
