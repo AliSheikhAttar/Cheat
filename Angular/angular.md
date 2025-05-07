@@ -24,3 +24,16 @@
 
 ## directives
 ![alt text](directives.png)
+
+## communicating from a parent to child component
+![alt text](parent2child.png)
+![alt text](values-from-parent.png)
+![alt text](ngfor.png)
+![alt text](variables-child.png)
+![alt text](binding.png)
+
+## pipe
+![alt text](pi e.png)
+
+## modules
+![alt text](modules.png)
