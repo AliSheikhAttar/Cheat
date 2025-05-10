@@ -37,3 +37,6 @@
 
 ## modules
 ![alt text](modules.png)
+
+## lazy loading
+![alt text](lazy-loading.png)
