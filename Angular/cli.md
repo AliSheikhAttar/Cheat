@@ -20,6 +20,11 @@ ng serve
 ng generate component <name>
 ```
 
+## generate service
+```bash
+ng g s <name>
+```
+
 ## generate pipe
 ```bash
 ng generate pipe <name>
