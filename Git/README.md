@@ -32,6 +32,26 @@ git config --help
 git config -h -short summary
 ```
 
+- set pull and push remote branch
+```bash
+# pull
+git branch --set-upstream-to=origin/r2/trs/sprint-2-head r2/trs/feat/trs-1927
+# push
+git config branch.r2/trs/feat/trs-1927.pushRemote upstream
+```
+
+- verify
+```bash
+git config --get branch.r2/trs/feat/trs-1927.remote
+# pull (origin)
+
+git config --get branch.r2/trs/feat/trs-1927.merge
+# merge
+
+git config --get branch.r2/trs/feat/trs-1927.pushRemote
+# push (upstream)
+```
+
 - initialize a new repository
 ```bash
 git init
@@ -74,16 +94,8 @@ git push --set-upstream origin master
 ```bash
 git push origin 
 ``` 
-- push local tags to github 
-```bash
-git push origin <tag:v1.0> 
-``` 
-- remove tag
-```bash
-git push origin --delete <tag>
-```
-### pull 
 
+### pull 
 - show remote repos
 ```bash
 git remote
@@ -161,6 +173,7 @@ git diff
 ```bash
 git diff --cached --exit-code
 ```
+
 ### config diff tool
 - set vscode as diff tool
 ```bash
@@ -175,16 +188,17 @@ git config --global difftool.vscode.cmd "code --wait --diff $LOCAL $REMOTE"
 git rm *.txt
 ```
 
--- delete from staging area
+- delete from staging area
 - delete <file> from git index(staging area) and not from local
 ```bash
 git rm --cached <file>
 ```
 
--- renaming & moving files from working dir & staging area
+- renaming & moving files from working dir & staging area
 ```bash
 git mv <file> <new_file>
 ```
+
 ## log & history
 - history of commits for a repo
 - sorted from latest to earliest
@@ -259,6 +273,17 @@ git tag <tagname> <commithash>
 ```bash
 git tag -a <tag> -m "<message>"
 ```
+
+- push local tags to github 
+```bash
+git push origin <tag:v1.0> 
+``` 
+
+- remove tag
+```bash
+git push origin --delete <tag>
+```
+
 - checkout to labeled commit
 ```bash
 git checkout <tag>
@@ -313,7 +338,33 @@ git clean -fd <file> #f : force, d : all dirs
 ```bash
 git restore --source=HEAD~<n> <file>
 ```
-           
+
+- checkout to commit
+> no branch
+```bash
+git checkout <commit hash>
+```
+
+- undo merge
+```bash
+git reset --<option:hard> HEAD~1/<commithash>
+```
+
+- revert merge
+> -m 1 : revert to first parent commit (on Master branch; last commit on master branch before merge)
+```bash
+git revert -m 1 HEAD
+```
+
+- Changes the base of the current branch to master
+```bash
+git rebase master
+```
+
+- replace the current commit head with the remote commit
+```bash
+git reset --hard origin/main
+```        
 
 ## Branching & Merging
 - Create branch
@@ -370,7 +421,6 @@ git push -u origin <branch>
 ```
 
 ### Comparing branches
-
 - Lists the commits in the <branch> branch not in master
 ```bash
 git log master..<branch>
@@ -487,26 +537,6 @@ git branch --merged
 git branch --no-merged
 ```
 
-- undo merge
-```bash
-git reset --<option:hard> HEAD~1/<commithash>
-```
-- revert merge
-> -m 1 : revert to first parent commit (on Master branch; last commit on master branch before merge)
-```bash
-git revert -m 1 HEAD
-```
-
-- Changes the base of the current branch to master
-```bash
-git rebase master
-```
-
-- replace the current commit head with the remote commit
-```bash
-git reset --hard origin/main
-```
-
 ## Remote
 ### Cloning a repository
 - Clone a repository from a URL
@@ -543,4 +573,9 @@ git push origin master
 - Shortcut for “git push origin master”
 ```bash
 git push
+```
+
+## cherry pick
+```bash
+git cherry-pick <commit hash>
 ```
