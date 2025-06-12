@@ -32,6 +32,14 @@ git config --help
 git config -h -short summary
 ```
 
+- set pull and push default remote branch
+```bash
+# Push to origin and set upstream so future `git push`/`git pull` use origin/my-feature
+git push --set-upstream origin my-feature
+# shorthand:
+git push -u origin my-feature
+```
+
 - set pull and push remote branch
 ```bash
 # pull
