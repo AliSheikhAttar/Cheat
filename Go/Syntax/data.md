@@ -746,6 +746,9 @@ for key, value := range m2 {
 ```go
 value, ok := myMap[key]
 // if it's not present, ok will be returned false
+
+// delete
+delete(myMap, key)
 ```
 
 ## channel

@@ -109,7 +109,7 @@ ls -i /path/to/file
 ## Unzip
 - unzip tar files
 ```bash
-tar -xvzf <archive>
+tar -xvf <archive>
 ```
   - The -x flag is used to extract the content of the archive.
   - The -v flag is used to output the list of files being extracted.
