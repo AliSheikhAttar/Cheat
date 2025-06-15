@@ -447,42 +447,50 @@ git diff --name-status <branch>
 ```
 
 ### Stashing
-- save changes to working dir before branching or merging
-- Creates a new stash
+> save changes to working dir before branching or merging
+- Create a new stash
 ```bash
-git stash push -m "New tax rules"
+git stash save "New tax rules"
 ```
 
-- Add to stash
+- Include untracked files
 ```bash
-git stash push --all/-a -m "<message>"
+git stash -u
 ```
 
-- Lists all the stashes
+- List all the stashes
 ```bash
 git stash list
 ```
 
-- Shows the given stash
+- Show the given stash
 ```bash
 git stash show stash@{1}
-```
-
-- Shortcut for stash@{1}
-```bash
+# shortcut
 git stash show 1
 ```
-- Applies the given stash to the working dir
+
+- Apply latest stash
+```bash
+git stash apply
+```
+
+- Apply the given stash to the working dir
 ```bash
 git stash apply 1
 ```
 
-- Deletes the given stash
+- Delete the given stash
 ```bash
 git stash drop 1
 ```
 
-- Deletes all the stashes
+- Apply and delete given stash
+```bash
+git stash pop 1
+```
+
+- Delete all the stashes
 ```bash
 git stash clear
 ```
