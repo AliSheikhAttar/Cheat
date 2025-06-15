@@ -436,10 +436,10 @@ git log master..<branch>
 
 - summary of changes
 ```bash
-git diff master..<branch>
+git diff main..<branch>
 ```
 ```bash
-git diff master..<branch>
+git diff main..<branch>
 ```
 - Changed files
 ```bash
