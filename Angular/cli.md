@@ -52,3 +52,20 @@ ng generate component elements/ElementsHome
 
 ## module property
 ![alt text](module-property.png)
+
+
+## yarn
+### install dependancy
+```bash
+yarn install
+```
+
+### build
+```bash
+yarn build
+```
+
+### serve
+```bash
+yarn start
+```
