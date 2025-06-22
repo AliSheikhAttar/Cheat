@@ -429,11 +429,10 @@ git push -u origin <branch>
 ```
 
 ### Comparing branches
-- Lists the commits in the <branch> branch not in master
+- Lists the commits reachable from <branch1> that aren't in <branch2> 
 ```bash
-git log master..<branch>
+git log <branch2>..<branch1>
 ```
-
 - summary of changes
 ```bash
 git diff main..<branch>
@@ -593,5 +592,5 @@ git push
 
 ## cherry pick
 ```bash
-git cherry-pick <commit hash>
+git cherry-pick <commit hash1> <commit hashn>
 ```
