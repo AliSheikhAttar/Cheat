@@ -165,33 +165,12 @@ git status --porcelain:
 git ls-files
 ```
 
-- staged changes
-- - -> last commit + -> staging area, @-x,y +z,s@ from line x/z y/s lines
-```bash
-git diff --staged
-```
-
-- not staged changes
-- - -> staging area + -> working dir, @-x,y +z,s@ from line x/z y/s lines
-```bash
-git diff
-```
-
 - output 1 if any changes detected else 0
 ```bash
 git diff --cached --exit-code
 ```
 
-### config diff tool
-- set vscode as diff tool
-```bash
-git config --global diff.tool vscode
-```
-```bash
-git config --global difftool.vscode.cmd "code --wait --diff $LOCAL $REMOTE"
-```
-
--- delete from working dir & staging area
+- delete from working dir & staging area
 ```bash
 git rm *.txt
 ```
@@ -253,30 +232,47 @@ git log --oneline --before/after="2020-12-2"/"one week ago"
 git log --oneline --grep="GUI"
 ```
 
-- show commits diffs
+## show commits diffs
+- hashkey : first char till any char as long as its unique
 ```bash
-git show <hashkey> # first char till any char as long as its unique
+git show <hashkey>
+git show HEAD # most recent
 git show HEAD~<n> #nth previous from the last
 ```
 - show commits contents
 ```bash
-git show <hashkey>:<file> # first char till any char as long as its unique
+git show <hashkey>:<file> 
 git show HEAD~<n>:<dir/file> #nth previous from the last
 ```
-- show commits files
-- blob : files, tree: dir
+
+- without the commit header
 ```bash
-git ls-tree <hashkey>/<HEAD~<n>>
+git show --pretty="" --name-only <commit>
 ```
-- show content of each file/dir
+
+- emit names
+- diff-filter => A (added) M (modified) D (deleted)
 ```bash
-git show <hashkey of node> # as long as its not ambiguous
+git show --pretty="" --diff-filter=AM <commit>
 ```
+
+- diff between two commits
+```bash
+git diff HEAD^ HEAD #last two commits
+git diff HEAD~1 HEAD #last two commits
+```
+
+- summary
+```bash
+git diff --stat HEAD~1 HEAD
+```
+
 ### tag
 - create lightweight tag & assign to <commit>(default: last commit)
 ```bash
 git tag <tagname> <commithash>
 ```
+
 - annotated tag
 ```bash
 git tag -a <tag> -m "<message>"
@@ -439,10 +435,6 @@ git diff main..<branch>
 ```
 ```bash
 git diff main..<branch>
-```
-- Changed files
-```bash
-git diff --name-status <branch>
 ```
 
 ### Stashing
