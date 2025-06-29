@@ -385,6 +385,8 @@ git checkout <branch_name>
 - rename branch
 ```bash
 git branch -m <old branch> <new branch name>‍‍‍‍‍‍‍‍
+# or rename current branch
+git branch -m <new branch name>‍‍‍‍‍‍‍‍
 ```
 - make branch and checkout to it
 ```bash
@@ -402,13 +404,19 @@ git branch --list
 git branch 
 ```
 
-- delete
+# delete
+- local
 ```bash
 git branch --delete <branch name> 
 ``` 
 ```bash
 git branch -d <branch name> 
 ``` 
+
+- remote
+```bash
+git push origin --delete <remote>
+```
 
 - local and remote branches
 ```bash
