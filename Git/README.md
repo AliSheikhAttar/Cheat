@@ -11,6 +11,14 @@ git config --global user.name “<Enter your username here>”
 git config --global user.email <Enter your email here> 
 git config --global core.editor "code --wait" -wait until the vscode instance is closed
 ```
+- store configs locally per repo
+```bash
+cd /path/to/repo
+git config user.name "Your Name"
+git config user.email "your.email@example.com"
+git config --local credential.helper store  # if using HTTPS
+```
+
 - store credentials permanantly
 ```bash
 git credential-osxkeychain #check if keychain helper is installed
@@ -38,26 +46,6 @@ git config -h -short summary
 git push --set-upstream origin my-feature
 # shorthand:
 git push -u origin my-feature
-```
-
-- set pull and push remote branch
-```bash
-# pull
-git branch --set-upstream-to=origin/r2/trs/sprint-2-head r2/trs/feat/trs-1927
-# push
-git config branch.r2/trs/feat/trs-1927.pushRemote upstream
-```
-
-- verify
-```bash
-git config --get branch.r2/trs/feat/trs-1927.remote
-# pull (origin)
-
-git config --get branch.r2/trs/feat/trs-1927.merge
-# merge
-
-git config --get branch.r2/trs/feat/trs-1927.pushRemote
-# push (upstream)
 ```
 
 - initialize a new repository
